@@ -1,0 +1,54 @@
+{
+  "coc-omnisharp.trace.server": "verbose",
+  "languageserver": {
+    "clangd": {
+      "command": "clangd",
+      "args": ["-compile-commands-dir=."],
+      "rootPatterns": ["compile_flags.txt", "**/compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    },
+    // Install with go get golang.org/x/tools/gopls@latest
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "usePlaceholders": true
+      }
+    },
+    "yaml": {
+      "module": "/Users/ponti/.npm_global/lib/node_modules/azure-pipelines-language-server/server.js",
+      "args": ["--node-ipc"],
+      "filetypes": ["yaml", "azure-pipelines.yml"],
+      "settings": {
+        "yaml": {
+          "schemas": {
+            "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json": ["azure-pipelines.yml", "pipelines/*.yml"],
+            "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json": [".github/**/*.yml"],
+            "https://github.com/travis-ci/travis-yml/raw/master/schema.json": [".travis.yml"],
+            "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/schemas/v3.0/schema.json": ["*.openapi.v3.yml"],
+            "kubernetes": ["*.yaml"]
+          }
+        }
+      }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    },
+    "terraform": {
+      // Install with curl -L https://github.com/juliosueiras/terraform-lsp/releases/download/v0.0.10/terraform-lsp_0.0.10_darwin_amd64.tar.gz | tar xz && cp terraform-lsp /usr/local/bin
+      "command": "terraform-lsp",
+      "filetypes": ["terraform"],
+      "initializationOptions": {}
+    }
+    // "omnisharp": {
+    //   "command": "mono",
+    //   "args": ["/Users/ponti/.config/coc/extensions/coc-omnisharp-data/server/omnisharp/Omnisharp.exe", "--stdio", "--verbose", "-s", "."],
+    //   "filetypes": ["cs"],
+    //   "rootPatterns": [".sln", ".csproj"]
+    // }
+  }
+}

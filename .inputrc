@@ -1,0 +1,14 @@
+# Tab autocomplete regardless of case
+set completion-ignore-case On
+
+set expand-tilde on
+set convert-meta off
+set input-meta on
+set output-meta on
+set visible-stats on
+
+# List all matches in case multiple possible completions
+set show-all-if-ambiguous on
+
+# More intelligent autocomplete
+set skip-completed-text on
