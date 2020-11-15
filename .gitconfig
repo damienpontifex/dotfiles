@@ -41,3 +41,9 @@
 	cookiefile = /Users/ponti/.gitcookies
 [init]
 	defaultBranch = main
+
+[includeIf "gitdir:~/purple/"]
+  path = ~/purple/.gitconfig
+# [includeIf "gitdir:~/developer/"]
+#   path = ~/developer/.gitconfig
+
