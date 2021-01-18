@@ -22,7 +22,9 @@ call plug#begin('~/.vim/plugged')
 	Plug 'hashivim/vim-terraform'
 	Plug 'pprovost/vim-ps1'
 	Plug 'plasticboy/vim-markdown'
-	Plug 'rust-lang/rust.vim'
+	" Plug 'rust-lang/rust.vim'
 	" Plug 'Yggdroot/indentLine'
+
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 call plug#end()

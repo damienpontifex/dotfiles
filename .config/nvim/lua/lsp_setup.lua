@@ -1,6 +1,11 @@
+vim.o.completeopt = 'menuone,noinsert,noselect'
+vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
+
+vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
+
 local buf_set_keymap = vim.api.nvim_buf_set_keymap
 
-local lsp_config = require'nvim_lsp'
+local lsp_config = require'lspconfig'
 local lsp_status = require'lsp-status'
 lsp_status.register_progress()
 lsp_status.config({
@@ -29,12 +34,12 @@ local function on_attach(client, bufnr)
   buf_set_keymap(bufnr, 'n', '<F12>' ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap(bufnr, 'n', '<F2>'  ,'<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'ca'    ,'<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', '<C-k>' ,'<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- buf_set_keymap(bufnr, 'n', '<C-k>' ,'<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'g0'    ,'<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   buf_set_keymap(bufnr, 'n', 'gW'    ,'<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
 
-  vim.api.nvim_command('autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()')
+  -- vim.api.nvim_command('autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()')
 end
 
 local function capabilities()
@@ -43,7 +48,7 @@ end
 
 -- local servers = {'gopls', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
 -- for _, lsp in ipairs(servers) do
---   nvim_lsp[lsp].setup {
+--   lspconfig[lsp].setup {
 --     on_attach = on_attach,
 --   }
 -- end
@@ -71,7 +76,14 @@ lsp_config.pyls.setup{}
 --  }
 
 lsp_config.rust_analyzer.setup{
-  on_attach = on_attach
+  on_attach = on_attach,
+  settings = {
+    rust_analyzer = {
+      cargoFeatures = {
+        loadOutDirsFromCheck = true;
+      }
+    }
+  }
 }
 
 lsp_config.yamlls.setup{
@@ -120,6 +132,20 @@ vim.lsp.callbacks[method] = function (_, method, result)
    end
 end
 
+local configs = require 'lspconfig/configs'
+local lsputil = require 'lspconfig/util'
+configs.bicep = {
+  default_config = {
+    cmd = { "dotnet", "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll" };
+    filetypes = { "bicep" };
+    root_dir = lsputil.root_pattern(".git");
+  };
+}
+
+lsp_config.bicep.setup {
+  on_attach = on_attach
+}
+
 local lsp_setup = {}
 
 lsp_setup.restart_lsp_servers = function()
@@ -133,12 +159,18 @@ lsp_setup.open_lsp_log = function()
 end
 
 lsp_setup.update_lsps = function()
-  vim.cmd('!brew upgrade terraform-ls || brew install hashicorp/tap/terraform-ls')
-  vim.cmd('!npm install --global vscode-json-languageserver')
-  vim.cmd('!npm install --global typescript-language-server typescript')
-  vim.cmd('!python3 -m pip install --user cmake-language-server')
-  vim.cmd('!GO111MODULE=on go get golang.org/x/tools/gopls@latest')
-  vim.cmd('!curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer && chmod +x /usr/local/bin/rust-analyzer')
+  os.execute 'brew upgrade terraform-ls || brew install hashicorp/tap/terraform-ls'
+  os.execute 'npm install --global vscode-json-languageserver'
+  os.execute 'npm install --global typescript-language-server typescript'
+  os.execute 'python3 -m pip install --user -U cmake-language-server'
+  os.execute [[python3 -m pip install --user -U 'python-language-server[all]']]
+  os.execute 'GO111MODULE=on go get golang.org/x/tools/gopls@latest'
+  os.execute 'curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer && chmod +x /usr/local/bin/rust-analyzer'
+  os.execute [[(cd $(mktemp -d) \
+    && curl -fLO https://github.com/Azure/bicep/releases/latest/download/bicep-langserver.zip \
+    && rm -rf /usr/local/bin/bicep-langserver \
+    && unzip -d /usr/local/bin/bicep-langserver bicep-langserver.zip)
+  ]]
 end
 
 return lsp_setup

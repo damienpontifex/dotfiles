@@ -2,11 +2,7 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/nvim-lsp.vim
 source $HOME/.config/nvim/settings.vim
 source $HOME/.config/nvim/keyboard.vim
-source $HOME/.config/nvim/languages.vim
-" source $HOME/.config/nvim/coc.nvim.vim
-source $HOME/.config/nvim/nerdtree.vim
 source $HOME/.config/nvim/vim-fugitive.vim
-lua require'statusline'
 
 if !exists(":DeleteAllBuffers")
   " bda to close all buffers
@@ -14,13 +10,7 @@ if !exists(":DeleteAllBuffers")
   cnoreabbrev bda DeleteAllBuffers
 endif
 
-" if !exists(":ReloadVimConfig")
-  command! ReloadVimConfig :source $MYVIMRC
-" endif
-
-if !exists(':TmuxWindowHere')
-  command TmuxWindowHere !tmux new-window -c %:p:h 
-endif
+command! ReloadVimConfig :source $MYVIMRC
 
 " Flash highlight yanked region
  au TextYankPost * silent! lua vim.highlight.on_yank {higroup="Substitute", timeout=200}
@@ -36,9 +26,6 @@ if !exists(":Hterm")
   command Hterm :sp|:term
 endif
 autocmd TermOpen term://* startinsert " Start terminal in insert mode
-
-" Rust
-let g:rustfmt_autosave = 1 
 
 " auto-reload vimrc configuration
 augroup myvimrchooks
@@ -77,7 +64,7 @@ augroup END
   " set termguicolors
 " endif
 let g:nord_cursor_line_number_background = 1
-colorscheme nord
+colorscheme codedark
 
 " Dont show wordcount in airline status
 let g:airline#extensions#wordcount#enabled = 0
