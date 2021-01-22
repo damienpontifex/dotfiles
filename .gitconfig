@@ -18,6 +18,8 @@
   rebase = true
 [rebase]
   autostash = true
+[init]
+  defaultBranch = main
 
 # Use NeoVim diff as diff tool
 [merge]
@@ -47,9 +49,3 @@
 # [includeIf "gitdir:~/developer/"]
 #   path = ~/developer/.gitconfig
 
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
