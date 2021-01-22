@@ -41,8 +41,6 @@
 	fetchJobs = 8
 [http]
 	cookiefile = /Users/ponti/.gitcookies
-[init]
-	defaultBranch = main
 
 [includeIf "gitdir:~/purple/"]
   path = ~/purple/.gitconfig
