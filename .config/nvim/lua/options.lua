@@ -10,6 +10,10 @@ set.mouse = 'a' -- Enable mouse
 set.clipboard = 'unnamed' -- Use OS clipboard
 set.hidden = true -- Allow unsaved changes in buffers
 
+set.scrolloff = 8
+set.sidescrolloff = 8
+vim.wo.colorcolumn = '80'
+
 vim.wo.cursorline = true -- highlight current line
 vim.bo.tabstop = 2 -- Number of visual spaces per TAB
 vim.bo.shiftwidth = 2 -- Number of spaces for each >> or << indent shift
