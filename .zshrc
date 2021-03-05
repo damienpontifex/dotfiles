@@ -51,7 +51,8 @@ export EDITOR=nvim
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias config=dotfiles
 if type brew &>/dev/null; then
-  # Requires brew install zsh-completion
+  # Requires `brew install zsh-completion`
+  # To fix insecure directories `compaudit | xargs chmod g-w`
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
   autoload -Uz compinit
@@ -74,7 +75,7 @@ done
 unset file
 export CLOUDSDK_PYTHON=python3
 
-export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
 
 ### Git aliases
 alias gs='git status'
@@ -119,9 +120,9 @@ alias kctx='kubectl config current-context'
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
-export OPENSSL_ROOT_DIR=/usr/local/opt/openssl
-export OPENSSL_LIBRARIES=/usr/local/opt/openssl
-export LIBRARY_PATH="$LIBRARY_PATH:/usr/local/opt/openssl/lib"
+export OPENSSL_ROOT_DIR=$(brew --prefix)/opt/openssl
+export OPENSSL_LIBRARIES=$(brew --prefix)/opt/openssl
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/opt/openssl/lib"
 
 # Use Moby BuildKit modern docker build engine
 export DOCKER_BUILDKIT=1
