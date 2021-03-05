@@ -56,7 +56,7 @@ function mac-installs {
     echo 'Homebrew exists'
   fi
 
-  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions)
+  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion)
   brew reinstall "${brew_packages[@]}" || true
 
   $(brew --prefix)/opt/fzf/install --all
