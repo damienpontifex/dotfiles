@@ -50,7 +50,13 @@ export EDITOR=nvim
 ### dotfiles ###
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias config=dotfiles
-[ -f $HOME/.git-completion.zsh ] && source $HOME/.git-completion.zsh
+if type brew &>/dev/null; then
+  # Requires brew install zsh-completion
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
 
 alias icloud='cd cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
