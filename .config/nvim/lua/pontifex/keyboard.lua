@@ -33,10 +33,10 @@ vnoremap('>', '>gv')
 vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], opts)
 
 -- -- Split navigation using Ctrl+{hjkl}
-nnoremap('<C-J>', '<C-W><C-J>')
-nnoremap('<C-K>', '<C-W><C-K>')
-nnoremap('<C-L>', '<C-W><C-L>')
-nnoremap('<C-H>', '<C-W><C-H>')
+-- nnoremap('<C-J>', '<C-W><C-J>')
+-- nnoremap('<C-K>', '<C-W><C-K>')
+-- nnoremap('<C-L>', '<C-W><C-L>')
+-- nnoremap('<C-H>', '<C-W><C-H>')
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
@@ -73,3 +73,7 @@ nnoremap('<esc><esc>', ':silent! nohls<CR>')
 -- inoremap('<S-Tab>', 'pumvisible() ? "\<C-p>" : "\<S-Tab>"')
 -- autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
+-- nnoremap('<C-p>', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
+-- nnoremap('<leader>fg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
+-- nnoremap('<leader>fb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
+-- nnoremap('<leader>fh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])

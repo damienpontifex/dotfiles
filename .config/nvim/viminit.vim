@@ -1,5 +1,4 @@
 source $HOME/.config/nvim/plugins.vim
-source $HOME/.config/nvim/nvim-lsp.vim
 source $HOME/.config/nvim/settings.vim
 source $HOME/.config/nvim/keyboard.vim
 source $HOME/.config/nvim/vim-fugitive.vim
@@ -95,6 +94,7 @@ endif
 
 " Section: Global Searching
 nnoremap <C-f> :Rg<CR>
+" nnoremap <C-f> :vimgrep  **/*<L>
 
 let g:vim_json_syntax_conceal = 0
 set conceallevel=0 " Never conceal

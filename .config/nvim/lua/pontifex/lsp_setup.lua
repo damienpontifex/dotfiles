@@ -1,9 +1,20 @@
+vim.api.nvim_exec([[
+"   sign define LspDiagnosticsErrorSign text=❗️
+"   sign define LspDiagnosticsWarningSign text=⚠️
+"   sign define LspDiagnosticsInformationSign text=ℹ
+"   sign define LspDiagnosticsHintSign text=👉
+
+  command! LspRestart lua require'lsp_setup'.restart_lsp_servers()
+  command! OpenLspLog execute '!open ' . v:lua.vim.lsp.get_log_path()
+  command! OpenInFinder execute '!open ' . expand("%:p:h")
+  command! UpdateLsps lua require'lsp_setup'.update_lsps()
+  " autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
+]], false)
+
 vim.o.completeopt = 'menuone,noinsert,noselect'
 vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
 
 vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-local buf_set_keymap = vim.api.nvim_buf_set_keymap
 
 local lsp_config = require'lspconfig'
 local lsp_status = require'lsp-status'
@@ -22,22 +33,45 @@ local function on_attach(client, bufnr)
   lsp_status.on_attach(client, bufnr)
   require'completion'.on_attach(client, bufnr)
 
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
   -- vim.api.nvim_buf_set_option(bufnr, 'completeopt', 'menuone,noinsert,noselect')
 
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap=true, silent=true }
-  buf_set_keymap(bufnr, 'n', 'gD'    ,':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gd'    ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', '<C-]>' ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'K'     ,'<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', '<F12>' ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', '<F2>'  ,'<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'ca'    ,'<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gD'    ,':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gd'    ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<C-]>' ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', 'K'     ,'<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<F12>' ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<F2>'  ,'<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', 'ca'    ,'<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   -- buf_set_keymap(bufnr, 'n', '<C-k>' ,'<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'g0'    ,'<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-  buf_set_keymap(bufnr, 'n', 'gW'    ,'<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+  buf_set_keymap('n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', 'g0'    ,'<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+  buf_set_keymap('n', 'gW'    ,'<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+
+  -- Set some keybinds conditional on server capabilities
+  if client.resolved_capabilities.document_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  elseif client.resolved_capabilities.document_range_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+  end
+
+  -- Set autocommands conditional on server_capabilities
+  if client.resolved_capabilities.document_highlight then
+    vim.api.nvim_exec([[
+      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+      augroup lsp_document_highlight
+        autocmd! * <buffer>
+        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+      augroup END
+    ]], false)
+  end
 
   -- vim.api.nvim_command('autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()')
 end
@@ -46,45 +80,16 @@ local function capabilities()
   lsp_status.capabilities()
 end
 
--- local servers = {'gopls', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
--- for _, lsp in ipairs(servers) do
---   lspconfig[lsp].setup {
---     on_attach = on_attach,
---   }
--- end
+-- Use a loop to conveniently both setup defined servers 
+-- and map buffer local keybindings when the language server attaches
+local servers = {'jsonls', 'gopls', 'pyls', 'cmake', 'omnisharp', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
+for _, lsp in ipairs(servers) do
+  lsp_config[lsp].setup {
+    on_attach = on_attach,
+  }
+end
 
 -- vim.lsp.set_log_level('debug')
-
-lsp_config.tsserver.setup{
-  on_attach = on_attach
-}
-
-lsp_config.jsonls.setup{
-  on_attach = on_attach
-}
-
-lsp_config.pyls.setup{}
---  lsp_config.pyls_ms.setup{
---    init_options = {
---      interpreter = {
---        properties = {
---          InterpreterPath = "/usr/local/bin/python3",
---          Version = "3.x"
---        }
---      }
---    }
---  }
-
-lsp_config.rust_analyzer.setup{
-  on_attach = on_attach,
-  settings = {
-    rust_analyzer = {
-      cargoFeatures = {
-        loadOutDirsFromCheck = true;
-      }
-    }
-  }
-}
 
 lsp_config.yamlls.setup{
   init_options = {
@@ -97,27 +102,15 @@ lsp_config.yamlls.setup{
   on_attach = on_attach
 }
 
-lsp_config.cmake.setup{
-  on_attach = on_attach
-}
-
 lsp_config.terraformls.setup{
   cmd = { "terraform-ls", "serve" },
   on_attach = on_attach
 }
 
-lsp_config.omnisharp.setup{
-  on_attach = on_attach
-}
-
-lsp_config.gopls.setup{
-  on_attach = on_attach
-}
-
 -- Override hover winhighlight.
 local method = 'textDocument/hover'
-local hover = vim.lsp.callbacks[method]
-vim.lsp.callbacks[method] = function (_, method, result)
+local hover = vim.lsp.handlers[method]
+vim.lsp.handlers[method] = function (_, method, result)
    hover(_, method, result)
 
    for _, winnr in ipairs(vim.api.nvim_tabpage_list_wins(0)) do

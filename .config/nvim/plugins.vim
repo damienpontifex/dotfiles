@@ -18,13 +18,18 @@ call plug#begin('~/.vim/plugged')
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
   Plug 'nvim-lua/lsp-status.nvim'
-	Plug 'tomasiser/vim-code-dark'
-	Plug 'hashivim/vim-terraform'
-	Plug 'pprovost/vim-ps1'
-	Plug 'plasticboy/vim-markdown'
-	" Plug 'rust-lang/rust.vim'
-	" Plug 'Yggdroot/indentLine'
+  Plug 'tomasiser/vim-code-dark'
+  Plug 'hashivim/vim-terraform'
+  Plug 'pprovost/vim-ps1'
+  Plug 'plasticboy/vim-markdown'
+  " Plug 'rust-lang/rust.vim'
+  " Plug 'Yggdroot/indentLine'
 
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 call plug#end()
+
