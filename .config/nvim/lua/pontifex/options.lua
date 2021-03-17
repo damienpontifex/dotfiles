@@ -4,6 +4,7 @@ vim.bo.swapfile = false
 vim.wo.wrap = false
 -- vim.wo.colorcolumn = +1
 
+set.termguicolors = true
 vim.wo.number = true
 vim.wo.relativenumber = true
 set.mouse = 'a' -- Enable mouse
@@ -17,6 +18,8 @@ vim.wo.colorcolumn = '80'
 vim.wo.cursorline = true -- highlight current line
 vim.bo.tabstop = 2 -- Number of visual spaces per TAB
 vim.bo.shiftwidth = 2 -- Number of spaces for each >> or << indent shift
+-- Workaround as vim.bo.shiftwidth doesn't seem to be working in my buffers
+vim.api.nvim_set_option('shiftwidth', 2)
 vim.bo.expandtab = true -- tabs are space
 vim.bo.cindent = true
 set.showmatch = true -- highlight matching [()}]

@@ -10,6 +10,7 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'tomasiser/vim-code-dark'
   Plug 'arcticicestudio/nord-vim'
+  Plug 'morhetz/gruvbox'
 
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'

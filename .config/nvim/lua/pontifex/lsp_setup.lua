@@ -18,6 +18,7 @@ vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
 local lsp_config = require'lspconfig'
 local lsp_status = require'lsp-status'
+local lsp_completion = require'completion'
 lsp_status.register_progress()
 lsp_status.config({
   status_symbol = '',
@@ -31,7 +32,7 @@ lsp_status.config({
 
 local function on_attach(client, bufnr)
   lsp_status.on_attach(client, bufnr)
-  require'completion'.on_attach(client, bufnr)
+  lsp_completion.on_attach(client, bufnr)
 
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -54,6 +55,13 @@ local function on_attach(client, bufnr)
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
+    vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+    --vim.api.nvim_exec([[
+    --  augroup lsp_document_formatting
+    --    autocmd! * <buffer>
+    --    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+    --  augroup END
+    --]], false)
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   elseif client.resolved_capabilities.document_range_formatting then
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
