@@ -55,7 +55,7 @@ local function on_attach(client, bufnr)
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
-    vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+    -- vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
     --vim.api.nvim_exec([[
     --  augroup lsp_document_formatting
     --    autocmd! * <buffer>
@@ -114,24 +114,6 @@ lsp_config.terraformls.setup{
   cmd = { "terraform-ls", "serve" },
   on_attach = on_attach
 }
-
--- Override hover winhighlight.
-local method = 'textDocument/hover'
-local hover = vim.lsp.handlers[method]
-vim.lsp.handlers[method] = function (_, method, result)
-   hover(_, method, result)
-
-   for _, winnr in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-     if pcall(function ()
-       vim.api.nvim_win_get_var(winnr, 'textDocument/hover')
-     end) then
-       vim.api.nvim_win_set_option(winnr, 'winhighlight', 'Normal:Visual,NormalNC:Visual')
-       break
-     else
-       -- Not a hover window.
-     end
-   end
-end
 
 local configs = require 'lspconfig/configs'
 local lsputil = require 'lspconfig/util'
