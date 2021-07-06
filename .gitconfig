@@ -7,9 +7,12 @@
 [alias]
   graph-log = log --oneline --decorate --graph --all
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
-  # master is normally the common parent, so squash back until common ancestor
-  rb = "!f() { git rebase -i $(git merge-base HEAD ${1:-master}); }; f"
-  clean-gone = "!f() { git fetch -p && for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
+  # main is normally the common parent, so squash back until common ancestor
+  squash = "!f() { git rebase --interactive $(git merge-base --fork-point HEAD ${1:-main}); }; f"
+  # Rebase branch back onto main off of original base $1
+  rb-onto = "!f() { git rebase --onto ${2:-origin/main} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
+  # Delete any branches where the tracking remote has been deleted
+  clean-gone = "!f() { git fetch --prune && for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
 [push]
   default = current
 [fetch]
@@ -42,8 +45,10 @@
 [http]
 	cookiefile = /Users/ponti/.gitcookies
 
-[includeIf "gitdir:~/purple/"]
-  path = ~/purple/.gitconfig
+[includeIf "gitdir:~/purple/woodside/"]
+  path = ~/purple/woodside/.gitconfig
+# [includeIf "gitdir:~/purple/"]
+#   path = ~/purple/.gitconfig
 # [includeIf "gitdir:~/developer/"]
 #   path = ~/developer/.gitconfig
 
