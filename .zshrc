@@ -1,65 +1,58 @@
 export ZSH="/Users/ponti/.oh-my-zsh"
 
-# Enable Ctrl-x-e to edit command line
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
-
 ZSH_THEME="amuse"
 # ZSH_THEME="agnoster"
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
 
 HIST_STAMPS="yyyy-mm-dd"
 
+# alias uuu="pbpaste | sed 's/\[.*\]/[default]/g' > ~/.aws/credentials"
+alias uuu="aws-azure-login --no-prompt && aws codeartifact login --tool npm --repository UpstreamProxy --domain woodside --domain-owner 278364088108 --duration-seconds 43200 --namespace @uxd"
 
 plugins=(
+  # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
+  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+  kubectl
+  helm
   kube-ps1
   zsh-syntax-highlighting
+  vscode
+  colored-man-pages
+  dotenv  # Auto load .env file when you cd into project root directory
 )
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#3a3a3a" #,underline"
 source $ZSH/oh-my-zsh.sh
 # PROMPT=$PROMPT'$(kube_ps1) '
 # RPROMPT='k8s: $(kube_ps1)'
-# User configuration
 
 # Ensure zsh plugins available
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
 [ -x $(command -v brew) ] && \
-  [ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
-  source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" && \
+  [ -f "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+  source "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" && \
   bindkey '^ ' autosuggest-accept
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
 
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
 
 export EDITOR=nvim
 
+function tm {
+  SESSION_NAME=${1:-default}
+  tmux new-session -A -s "${SESSION_NAME}"
+}
+
+function new-tsc-project {
+  npm init -y
+  npm i -D @tsconfig/node14 @types/node ts-node typescript
+  echo '{\n  "extends": "@tsconfig/node14"\n}' > tsconfig.json
+  touch index.ts
+}
+
 ### dotfiles ###
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias config=dotfiles
-if type brew &>/dev/null; then
-  # Requires `brew install zsh-completion`
-  # To fix insecure directories `compaudit | xargs chmod g-w`
-  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
-  autoload -Uz compinit
-  compinit
-fi
-
-alias icloud='cd cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
+alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 ### Utility ###
 alias check_disk='sudo fsck -fy'
@@ -75,27 +68,20 @@ done
 unset file
 export CLOUDSDK_PYTHON=python3
 
-export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
+# Use llvm from homebrew
+export PATH="$(brew --prefix llvm)/bin:$PATH"
 
-### Git aliases
-alias gs='git status'
-alias g='git'
-alias gcm='git commit -m'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# added by travis gem
-[ -f /Users/ponti/.travis/travis.sh ] && source /Users/ponti/.travis/travis.sh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Node and npm
 export NODE_ENV=development
 export PATH=$HOME/.npm_global/bin:$PATH
-export NPM_CONFIG_PREFIX=~/.npm_global
+export NPM_CONFIG_PREFIX=$HOME/.npm_global
 
 # golang
 if [[ -x $(command -v go) ]]; then
-  export PATH="$PATH:$(go env GOPATH)/bin"
   export GOPATH=$(go env GOPATH)
+  export PATH="$PATH:${GOPATH}/bin"
 fi
 
 # .NET
@@ -106,35 +92,30 @@ alias watch='watch '
 
 # az cli
 alias azswitch='az account set --subscription "$(az account list --output tsv --query "[].name" | fzf)"'
-source /usr/local/etc/bash_completion.d/az 
+source /usr/local/etc/bash_completion.d/az
 
 # k8s
 export KUBE_EDITOR=nvim
-[[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
-[[ -x $(command -v helm) ]] && source <(helm completion zsh)
-alias k='kubectl'
-alias kgp='kubectl get pods'
-alias kcls='kubectl config get-contexts'
-alias kcu='kubectl config use-context "$(kubectl config get-contexts -o name | fzf)"'
-alias kctx='kubectl config current-context'
+# [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
+alias kcu='kcuc "$(kcgc -o name | fzf)"'
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
-export OPENSSL_ROOT_DIR=$(brew --prefix)/opt/openssl
-export OPENSSL_LIBRARIES=$(brew --prefix)/opt/openssl
-export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/opt/openssl/lib"
+export OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
+export OPENSSL_LIBRARIES="${OPENSSL_ROOT_DIR}"
+export LIBRARY_PATH="$LIBRARY_PATH:${OPENSSL_ROOT_DIR}/lib"
 
 # Use Moby BuildKit modern docker build engine
 export DOCKER_BUILDKIT=1
 
-function cd_with_fzf {
-  cd $HOME && fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden | xargs -I '{}' cd "{}"
-}
-zle -N cd_with_fzf
-bindkey '^f' cd_with_fzf
-function open_with_fzf {
-  fd -t f -H -I | fzf | xargs -I '{}' open "{}"
-}
-zle -N open_with_fzf
-bindkey '^o' open_with_fzf 
-
+# TODO: Refine these
+# function cd_with_fzf {
+#   cd $HOME && fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden | xargs -I '{}' cd "{}"
+# }
+# zle -N cd_with_fzf
+# bindkey '^f' cd_with_fzf
+# function open_with_fzf {
+#   fd -t f -H -I | fzf | xargs -I '{}' open "{}"
+# }
+# zle -N open_with_fzf
+# bindkey '^o' open_with_fzf
