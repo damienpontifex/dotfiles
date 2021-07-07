@@ -10,7 +10,9 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'tomasiser/vim-code-dark'
   Plug 'arcticicestudio/nord-vim'
-  Plug 'morhetz/gruvbox'
+  " Plug 'morhetz/gruvbox'
+  Plug 'chriskempson/base16-vim'
+  Plug 'vim-airline/vim-airline'
 
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
@@ -18,8 +20,6 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
-  Plug 'nvim-lua/lsp-status.nvim'
-  Plug 'tomasiser/vim-code-dark'
   Plug 'hashivim/vim-terraform'
   Plug 'pprovost/vim-ps1'
   Plug 'plasticboy/vim-markdown'

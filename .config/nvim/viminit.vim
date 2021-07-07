@@ -63,7 +63,7 @@ augroup END
   " set termguicolors
 " endif
 let g:nord_cursor_line_number_background = 1
-colorscheme gruvbox
+colorscheme base16-gruvbox-dark-hard
 
 " Dont show wordcount in airline status
 let g:airline#extensions#wordcount#enabled = 0

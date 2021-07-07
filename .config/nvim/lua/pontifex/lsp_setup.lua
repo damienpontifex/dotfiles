@@ -4,10 +4,10 @@ vim.api.nvim_exec([[
 "   sign define LspDiagnosticsInformationSign text=ℹ
 "   sign define LspDiagnosticsHintSign text=👉
 
-  command! LspRestart lua require'lsp_setup'.restart_lsp_servers()
+  command! LspRestart lua require'pontifex.lsp_setup'.restart_lsp_servers()
   command! OpenLspLog execute '!open ' . v:lua.vim.lsp.get_log_path()
   command! OpenInFinder execute '!open ' . expand("%:p:h")
-  command! UpdateLsps lua require'lsp_setup'.update_lsps()
+  command! UpdateLsps lua require'pontifex.lsp_setup'.update_lsps()
   " autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
 ]], false)
 
@@ -17,22 +17,12 @@ vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
 vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
 local lsp_config = require'lspconfig'
-local lsp_status = require'lsp-status'
 local lsp_completion = require'completion'
-lsp_status.register_progress()
-lsp_status.config({
-  status_symbol = '',
-  indicator_errors = '❗️',
-  indicator_warnings = '⚠️',
-  indicator_info = 'ℹ',
-  indicator_hint = '👉',
-  indicator_ok = '✔️',
-  spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
-})
 
 local function on_attach(client, bufnr)
-  lsp_status.on_attach(client, bufnr)
   lsp_completion.on_attach(client, bufnr)
+
+  vim.notify("Attaching LSP client "..client.id.." to buffer "..bufnr)
 
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -53,6 +43,10 @@ local function on_attach(client, bufnr)
   buf_set_keymap('n', 'g0'    ,'<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   buf_set_keymap('n', 'gW'    ,'<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
 
+  buf_set_keymap('n', '<leader>dn', '<cmd> lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<leader>dp', '<cmd> lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<leader>af', '<cmd> lua vim.lsp.buf.code_action()<CR>', opts)
+
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
     -- vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
@@ -70,22 +64,18 @@ local function on_attach(client, bufnr)
   -- Set autocommands conditional on server_capabilities
   if client.resolved_capabilities.document_highlight then
     vim.api.nvim_exec([[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
+      " hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+      " hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+      " hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+      " augroup lsp_document_highlight
+      "   autocmd! * <buffer>
+      "   autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+      "   autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+      " augroup END
     ]], false)
   end
 
   -- vim.api.nvim_command('autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()')
-end
-
-local function capabilities()
-  lsp_status.capabilities()
 end
 
 -- Use a loop to conveniently both setup defined servers 
@@ -96,6 +86,10 @@ for _, lsp in ipairs(servers) do
     on_attach = on_attach,
   }
 end
+
+lsp_config.omnisharp.setup{
+  cmd = { "/usr/local/bin/omnisharp/run", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
+}
 
 -- vim.lsp.set_log_level('debug')
 
@@ -115,8 +109,18 @@ lsp_config.terraformls.setup{
   on_attach = on_attach
 }
 
+--lsp_config.rust_analyzer.setup {
+--  --parallel
+--}
+
 local configs = require 'lspconfig/configs'
 local lsputil = require 'lspconfig/util'
+
+vim.api.nvim_exec([[
+  augroup filetypedetect
+    au! BufRead,BufNewFile *.bicep setfiletype bicep
+  augroup END
+]], false)
 configs.bicep = {
   default_config = {
     cmd = { "dotnet", "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll" };
@@ -141,6 +145,22 @@ lsp_setup.open_lsp_log = function()
   vim.cmd('!open ' .. vim.lsp.get_log_path())
 end
 
+lsp_setup.update_bicep_lsp = function ()
+  os.execute [[(cd $(mktemp -d) \
+    && curl -fLO https://github.com/Azure/bicep/releases/latest/download/bicep-langserver.zip \
+    && rm -rf /usr/local/bin/bicep-langserver \
+    && unzip -d /usr/local/bin/bicep-langserver bicep-langserver.zip)
+  ]]
+end
+
+lsp_setup.update_omnisharp_lsp = function()
+  os.execute [[
+    mkdir -p /usr/local/bin/omnisharp \
+    && curl -L https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx.tar.gz \
+    | tar xvz - -C /usr/local/bin/omnisharp
+  ]]
+end
+
 lsp_setup.update_lsps = function()
   os.execute 'brew upgrade terraform-ls || brew install hashicorp/tap/terraform-ls'
   os.execute 'npm install --global vscode-json-languageserver'
@@ -149,11 +169,12 @@ lsp_setup.update_lsps = function()
   os.execute [[python3 -m pip install --user -U 'python-language-server[all]']]
   os.execute 'GO111MODULE=on go get golang.org/x/tools/gopls@latest'
   os.execute 'curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer && chmod +x /usr/local/bin/rust-analyzer'
-  os.execute [[(cd $(mktemp -d) \
-    && curl -fLO https://github.com/Azure/bicep/releases/latest/download/bicep-langserver.zip \
-    && rm -rf /usr/local/bin/bicep-langserver \
-    && unzip -d /usr/local/bin/bicep-langserver bicep-langserver.zip)
-  ]]
+  lsp_setup.update_omnisharp_lsp()
+  lsp_setup.update_bicep_lsp()
 end
+
+vim.api.nvim_exec([[
+  command! UpdateBicepLsp lua require'pontifex.lsp_setup'.update_bicep_lsp()
+]], false)
 
 return lsp_setup
