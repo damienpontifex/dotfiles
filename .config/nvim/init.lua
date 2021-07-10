@@ -20,7 +20,7 @@ require'packer'.startup(function()
   use 'chriskempson/base16-vim'
   use 'vim-airline/vim-airline'
 
-  use { 'junegunn/fzf', run = function() vim.cmd'fzf#install()' end }
+  use { 'junegunn/fzf', run = 'call fzf#install()' }
   use 'junegunn/fzf.vim'
   use 'mileszs/ack.vim'
 
