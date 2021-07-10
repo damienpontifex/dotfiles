@@ -10,7 +10,7 @@ require'packer'.startup(function()
   use 'wbthomason/packer.nvim'
 
   use 'scrooloose/nerdtree'
-  -- use 'ryanoasis/vim-devicons'
+  use 'ryanoasis/vim-devicons'
   -- use 'tiagofumo/vim-nerdtree-syntax-highlight'
   use 'tpope/vim-fugitive'
 
