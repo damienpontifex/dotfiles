@@ -116,11 +116,6 @@ lsp_config.terraformls.setup{
 local configs = require 'lspconfig/configs'
 local lsputil = require 'lspconfig/util'
 
-vim.api.nvim_exec([[
-  augroup filetypedetect
-    au! BufRead,BufNewFile *.bicep setfiletype bicep
-  augroup END
-]], false)
 configs.bicep = {
   default_config = {
     cmd = { "dotnet", "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll" };
@@ -178,3 +173,4 @@ vim.api.nvim_exec([[
 ]], false)
 
 return lsp_setup
+

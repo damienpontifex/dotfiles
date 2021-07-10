@@ -25,6 +25,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'plasticboy/vim-markdown'
   " Plug 'rust-lang/rust.vim'
   " Plug 'Yggdroot/indentLine'
+  Plug 'editorconfig/editorconfig-vim'
 
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
