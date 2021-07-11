@@ -20,9 +20,9 @@ require'packer'.startup(function()
   use 'chriskempson/base16-vim'
   use 'vim-airline/vim-airline'
 
-  use { 'junegunn/fzf', run = 'call fzf#install()' }
-  use 'junegunn/fzf.vim'
-  use 'mileszs/ack.vim'
+  -- use { 'junegunn/fzf', run = 'call fzf#install()' }
+  -- use 'junegunn/fzf.vim'
+  -- use 'mileszs/ack.vim'
 
   use 'neovim/nvim-lspconfig'
   use 'nvim-lua/completion-nvim'
@@ -33,9 +33,10 @@ require'packer'.startup(function()
   -- use 'Yggdroot/indentLine'
   use 'editorconfig/editorconfig-vim'
 
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+  }
   
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 

@@ -41,3 +41,4 @@ vim.opt.visualbell = false
 vim.opt.wildignore:append { '*/node_modules/*', '*/bin/*', '*/obj/*' }
 vim.opt.wildmenu = true -- show options as list when switching buffers etc
 vim.opt.wrap = false
+vim.opt.conceallevel = 0 -- never conceal

@@ -11,3 +11,5 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
+" \q to delete buffer without closing window
+map <leader>q :bp<CR>:bd#<CR>
