@@ -7,6 +7,7 @@ function! ToggleGStatus()
         bd .git/index
     else
         Git
+        :15wincmd_
     endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
