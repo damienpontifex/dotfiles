@@ -140,32 +140,85 @@ lsp_setup.open_lsp_log = function()
   vim.cmd('!open ' .. vim.lsp.get_log_path())
 end
 
-lsp_setup.update_bicep_lsp = function ()
-  os.execute [[(cd $(mktemp -d) \
-    && curl -fLO https://github.com/Azure/bicep/releases/latest/download/bicep-langserver.zip \
-    && rm -rf /usr/local/bin/bicep-langserver \
-    && unzip -d /usr/local/bin/bicep-langserver bicep-langserver.zip)
-  ]]
+local function update_lsp(lsp_name, cmd)
+  local function on_event(job_id, data, event)
+    if event == "exit" then
+      if data == 0 then
+        print("Done updating " .. lsp_name)
+      else
+        print("Non-zero exit code updating " .. lsp_name .. vim.inspect(data))
+      end
+    end
+
+    if (event == "stdout" or event == "stderr") then
+      print(data[1])
+    end
+  end
+  vim.fn.jobstart(cmd, 
+  {
+    on_stderr = on_event,
+    on_stdout = on_event,
+    on_exit = on_event,
+    stdout_buffered = false,
+    stderr_buffered = false,
+  })
 end
 
-lsp_setup.update_omnisharp_lsp = function()
-  os.execute [[
-    mkdir -p /usr/local/bin/omnisharp \
-    && curl -L https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx.tar.gz \
-    | tar xvz - -C /usr/local/bin/omnisharp
+function update_bicep_lsp()
+  update_lsp("bicep", [[
+    echo "Bicep version:" \
+    $(curl --silent https://api.github.com/repos/azure/bicep/releases/latest \
+    | jq --raw-output '.name') \
+    && (cd $(mktemp -d) \
+    && curl --silent --location --remote-name https://github.com/Azure/bicep/releases/latest/download/bicep-langserver.zip \
+    && rm -rf /usr/local/bin/bicep-langserver \
+    && unzip -q -d /usr/local/bin/bicep-langserver bicep-langserver.zip || true)
+  ]])
+end
+
+function update_omnisharp_lsp()
+  local cmd = [[
+    rm -rf /usr/local/bin/omnisharp \
+    && mkdir -p /usr/local/bin/omnisharp \
+    && curl --silent --location \
+      https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx.tar.gz \
+    | tar xz - -C /usr/local/bin/omnisharp
   ]]
+  update_lsp("omnisharp", cmd)
+end
+
+function update_terraform_ls()
+  update_lsp("terraform-ls", 'brew upgrade terraform-ls || brew install hashicorp/tap/terraform-ls')
+end
+
+function update_typescript_ls()
+  update_lsp("typescript-language-server", "npm install --global typescript-language-server typescript")
+end
+
+function update_rust_analyzer()
+  update_lsp("rust-analyzer", [[
+    echo "Rust analyzer version:" \
+    $(curl --silent https://api.github.com/repos/rust-analyzer/rust-analyzer/releases/latest \
+    | jq --raw-output '.name') \
+    && curl --location --silent --output /usr/local/bin/rust-analyzer \
+      https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac  \
+    && chmod +x /usr/local/bin/rust-analyzer
+  ]])
+end
+
+function update_all_lsps()
+  update_omnisharp_lsp()
+  update_bicep_lsp()
+  update_terraform_ls()
+  update_typescript_ls()
+  update_rust_analyzer()
 end
 
 lsp_setup.update_lsps = function()
-  os.execute 'brew upgrade terraform-ls || brew install hashicorp/tap/terraform-ls'
   os.execute 'npm install --global vscode-json-languageserver'
-  os.execute 'npm install --global typescript-language-server typescript'
   os.execute 'python3 -m pip install --user -U cmake-language-server'
   os.execute [[python3 -m pip install --user -U 'python-language-server[all]']]
   os.execute 'GO111MODULE=on go get golang.org/x/tools/gopls@latest'
-  os.execute 'curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer && chmod +x /usr/local/bin/rust-analyzer'
-  lsp_setup.update_omnisharp_lsp()
-  lsp_setup.update_bicep_lsp()
 end
 
 vim.api.nvim_exec([[
