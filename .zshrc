@@ -8,6 +8,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # alias uuu="pbpaste | sed 's/\[.*\]/[default]/g' > ~/.aws/credentials"
 alias uuu="aws-azure-login --no-prompt && aws codeartifact login --tool npm --repository UpstreamProxy --domain woodside --domain-owner 278364088108 --duration-seconds 43200 --namespace @uxd"
 
+# Ensure `code` command is available
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
 plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
