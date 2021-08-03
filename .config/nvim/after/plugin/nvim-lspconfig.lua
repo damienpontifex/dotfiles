@@ -206,19 +206,26 @@ function update_rust_analyzer()
   ]])
 end
 
+function update_gopls() 
+  update_lsp("gopls", [[
+    GO111MODULE=on go get golang.org/x/tools/gopls@latest
+  ]])
+
+end
+
 function update_all_lsps()
   update_omnisharp_lsp()
   update_bicep_lsp()
   update_terraform_ls()
   update_typescript_ls()
   update_rust_analyzer()
+  update_gopls()
 end
 
 lsp_setup.update_lsps = function()
   os.execute 'npm install --global vscode-json-languageserver'
   os.execute 'python3 -m pip install --user -U cmake-language-server'
   os.execute [[python3 -m pip install --user -U 'python-language-server[all]']]
-  os.execute 'GO111MODULE=on go get golang.org/x/tools/gopls@latest'
 end
 
 vim.api.nvim_exec([[
