@@ -91,14 +91,16 @@ lsp_config.omnisharp.setup{
   cmd = { "/usr/local/bin/omnisharp/run", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
 }
 
--- vim.lsp.set_log_level('debug')
+--vim.lsp.set_log_level('debug')
 
 lsp_config.yamlls.setup{
-  init_options = {
-    ["yaml.schemas"] = {
-      ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" };
-      ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json"] = { ".github/**/*.yml" };
-      ["kubernetes"] = { "*.yaml" }
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" };
+        ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yml" };
+        kubernetes = "/*.yaml"
+      }
     }
   },
   on_attach = on_attach
@@ -210,7 +212,12 @@ function update_gopls()
   update_lsp("gopls", [[
     GO111MODULE=on go get golang.org/x/tools/gopls@latest
   ]])
+end
 
+function update_yaml_ls()
+  update_lsp("yaml-language-server", [[
+    yarn global add yaml-language-server
+  ]])
 end
 
 function update_all_lsps()
@@ -220,6 +227,7 @@ function update_all_lsps()
   update_typescript_ls()
   update_rust_analyzer()
   update_gopls()
+  update_yaml_ls()
 end
 
 lsp_setup.update_lsps = function()
@@ -227,10 +235,6 @@ lsp_setup.update_lsps = function()
   os.execute 'python3 -m pip install --user -U cmake-language-server'
   os.execute [[python3 -m pip install --user -U 'python-language-server[all]']]
 end
-
-vim.api.nvim_exec([[
-  command! UpdateBicepLsp lua require'pontifex.lsp_setup'.update_bicep_lsp()
-]], false)
 
 return lsp_setup
 
