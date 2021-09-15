@@ -67,17 +67,24 @@ function mac-installs {
 }
 
 function linux-installs {
-  apt_packages=(neovim python3-neovim fzf ripgrep tmux)
+  curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-  if [ $(id -u) -eq 0 ]; then
-    add-apt-repository ppa:neovim-ppa/unstable
-    apt update
-    apt install -y "${apt_packages[@]}"
-  else
-    sudo add-apt-repository ppa:neovim-ppa/unstable
-    sudo apt update
-    sudo apt install -y "${apt_packages[@]}" 
-  fi
+  sudo add-apt-repository ppa:neovim-ppa/unstable
+  sudo apt update
+  sudo apt install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    neovim \
+    fzf \
+    ripgrep \
+    tmux
+    
+  # kubectl
+  sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  sudo apt-get update
+  sudo apt-get install -y kubectl
 
   # Rust
   curl https://sh.rustup.rs -sSf | sh -s -- -y
