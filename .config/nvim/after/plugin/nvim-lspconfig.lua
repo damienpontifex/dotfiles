@@ -80,7 +80,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers 
 -- and map buffer local keybindings when the language server attaches
-local servers = {'jsonls', 'gopls', 'pyls', 'cmake', 'omnisharp', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
+local servers = {} -- {'jsonls', 'gopls', 'pyls', 'cmake', 'omnisharp', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {
     on_attach = on_attach,
@@ -111,22 +111,8 @@ lsp_config.terraformls.setup{
   on_attach = on_attach
 }
 
---lsp_config.rust_analyzer.setup {
---  --parallel
---}
-
-local configs = require 'lspconfig/configs'
-local lsputil = require 'lspconfig/util'
-
-configs.bicep = {
-  default_config = {
-    cmd = { "dotnet", "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll" };
-    filetypes = { "bicep" };
-    root_dir = lsputil.root_pattern(".git");
-  };
-}
-
 lsp_config.bicep.setup {
+  cmd = { "dotnet", "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll" },
   on_attach = on_attach
 }
 
