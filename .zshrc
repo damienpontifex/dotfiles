@@ -25,7 +25,7 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 # PROMPT=$PROMPT'$(kube_ps1) '
-# RPROMPT='k8s: $(kube_ps1)'
+RPROMPT='$(kube_ps1)'
 
 # Ensure zsh plugins available
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
@@ -122,3 +122,16 @@ export DOCKER_BUILDKIT=1
 # }
 # zle -N open_with_fzf
 # bindkey '^o' open_with_fzf
+
+# This speeds up pasting w/ autosuggest
+# https://github.com/zsh-users/zsh-autosuggestions/issues/238
+pasteinit() {
+  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
+
+pastefinish() {
+  zle -N self-insert $OLD_SELF_INSERT
+}
+zstyle :bracketed-paste-magic paste-init pasteinit
+zstyle :bracketed-paste-magic paste-finish pastefinish
