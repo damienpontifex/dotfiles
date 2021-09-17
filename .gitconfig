@@ -1,6 +1,7 @@
 [core]
 	excludesfile = /Users/ponti/.gitignore_global
 	editor = nvim
+	autocrlf = true
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com

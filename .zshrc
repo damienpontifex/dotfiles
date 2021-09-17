@@ -1,4 +1,4 @@
-export ZSH="/Users/ponti/.oh-my-zsh"
+export ZSH="${HOME}/.oh-my-zsh"
 
 ZSH_THEME="amuse"
 # ZSH_THEME="agnoster"
@@ -30,7 +30,7 @@ RPROMPT='$(kube_ps1)'
 # Ensure zsh plugins available
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
-[ -x $(command -v brew) ] && \
+[ -x "$(command -v brew)" ] && \
   [ -f "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
   source "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" && \
   bindkey '^ ' autosuggest-accept
@@ -72,7 +72,9 @@ unset file
 export CLOUDSDK_PYTHON=python3
 
 # Use llvm from homebrew
-export PATH="$(brew --prefix llvm)/bin:$PATH"
+if [ -x "$(command -v brew)" ]; then
+  export PATH="$(brew --prefix llvm)/bin:$PATH"
+fi
 
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
@@ -95,7 +97,7 @@ alias watch='watch '
 
 # az cli
 alias azswitch='az account set --subscription "$(az account list --output tsv --query "[].name" | fzf)"'
-source /usr/local/etc/bash_completion.d/az
+[ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 # k8s
 export KUBE_EDITOR=nvim
