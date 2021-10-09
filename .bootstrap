@@ -60,13 +60,15 @@ function mac-installs {
   brew tap homebrew/cask-fonts
   brew tap microsoft/git
 
-  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-cascadia-mono-pl)
+  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-cascadia-mono-pl jq)
   brew reinstall "${brew_packages[@]}" || true
 
   $(brew --prefix)/opt/fzf/install --all
 
   brew cask reinstall powershell
   brew install --cask git-credential-manager-core
+  
+  rustup-init
   
   echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 }
