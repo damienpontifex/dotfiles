@@ -25,7 +25,7 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 # PROMPT=$PROMPT'$(kube_ps1) '
-RPROMPT='$(kube_ps1)'
+RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
 
 # Ensure zsh plugins available
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
@@ -46,8 +46,12 @@ function tm {
 
 function new-tsc-project {
   npm init -y
-  npm i -D @tsconfig/node14 @types/node ts-node typescript
   echo '{\n  "extends": "@tsconfig/node14"\n}' > tsconfig.json
+  PACKAGE_JSON=$(jq '.scripts.build = "esbuild index.ts --bundle --minify --sourcemap --platform=node --outfile=bin/index.js"' package.json)
+  PACKAGE_JSON=$(echo $PACKAGE_JSON | jq $'.scripts.start = "nodemon --ext ts --ignore ./bin --exec \'npm run build && node --enable-source-maps ./bin/index.js\'"')
+  echo $PACKAGE_JSON > package.json
+  unset PACKAGE_JSON
+  npm i -D @tsconfig/node14 @types/node ts-node typescript nodemon esbuild
   touch index.ts
 }
 

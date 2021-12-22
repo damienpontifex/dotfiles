@@ -1,6 +1,6 @@
 xnoremap p "_dP
 
-" Section: Popup Menu 
+" Section: Popup Menu
 " When popup menu is visible - Enter key selects highlighted menu item
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Ctrl+Space when in insert mode to launch omni completion for ins-completion

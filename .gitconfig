@@ -1,7 +1,7 @@
 [core]
 	excludesfile = /Users/ponti/.gitignore_global
 	editor = nvim
-	autocrlf = true
+	autocrlf = input
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
@@ -40,16 +40,20 @@
 	branch = false
 [credential]
 	helper = osxkeychain
+	helper =
+	helper = /usr/local/share/gcm-core/git-credential-manager-core
 [submodule]
 	recurse = true
 	fetchJobs = 8
 [http]
 	cookiefile = /Users/ponti/.gitcookies
 
-[includeIf "gitdir:~/purple/woodside/"]
-  path = ~/purple/woodside/.gitconfig
+[includeIf "gitdir:~/wooliesx"]
+  path = ~/wooliesx/.gitconfig
 # [includeIf "gitdir:~/purple/"]
 #   path = ~/purple/.gitconfig
 # [includeIf "gitdir:~/developer/"]
 #   path = ~/developer/.gitconfig
 
+[credential "https://dev.azure.com"]
+	useHttpPath = true

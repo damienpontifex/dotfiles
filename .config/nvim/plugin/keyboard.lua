@@ -9,7 +9,7 @@ local function inoremap(key, cmd)
   vim.api.nvim_set_keymap('i', key, cmd, opts)
 end
 
--- Cancel default behaviour of d, D, c, C to put the text they delete in 
+-- Cancel default behaviour of d, D, c, C to put the text they delete in
 -- the default register.
 nnoremap('d', '"_d')
 vnoremap('d', '"_d')
@@ -62,7 +62,7 @@ vnoremap('<M-k>', ":m '<-2<CR>gv=gv")
 -- Clear search highlights with double esc
 nnoremap('<esc><esc>', ':silent! nohls<CR>')
 
--- Section: Popup Menu 
+-- Section: Popup Menu
 -- When popup menu is visible - Enter key selects highlighted menu item
 -- inoremap('<expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 -- Ctrl+Space when in insert mode to launch omni completion for ins-completion

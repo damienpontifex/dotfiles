@@ -9,7 +9,7 @@ augroup PontifexAutocmds
 
   autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
   autocmd FileType json setlocal equalprg=jq\ .
- 
+
   " Flash highlight yanked region
   autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="Substitute", timeout=200}
 

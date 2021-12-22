@@ -37,7 +37,7 @@ require'packer'.startup(function()
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
-  
+
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
 end)
@@ -45,12 +45,12 @@ end)
 vim.cmd [[
   syntax enable
   set t_ut= " without this line, weird things happen when using tmux
-  
+
   " Enable file type detection
   filetype plugin on
-  
+
   set t_Co=256
-  
+
   let &grepprg='grep -n --exclude-dir={.git,node_modules,bin,obj} $* /dev/null | redraw! | cw'
 
   colorscheme base16-gruvbox-dark-hard

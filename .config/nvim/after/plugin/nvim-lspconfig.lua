@@ -78,7 +78,7 @@ local function on_attach(client, bufnr)
   -- vim.api.nvim_command('autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()')
 end
 
--- Use a loop to conveniently both setup defined servers 
+-- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
 local servers = {} -- {'jsonls', 'gopls', 'pyls', 'cmake', 'omnisharp', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
 for _, lsp in ipairs(servers) do
@@ -142,7 +142,7 @@ local function update_lsp(lsp_name, cmd)
       print(data[1])
     end
   end
-  vim.fn.jobstart(cmd, 
+  vim.fn.jobstart(cmd,
   {
     on_stderr = on_event,
     on_stdout = on_event,
@@ -194,7 +194,7 @@ function update_rust_analyzer()
   ]])
 end
 
-function update_gopls() 
+function update_gopls()
   update_lsp("gopls", [[
     GO111MODULE=on go get golang.org/x/tools/gopls@latest
   ]])
