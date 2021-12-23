@@ -46,11 +46,14 @@ function tm {
 
 function new-tsc-project {
   npm init -y
+
   echo '{\n  "extends": "@tsconfig/node14"\n}' > tsconfig.json
-  PACKAGE_JSON=$(jq '.scripts.build = "esbuild index.ts --bundle --minify --sourcemap --platform=node --outfile=bin/index.js"' package.json)
-  PACKAGE_JSON=$(echo $PACKAGE_JSON | jq $'.scripts.start = "nodemon --ext ts --ignore ./bin --exec \'npm run build && node --enable-source-maps ./bin/index.js\'"')
+
+  local PACKAGE_JSON=$(jq $'
+  .scripts.build = "esbuild index.ts --bundle --minify --sourcemap --platform=node --outfile=bin/index.js" |
+  .scripts.start = "nodemon --ext ts --ignore ./bin --exec \'npm run build && node --enable-source-maps ./bin/index.js\'"' package.json)
   echo $PACKAGE_JSON > package.json
-  unset PACKAGE_JSON
+
   npm i -D @tsconfig/node14 @types/node ts-node typescript nodemon esbuild
   touch index.ts
 }
