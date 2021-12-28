@@ -103,7 +103,7 @@ export ASPNETCORE_ENVIRONMENT=Development
 alias watch='watch '
 
 # az cli
-alias azswitch='az account set --subscription "$(az account list --output tsv --query "[].name" | fzf)"'
+alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r az account set --subscription'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 # k8s
