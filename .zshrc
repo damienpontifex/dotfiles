@@ -1,12 +1,8 @@
 export ZSH="${HOME}/.oh-my-zsh"
 
 ZSH_THEME="amuse"
-# ZSH_THEME="agnoster"
 
 HIST_STAMPS="yyyy-mm-dd"
-
-# alias uuu="pbpaste | sed 's/\[.*\]/[default]/g' > ~/.aws/credentials"
-alias uuu="aws-azure-login --no-prompt && aws codeartifact login --tool npm --repository UpstreamProxy --domain woodside --domain-owner 278364088108 --duration-seconds 43200 --namespace @uxd"
 
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -24,10 +20,8 @@ plugins=(
   dotenv  # Auto load .env file when you cd into project root directory
 )
 source $ZSH/oh-my-zsh.sh
-# PROMPT=$PROMPT'$(kube_ps1) '
 RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
 
-# Ensure zsh plugins available
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
 [ -x "$(command -v brew)" ] && \
@@ -103,12 +97,12 @@ export ASPNETCORE_ENVIRONMENT=Development
 alias watch='watch '
 
 # az cli
-alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r az account set --subscription'
+alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 # k8s
 export KUBE_EDITOR=nvim
-# [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
+[[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
 alias kcu='kcuc "$(kcgc -o name | fzf)"'
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
