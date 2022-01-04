@@ -103,7 +103,7 @@ alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r 
 # k8s
 export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
-alias kcu='kcuc "$(kcgc -o name | fzf)"'
+alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
