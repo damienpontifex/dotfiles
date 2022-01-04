@@ -6,7 +6,6 @@ vim.opt.backup = false -- don't make backups before writing
 vim.opt.belloff = 'all' -- never ring the bell for any reason
 vim.opt.cindent = true
 vim.opt.clipboard = 'unnamed' -- Use OS clipboard
-vim.opt.colorcolumn = '80'
 vim.opt.completeopt = 'menuone' -- show menu even if there is only one candidate
 vim.opt.completeopt:append { 'noselect' } -- don't automatically select candidate
 vim.opt.cursorline = true -- highlight current line
@@ -42,3 +41,5 @@ vim.opt.wildignore:append { '*/node_modules/*', '*/bin/*', '*/obj/*' }
 vim.opt.wildmenu = true -- show options as list when switching buffers etc
 vim.opt.wrap = false
 vim.opt.conceallevel = 0 -- never conceal
+
+-- vim.g.mapleader = ' '

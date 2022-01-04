@@ -8,13 +8,13 @@ vim.api.nvim_exec([[
   command! OpenLspLog execute '!open ' . v:lua.vim.lsp.get_log_path()
   command! OpenInFinder execute '!open ' . expand("%:p:h")
   command! UpdateLsps lua require'pontifex.lsp_setup'.update_lsps()
-  " autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
+  autocmd CursorHold * lua vim.diagnostic.open_float()
 ]], false)
 
 vim.o.completeopt = 'menuone,noinsert,noselect'
 vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
 
-vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
+-- vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
 local lsp_config = require'lspconfig'
 local lsp_completion = require'completion'
@@ -22,7 +22,7 @@ local lsp_completion = require'completion'
 local function on_attach(client, bufnr)
   lsp_completion.on_attach(client, bufnr)
 
-  vim.notify("Attaching LSP client "..client.id.." to buffer "..bufnr)
+  vim.notify("Attaching LSP client "..client.name.." to buffer "..bufnr)
 
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -68,7 +68,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = {'jsonls', 'gopls', 'cmake', 'omnisharp', 'rust_analyzer', 'sumneko_lua', 'tsserver'}
+local servers = {'jsonls', 'gopls', 'omnisharp', 'rust_analyzer', 'tsserver'}
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {
     on_attach = on_attach,
@@ -106,13 +106,13 @@ lsp_config.bicep.setup {
 
 local lsp_setup = {}
 
-lsp_setup.restart_lsp_servers = function()
+function restart_lsp_servers()
   vim.lsp.stop_client(vim.lsp.get_active_clients())
   -- Force LSP for current buffer to start
   vim.cmd('edit')
 end
 
-lsp_setup.open_lsp_log = function()
+function open_lsp_log()
   vim.cmd('!open ' .. vim.lsp.get_log_path())
 end
 
