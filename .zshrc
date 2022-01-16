@@ -100,6 +100,32 @@ alias watch='watch '
 alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
+function renew-aks-credentials {
+  local CURRENT_SUBSCRIPTION=$(az account show --query 'name' -o tsv)
+  local CURRENT_CONTEXT=$(k config current-context)
+
+  az account set --subscription WOWDEVTEST
+  az aks get-credentials --resource-group wow-dev-k8s-ecommerce-aae --name wowdk8suiaae --overwrite-existing
+  kcn trader-ui
+
+  az account set --subscription WOWUAT
+  az aks get-credentials --resource-group wow-uat-k8s-ecommerce-aae --name wowuk8suiaae --overwrite-existing
+  kcn trader-ui
+  az aks get-credentials --resource-group wow-uat-k8s-ecommerce-aas --name wowuk8suiaas --overwrite-existing
+  kcn trader-ui
+
+  az account set --subscription WOWPROD
+  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aae --name wowpk8suiaae-2 --overwrite-existing
+  kcn trader-ui
+  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aae --name wowpk8suiaae --overwrite-existing
+  kcn trader-ui
+  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aas --name wowpk8suiaas --overwrite-existing
+  kcn trader-ui
+
+  az account set --subscription "${CURRENT_SUBSCRIPTION}"
+  k config use-context "${CURRENT_CONTEXT}"
+}
+
 # k8s
 export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
