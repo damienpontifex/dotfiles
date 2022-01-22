@@ -19,7 +19,8 @@ require'packer'.startup(function()
   -- use 'morhetz/gruvbox'
   use 'chriskempson/base16-vim'
   use 'vim-airline/vim-airline'
-  use "projekt0n/github-nvim-theme"
+  -- use "projekt0n/github-nvim-theme"
+  use 'vv9k/vim-github-dark'
 
   -- use { 'junegunn/fzf', run = 'call fzf#install()' }
   -- use 'junegunn/fzf.vim'
@@ -54,6 +55,6 @@ vim.cmd [[
 
   let &grepprg='grep -n --exclude-dir={.git,node_modules,bin,obj} $* /dev/null | redraw! | cw'
 
-  colorscheme github_dark_default
+  colorscheme ghdark
 ]]
 

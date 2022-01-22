@@ -76,7 +76,7 @@ for _, lsp in ipairs(servers) do
 end
 
 lsp_config.omnisharp.setup{
-  cmd = { "/usr/local/bin/omnisharp/run", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
+  cmd = { "/usr/local/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
 }
 
 --vim.lsp.set_log_level('debug')
