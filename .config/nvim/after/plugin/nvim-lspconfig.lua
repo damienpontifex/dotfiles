@@ -4,7 +4,6 @@ vim.api.nvim_exec([[
 "   sign define LspDiagnosticsInformationSign text=ℹ
 "   sign define LspDiagnosticsHintSign text=👉
 
-  command! LspRestart lua require'pontifex.lsp_setup'.restart_lsp_servers()
   command! OpenLspLog execute '!open ' . v:lua.vim.lsp.get_log_path()
   command! OpenInFinder execute '!open ' . expand("%:p:h")
   command! UpdateLsps lua require'pontifex.lsp_setup'.update_lsps()
@@ -68,7 +67,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = {'jsonls', 'gopls', 'omnisharp', 'rust_analyzer', 'tsserver'}
+local servers = {'gopls', 'omnisharp', 'rust_analyzer', 'tsserver'}
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {
     on_attach = on_attach,
