@@ -8,38 +8,79 @@ require'packer'.startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  use 'scrooloose/nerdtree'
+  use {
+    'nvim-telescope/telescope.nvim',
+    config = function()
+      require('config.telescope').setup()
+    end,
+    requires = {
+      'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim',
+    }
+  }
+
+  use {
+    'scrooloose/nerdtree',
+    config = function() 
+      require('config.nerdtree').setup()
+    end,
+  }
+
   use 'ryanoasis/vim-devicons'
-  -- use 'tiagofumo/vim-nerdtree-syntax-highlight'
   use 'tpope/vim-fugitive'
+  use {
+    'vim-airline/vim-airline',
+    requires = {
+      'vim-airline/vim-airline-themes',
+    },
+  }
+  use 'editorconfig/editorconfig-vim'
 
-  use 'tomasiser/vim-code-dark'
-  use 'arcticicestudio/nord-vim'
-  -- use 'morhetz/gruvbox'
-  use 'chriskempson/base16-vim'
-  use 'vim-airline/vim-airline'
-  -- use "projekt0n/github-nvim-theme"
-  use 'vv9k/vim-github-dark'
+  -- Themes
+  --use 'tomasiser/vim-code-dark'
+  --use 'arcticicestudio/nord-vim'
+  --use 'chriskempson/base16-vim'
+  use {
+    'vv9k/vim-github-dark',
+    config = function()
+      vim.cmd 'colorscheme ghdark'
+      -- set hlsearch " highlight matches
+      -- See :h cterm-colors for colours
+      vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
+    end,
+  }
 
-  -- use { 'junegunn/fzf', run = 'call fzf#install()' }
-  -- use 'junegunn/fzf.vim'
-  -- use 'mileszs/ack.vim'
+  use {
+    'neovim/nvim-lspconfig',
+    config = function()
+      require('config.lsp').setup()
+    end,
+    wants = { "cmp-nvim-lsp" }
+  }
+  use {
+    'hrsh7th/nvim-cmp',
+    config = function()
+      require('config.cmp').setup()
+    end,
+    requires = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-nvim-lsp-signature-help'
+    }
+  }
 
-  use 'neovim/nvim-lspconfig'
-  use 'nvim-lua/completion-nvim'
+  -- Languages
   use 'hashivim/vim-terraform'
   use 'pprovost/vim-ps1'
   use 'plasticboy/vim-markdown'
-  -- use 'rust-lang/rust.vim'
-  -- use 'Yggdroot/indentLine'
-  use 'editorconfig/editorconfig-vim'
 
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+  use { 
+    'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('config.treesitter').setup()
+    end,
+    run = ':TSUpdate' 
   }
-
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
@@ -47,18 +88,4 @@ require'packer'.startup(function(use)
   end
 
 end)
-
-vim.cmd [[
-  syntax enable
-  set t_ut= " without this line, weird things happen when using tmux
-
-  " Enable file type detection
-  filetype plugin on
-
-  set t_Co=256
-
-  let &grepprg='grep -n --exclude-dir={.git,node_modules,bin,obj} $* /dev/null | redraw! | cw'
-
-  colorscheme ghdark
-]]
 

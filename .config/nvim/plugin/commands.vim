@@ -4,3 +4,6 @@ command! Hterm :sp|:term
 command! DeleteAllBuffers :bufdo bd
 cnoreabbrev bda DeleteAllBuffers
 
+command! OpenLspLog execute '!open ' . v:lua.vim.lsp.get_log_path()
+command! OpenInFinder execute '!open ' . expand("%:p:h")
+

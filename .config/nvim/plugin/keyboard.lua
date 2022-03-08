@@ -1,13 +1,10 @@
 local opts = { noremap = true, silent = true }
-local function nnoremap(key, cmd)
-  vim.api.nvim_set_keymap('n', key, cmd, opts)
-end
-local function vnoremap(key, cmd)
-  vim.api.nvim_set_keymap('v', key, cmd, opts)
-end
-local function inoremap(key, cmd)
-  vim.api.nvim_set_keymap('i', key, cmd, opts)
-end
+local function nnoremap(key, cmd) vim.api.nvim_set_keymap('n', key, cmd, opts) end
+local function vnoremap(key, cmd) vim.api.nvim_set_keymap('v', key, cmd, opts) end
+local function inoremap(key, cmd) vim.api.nvim_set_keymap('i', key, cmd, opts) end
+local function xnoremap(key, cmd) vim.api.nvim_set_keymap('x', key, cmd, opts) end
+
+xnoremap('p', '"_dP')
 
 -- Cancel default behaviour of d, D, c, C to put the text they delete in
 -- the default register.
@@ -62,18 +59,19 @@ vnoremap('<M-k>', ":m '<-2<CR>gv=gv")
 -- Clear search highlights with double esc
 nnoremap('<esc><esc>', ':silent! nohls<CR>')
 
--- Section: Popup Menu
--- When popup menu is visible - Enter key selects highlighted menu item
--- inoremap('<expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
--- Ctrl+Space when in insert mode to launch omni completion for ins-completion
--- http://vimdoc.sourceforge.net/htmldoc/insert.html#ins-completion
--- inoremap('<C-Space>', "\<C-x>\<C-o>")
--- inoremap('<C-@>', "\<C-x>\<C-o>")
--- inoremap('<Tab>', 'pumvisible() ? "\<C-n>" : "\<Tab>"')
--- inoremap('<S-Tab>', 'pumvisible() ? "\<C-p>" : "\<S-Tab>"')
--- autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+vim.cmd [[
+  " Section: Popup Menu
+  " When popup menu is visible - Enter key selects highlighted menu item
+  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " Ctrl+Space when in insert mode to launch omni completion for ins-completion
+  " http://vimdoc.sourceforge.net/htmldoc/insert.html#ins-completion
+  inoremap <expr> <C-Space> "\<C-x>\<C-o>"
+  inoremap <expr> <C-@> "\<C-x>\<C-o>"
+  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
--- nnoremap('<C-p>', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
--- nnoremap('<leader>fg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
--- nnoremap('<leader>fb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
--- nnoremap('<leader>fh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
+  " \q to delete buffer without closing window
+  map <leader>q :bp<CR>:bd#<CR>
+]]
+
