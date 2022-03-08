@@ -11,7 +11,7 @@ vim.api.nvim_exec([[
 ]], false)
 
 vim.o.completeopt = 'menuone,noinsert,noselect'
-vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
+-- vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
 
 -- vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
@@ -22,6 +22,8 @@ local function on_attach(client, bufnr)
   lsp_completion.on_attach(client, bufnr)
 
   vim.notify("Attaching LSP client "..client.name.." to buffer "..bufnr)
+
+  print(vim.inspect(client.resolved_capabilities))
 
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -67,7 +69,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = {'gopls', 'omnisharp', 'rust_analyzer', 'tsserver'}
+local servers = {'gopls', 'omnisharp', 'tsserver'}
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {
     on_attach = on_attach,
@@ -77,6 +79,24 @@ end
 lsp_config.omnisharp.setup{
   cmd = { "/usr/local/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
 }
+
+lsp_config.rust_analyzer.setup({
+  on_attach = on_attach,
+  settings = {
+    ["rust-analyzer"] = {
+      assist = {
+        importGranularity = "module",
+        importPrefix = "by_self",
+      },
+      cargo = {
+        loadOutDirsFromCheck = true
+      },
+      procMacro = {
+        enable = true
+      },
+    }
+  }
+})
 
 --vim.lsp.set_log_level('debug')
 
@@ -171,15 +191,7 @@ function update_typescript_ls()
 end
 
 function update_rust_analyzer()
-  update_lsp("rust-analyzer", [[
-    echo "Rust analyzer version:" \
-    $(curl --silent https://api.github.com/repos/rust-analyzer/rust-analyzer/releases/latest \
-    | jq --raw-output '.name') \
-    && curl --location --silent \
-      https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-$(uname -m)-apple-darwin.gz \
-      | gunzip > /usr/local/bin/rust-analyzer  \
-    && chmod +x /usr/local/bin/rust-analyzer
-  ]])
+  update_lsp("rust-analyzer", 'brew upgrade rust-analyzer || brew install rust-analyzer')
 end
 
 function update_gopls()
