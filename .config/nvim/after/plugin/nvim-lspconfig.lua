@@ -69,7 +69,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = {'gopls', 'omnisharp', 'tsserver'}
+local servers = {'gopls', 'tsserver'}
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {
     on_attach = on_attach,
@@ -77,7 +77,8 @@ for _, lsp in ipairs(servers) do
 end
 
 lsp_config.omnisharp.setup{
-  cmd = { "/usr/local/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) };
+  cmd = { "/usr/local/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
+  on_attach = on_attach,
 }
 
 lsp_config.rust_analyzer.setup({
@@ -176,7 +177,7 @@ function update_omnisharp_lsp()
     rm -rf /usr/local/bin/omnisharp \
     && mkdir -p /usr/local/bin/omnisharp \
     && curl --silent --location \
-      https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx.tar.gz \
+      https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz \
     | tar xz - -C /usr/local/bin/omnisharp
   ]]
   update_lsp("omnisharp", cmd)
