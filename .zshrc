@@ -7,6 +7,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+[ -d /opt/homebrew/bin ] && PATH="/opt/homebrew/bin:$PATH"
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+
 plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
@@ -64,6 +67,7 @@ alias getmyip='dig +short myip.opendns.com @resolver1.opendns.com'
 
 ### Static HTTP Server ###
 alias http-server="python3 -m http.server"
+[ -x "$(command -v brew)" ] && [ -d "$(brew --prefix python3)" ] && export PATH="$(brew --prefix python3)/libexec/bin:$PATH"
 
 # gcloud cli https://cloud.google.com/sdk/install
 for file in $HOME/.gcloud/google-cloud-sdk/{path.zsh.inc,completion.zsh.inc}; do
@@ -164,3 +168,5 @@ pastefinish() {
 }
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
