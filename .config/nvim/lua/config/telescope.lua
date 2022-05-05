@@ -2,15 +2,16 @@ local M = {}
 
 function M.setup()
 
-  local opts = { noremap=true, silent=true }
-  vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], opts)
-  vim.api.nvim_set_keymap('n', '<Leader>fg', [[<Cmd>lua require('telescope.builtin').live_grep()<CR>]], opts)
-  vim.api.nvim_set_keymap('n', '<Leader>fb', [[<Cmd>lua require('telescope.builtin').buffers()<CR>]], opts)
-  vim.api.nvim_set_keymap('n', '<Leader>fh', [[<Cmd>lua require('telescope.builtin').help_tags()<CR>]], opts)
-  vim.api.nvim_set_keymap('n', '<Leader>gs', [[<Cmd>lua require('telescope.builtin').git_status()<CR>]], opts)
+  local opts = { noremap = true, silent = true }
+  local telescope_builtin = require('telescope.builtin')
+  vim.keymap.set('n', '<Leader>ff', telescope_builtin.find_files, opts)
+  vim.keymap.set('n', '<Leader>fg', telescope_builtin.live_grep, opts)
+  vim.keymap.set('n', '<Leader>fb', telescope_builtin.buffers, opts)
+  vim.keymap.set('n', '<Leader>fh', telescope_builtin.help_tags, opts)
+  vim.keymap.set('n', '<Leader>gs', telescope_builtin.git_status, opts)
 
-  vim.api.nvim_set_keymap('n', '<C-p>', [[<Cmd>lua require('telescope.builtin').git_filenis()<CR>]], opts)
-  vim.api.nvim_set_keymap('n', '<C-f>', [[<Cmd>lua require('telescope.builtin').live_grep()<CR>]], opts)
+  vim.keymap.set('n', '<C-p>', telescope_builtin.git_files, opts)
+  vim.keymap.set('n', '<C-f>', telescope_builtin.live_grep, opts)
 
   local actions = require('telescope.actions')
   require('telescope').setup{

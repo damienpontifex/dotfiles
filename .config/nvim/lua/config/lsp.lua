@@ -12,32 +12,32 @@ function M.setup()
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local opts = { noremap=true, silent=true }
-    buf_set_keymap('n', 'gD'    ,':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', 'gd'    ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', '<C-]>' ,'<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', 'K'     ,'<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    buf_set_keymap('n', '<F12>' ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', '<F2>'  ,'<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    buf_set_keymap('n', 'ca'    ,'<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    -- buf_set_keymap(bufnr, 'n', '<C-k>' ,'<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    buf_set_keymap('n', 'gr'    ,'<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', 'g0'    ,'<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-    buf_set_keymap('n', 'gW'    ,'<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+    local opts = { silent = true, buffer = true }
 
-    buf_set_keymap('n', '<leader>dn', '<cmd> lua vim.diagnostic.goto_next()<CR>', opts)
-    buf_set_keymap('n', '<leader>dp', '<cmd> lua vim.diagnostic.goto_prev()<CR>', opts)
-    buf_set_keymap('n', '<leader>ds', '<cmd> lua vim.diagnostic.open_float()<CR>', opts)
-    buf_set_keymap('n', '<leader>af', '<cmd> lua vim.lsp.buf.code_action()<CR>', opts)
-    buf_set_keymap('n', '<leader>kf', '<cmd> lua vim.lsp.buf.formatting()<CR>', opts)
+    vim.keymap.set('n', 'gD', ':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+    vim.keymap.set('n', 'gd'    ,vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gr'    ,vim.lsp.buf.references, opts)
+    vim.keymap.set('n', 'K'     ,vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', '<F12>' ,vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<F2>'  ,vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', 'ca'    ,vim.lsp.buf.code_action, opts)
+    -- buf_set_keymap(bufnr, 'n', '<C-k>' ,vim.lsp.buf.signature_help()<CR>', opts)
+    vim.keymap.set('n', 'gr'    ,vim.lsp.buf.references, opts)
+    vim.keymap.set('n', 'g0'    ,vim.lsp.buf.document_symbol, opts)
+    vim.keymap.set('n', 'gW'    ,vim.lsp.buf.workspace_symbol, opts)
+
+    vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, opts)
+    vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
+    vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '<leader>af', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<leader>kf', vim.lsp.buf.formatting, opts)
 
     -- Set some keybinds conditional on server capabilities
     if client.resolved_capabilities.document_formatting then
-      buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+      vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, opts)
     elseif client.resolved_capabilities.document_range_formatting then
-      buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+      vim.keymap.set("n", "<space>f", vim.lsp.buf.range_formatting, opts)
     end
   end
 
@@ -55,7 +55,7 @@ function M.setup()
   end
 
   lsp_config.omnisharp.setup{
-    cmd = { "/usr/local/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
+    cmd = { "/opt/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
     on_attach = on_attach,
     capabilities = capabilities,
   }
@@ -86,8 +86,9 @@ function M.setup()
     settings = {
       yaml = {
         schemas = {
-          ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" };
-          ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yml" };
+          ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" },
+          ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yml" },
+          ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = { "tye.yaml" },
           kubernetes = "/*.yaml"
         }
       }
@@ -157,11 +158,11 @@ end
 
 function update_omnisharp_lsp()
   local cmd = [[
-    rm -rf /usr/local/bin/omnisharp \
-    && mkdir -p /usr/local/bin/omnisharp \
+    rm -rf /opt/bin/omnisharp/* \
+    && mkdir -p /opt/bin/omnisharp \
     && curl --silent --location \
       https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz \
-    | tar xz - -C /usr/local/bin/omnisharp
+    | tar xz - -C /opt/bin/omnisharp
   ]]
   update_lsp("omnisharp", cmd)
 end

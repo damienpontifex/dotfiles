@@ -1,77 +1,69 @@
 local opts = { noremap = true, silent = true }
-local function nnoremap(key, cmd) vim.api.nvim_set_keymap('n', key, cmd, opts) end
-local function vnoremap(key, cmd) vim.api.nvim_set_keymap('v', key, cmd, opts) end
-local function inoremap(key, cmd) vim.api.nvim_set_keymap('i', key, cmd, opts) end
-local function xnoremap(key, cmd) vim.api.nvim_set_keymap('x', key, cmd, opts) end
 
-xnoremap('p', '"_dP')
+vim.keymap.set('x', 'p', '"_dP', opts)
 
 -- Cancel default behaviour of d, D, c, C to put the text they delete in
 -- the default register.
-nnoremap('d', '"_d')
-vnoremap('d', '"_d')
-nnoremap('D', '"_D')
-vnoremap('D', '"_D')
-nnoremap('c', '"_c')
-vnoremap('c', '"_c')
-nnoremap('C', '"_C')
-vnoremap('C', '"_C')
+vim.keymap.set({ 'n', 'v' }, 'd', '"_d', opts)
+vim.keymap.set({ 'n', 'v' }, 'D', '"_D', opts)
+vim.keymap.set({ 'n', 'v' }, 'c', '"_c', opts)
+vim.keymap.set({ 'n', 'v' }, 'C', '"_C', opts)
 
 -- Auto format document
-nnoremap('<Tab>', ':bnext<CR>')
-nnoremap('<S-Tab>', ':bprevious<CR>')
--- nnoremap('F', "gg=G''<CR>")
+vim.keymap.set('n', '<Tab>', ':bnext<CR>')
+vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>')
+-- vim.keymap.set('n', 'F', "gg=G''<CR>")
 
 -- make < > shifts keep selection
-vnoremap('<', '<gv')
-vnoremap('>', '>gv')
+vim.keymap.set('v', '<', '<gv', opts)
+vim.keymap.set('v', '>', '>gv', opts)
 
 -- Esc to got to normal mode in terminal
-vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], opts)
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
 
 -- -- Split navigation using Ctrl+{hjkl}
--- nnoremap('<C-J>', '<C-W><C-J>')
--- nnoremap('<C-K>', '<C-W><C-K>')
--- nnoremap('<C-L>', '<C-W><C-L>')
--- nnoremap('<C-H>', '<C-W><C-H>')
+-- vim.keymap.set('n', '<C-J>', '<C-W><C-J>', opts)
+-- vim.keymap.set('n', '<C-K>', '<C-W><C-K>', opts)
+-- vim.keymap.set('n', '<C-L>', '<C-W><C-L>', opts)
+-- vim.keymap.set('n', '<C-H>', '<C-W><C-H>', opts)
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
-nnoremap('k', 'gk')
-nnoremap('j', 'gj')
-nnoremap('0', 'g0')
-nnoremap('$', 'g$')
+vim.keymap.set('n', 'k', 'gk', opts)
+vim.keymap.set('n', 'j', 'gj', opts)
+vim.keymap.set('n', '0', 'g0', opts)
+vim.keymap.set('n', '$', 'g$', opts)
 
 -- Mappings to move lines with alt+{j,k} in normal, insert, visual modes
 -- Symbols are the real character generated on macOS when pressing Alt+key
-nnoremap('∆ :m', '.+1<CR>==')
-nnoremap('<M-j> :m', '.+1<CR>==')
-nnoremap('˚ :m', '.-2<CR>==')
-nnoremap('<M-k> :m', '.-2<CR>==')
+vim.keymap.set('n', '∆ :m', '.+1<CR>==', opts)
+vim.keymap.set('n', '<M-j> :m', '.+1<CR>==', opts)
+vim.keymap.set('n', '˚ :m', '.-2<CR>==', opts)
+vim.keymap.set('n', '<M-k> :m', '.-2<CR>==', opts)
 
-inoremap('∆', '<Esc>:m .+1<CR>==gi')
-inoremap('˚', '<Esc>:m .-2<CR>==gi')
-vnoremap('∆' , ":m '>+1<CR>gv=gv")
-vnoremap('<M-j>', ":m '>+1<CR>gv=gv")
-vnoremap('˚', ":m, '<-2<CR>gv=gv")
-vnoremap('<M-k>', ":m '<-2<CR>gv=gv")
+vim.keymap.set('i', '∆', '<Esc>:m .+1<CR>==gi', opts)
+vim.keymap.set('i', '˚', '<Esc>:m .-2<CR>==gi', opts)
+vim.keymap.set('v', '∆' , ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set('v', '<M-j>', ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set('v', '˚', ":m, '<-2<CR>gv=gv", opts)
+vim.keymap.set('v', '<M-k>', ":m '<-2<CR>gv=gv", opts)
 
 -- Clear search highlights with double esc
-nnoremap('<esc><esc>', ':silent! nohls<CR>')
+vim.keymap.set('n', '<esc><esc>', ':silent! nohls<CR>', opts)
 
-vim.cmd [[
-  " Section: Popup Menu
-  " When popup menu is visible - Enter key selects highlighted menu item
-  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  " Ctrl+Space when in insert mode to launch omni completion for ins-completion
-  " http://vimdoc.sourceforge.net/htmldoc/insert.html#ins-completion
-  inoremap <expr> <C-Space> "\<C-x>\<C-o>"
-  inoremap <expr> <C-@> "\<C-x>\<C-o>"
-  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-  autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+-- \q to delete buffer without closing window
+vim.keymap.set('n', '<leader>q', ':bp<CR>:bd#<CR>', opts)
 
-  " \q to delete buffer without closing window
-  map <leader>q :bp<CR>:bd#<CR>
-]]
+--vim.keymap.set('i', '<CR>', function()
+--  return vim.fn.pumvisible() == 1 and '<C-y>' or '<CR>'
+--end, { expr = true })
+
+-- vim.keymap.set('i', '<C-Space>', '<C-x><C-o>', { expr = true })
+-- vim.keymap.set('i', '<C-@>', '<C-x><C-o>', { expr = true })
+vim.keymap.set('i', '<Tab>', function()
+  return vim.fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
+end, { expr = true })
+vim.keymap.set('i', '<S-Tab>', function()
+  return vim.fn.pumvisible() == 1 and '<C-p>' or '<S-Tab>'
+end, { expr = true })
 

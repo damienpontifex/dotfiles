@@ -60,9 +60,8 @@ opt.conceallevel = 0 -- never conceal
 -- g.maplocalleader = ' '
 
 -- Highlight on yank
-vim.cmd [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="Substitute", timeout=200}
-  augroup end
-]]
+vim.api.nvim_create_autocmd({ "TextYankPost" }, {
+  callback = function()
+    vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
+  end,
+})
