@@ -26,11 +26,11 @@ function M.setup()
       { name = "nvim_lsp" },
       { name = "nvim_lsp_signature_help" },
     }),
-    -- snippet = {
-    --   expand = function(args)
-    --     require('luasnip').lsp_expand(args.body)
-    --   end,
-    -- },
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
   })
 end
 

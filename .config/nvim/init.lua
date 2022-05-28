@@ -24,6 +24,7 @@ require'packer'.startup(function(use)
     requires = {
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-live-grep-raw.nvim',
     }
   }
 
@@ -73,7 +74,9 @@ require'packer'.startup(function(use)
     requires = {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-nvim-lua',
-      'hrsh7th/cmp-nvim-lsp-signature-help'
+      'hrsh7th/cmp-nvim-lsp-signature-help',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
     }
   }
 

@@ -14,7 +14,7 @@ function M.setup()
 
     local opts = { silent = true, buffer = true }
 
-    vim.keymap.set('n', 'gD', ':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+    --vim.keymap.set('n', 'gD', ':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
     vim.keymap.set('n', 'gd'    ,vim.lsp.buf.definition, opts)
     vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gr'    ,vim.lsp.buf.references, opts)
@@ -87,7 +87,7 @@ function M.setup()
       yaml = {
         schemas = {
           ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" },
-          ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yml" },
+          ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yaml" },
           ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = { "tye.yaml" },
           kubernetes = "/*.yaml"
         }
