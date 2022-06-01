@@ -50,14 +50,21 @@ require'packer'.startup(function(use)
   --use 'arcticicestudio/nord-vim'
   --use 'chriskempson/base16-vim'
   use {
-    'vv9k/vim-github-dark',
+    'catppuccin/nvim',
+    as = 'catppuccin',
     config = function()
-      vim.cmd 'colorscheme ghdark'
-      -- set hlsearch " highlight matches
-      -- See :h cterm-colors for colours
-      vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
+      vim.cmd[[colorscheme catppuccin]]
     end,
   }
+  --use {
+  --  'vv9k/vim-github-dark',
+  --  config = function()
+  --    -- vim.cmd 'colorscheme ghdark'
+  --    -- set hlsearch " highlight matches
+  --    -- See :h cterm-colors for colours
+  --    -- vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
+  --  end,
+  --}
 
   use {
     'neovim/nvim-lspconfig',
@@ -65,6 +72,18 @@ require'packer'.startup(function(use)
       require('config.lsp').setup()
     end,
     wants = { "cmp-nvim-lsp" }
+  }
+  use { 
+    'rcarriga/nvim-dap-ui', 
+    config = function()
+      require('config.dap').setup()
+    end,
+    requires = {
+      'mfussenegger/nvim-dap',
+      'mfussenegger/nvim-dap-python',
+      'theHamsta/nvim-dap-virtual-text',
+      'nvim-telescope/telescope-dap.nvim'
+    } 
   }
   use {
     'hrsh7th/nvim-cmp',
