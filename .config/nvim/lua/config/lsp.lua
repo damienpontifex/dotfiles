@@ -53,6 +53,10 @@ function M.setup()
       capabilities = capabilities,
     }
   end
+  lsp_config.jsonls.setup{}
+
+  -- python3 -m pip install --upgrade pyright
+  lsp_config.pyright.setup{}
 
   lsp_config.omnisharp.setup{
     cmd = { "/opt/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
