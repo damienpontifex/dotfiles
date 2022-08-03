@@ -72,6 +72,11 @@ function M.setup_rust(dap)
     command = '/usr/bin/lldb-vscode',
     name = 'lldb'
   }
+  dap.adapters['rust-lldb'] = {
+    type = 'executable',
+    command = vim.fn.expand('$HOME/.cargo/bin/rust-lldb'),
+    name = 'rust-lldb'
+  }
 
   dap.configurations.cpp = {
     {
@@ -101,11 +106,36 @@ function M.setup_rust(dap)
   }
 
   dap.configurations.c = dap.configurations.cpp
-  dap.configurations.rust = dap.configurations.cpp
-  dap.configurations.rust[1].program = function()
-    local likely_executable_name = string.gsub(vim.fn.getcwd(), '(.*/)(.*)', '%2')
-    return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/' .. likely_executable_name, 'file')
-  end
+
+--  dap.configurations.rust = {
+--    {
+--      name = 'Launch',
+--      type = 'rust-lldb',
+--      request = 'launch',
+--      program = function()
+--        local pickers = require('telescope.pickers')
+--        local finders = require('telescope.finders')
+--        pickers.new({}, {
+--          prompt_title = 'Target',
+--          finder = finders.new_oneshot_job('find target/debug -type f -perm -111', {}),
+--          attach_mappings = function(prompt_bufnr, map)
+--            -- Override the action for <CR> to get value instead of open buffer
+--            actions.select_default:replace(function()
+--              local selection = action_state.get_selected_entry()
+--              
+--            end)
+--            return true
+--          end,
+--        }):find()
+--
+--        local likely_executable_name = string.gsub(vim.fn.getcwd(), '(.*/)(.*)', '%2')
+--        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/' .. likely_executable_name, 'file')
+--      end,
+--      cwd = '${workspaceFolder}',
+--      stopOnEntry = true,
+--      args = {},
+--    },
+--  }
 end
 
 function M.setup_ui(dap)

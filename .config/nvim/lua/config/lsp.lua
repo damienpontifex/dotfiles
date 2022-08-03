@@ -59,7 +59,7 @@ function M.setup()
   lsp_config.pyright.setup{}
 
   lsp_config.omnisharp.setup{
-    cmd = { "/opt/bin/omnisharp/Omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
+    cmd = { "dotnet", "/opt/bin/omnisharp/Omnisharp.dll", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
     on_attach = on_attach,
     capabilities = capabilities,
   }
@@ -90,9 +90,11 @@ function M.setup()
     settings = {
       yaml = {
         schemas = {
-          ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", "pipelines/**/*.yml" },
-          ["https://json.schemastore.org/github-workflow"] = { ".github/**/*.yaml" },
-          ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = { "tye.yaml" },
+          ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", ".pipelines/**/*.yml" },
+          ["https://json.schemastore.org/github-workflow.json"] = ".github/**",
+          ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = "tye.yaml",
+          ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] = "helmfile.yaml",
+          ["https://json.schemastore.org/catalog-info.json"] = "catalog-info.yaml",
           kubernetes = "/*.yaml"
         }
       }
@@ -185,7 +187,7 @@ end
 
 function update_gopls()
   update_lsp("gopls", [[
-    GO111MODULE=on go get golang.org/x/tools/gopls@latest
+    GO111MODULE=on go install golang.org/x/tools/gopls@latest
   ]])
 end
 

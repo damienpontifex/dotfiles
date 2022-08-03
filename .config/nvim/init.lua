@@ -44,6 +44,12 @@ require'packer'.startup(function(use)
     },
   }
   use 'editorconfig/editorconfig-vim'
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
 
   -- Themes
   --use 'tomasiser/vim-code-dark'
@@ -73,6 +79,16 @@ require'packer'.startup(function(use)
     end,
     wants = { "cmp-nvim-lsp" }
   }
+  --use {
+  --  'simrat39/rust-tools.nvim',
+  --  config = function()
+  --    require('config.rusttools').setup()
+  --  end,
+  --  requires = {
+  --    'mfussenegger/nvim-dap',
+  --    'nvim-lua/plenary.nvim',
+  --  }
+  --}
   use { 
     'rcarriga/nvim-dap-ui', 
     config = function()
@@ -104,6 +120,7 @@ require'packer'.startup(function(use)
   use 'hashivim/vim-terraform'
   use 'pprovost/vim-ps1'
   use 'plasticboy/vim-markdown'
+  use 'jparise/vim-graphql'
 
   use { 
     'nvim-treesitter/nvim-treesitter',

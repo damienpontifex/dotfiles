@@ -14,8 +14,8 @@ function M.setup()
   vim.keymap.set('n', '<C-p>', function() builtin.find_files(themes.get_dropdown({ previewer = false })) end, opts)
 
   --vim.keymap.set('n', '<C-f>', builtin.live_grep, opts)
-  require('telescope').load_extension('live_grep_raw')
-  vim.keymap.set('n', '<C-f>', require('telescope').extensions.live_grep_raw.live_grep_raw, opts)
+  require('telescope').load_extension('live_grep_args')
+  vim.keymap.set('n', '<C-f>', require('telescope').extensions.live_grep_args.live_grep_args, opts)
 
   vim.keymap.set('n', '<C-t>', builtin.lsp_dynamic_workspace_symbols, opts)
   vim.keymap.set('n', 'gD', function()
