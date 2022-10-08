@@ -56,7 +56,6 @@ export PS1="${RESET}\u@\h:${GREEN}\w${YELLOW}\$(git_branch)${NORMAL}\n\$ "
 
 export PATH="$HOME/.local/flutter/bin:$PATH"
 
-export PATH="$HOME/.cargo/bin:$PATH"
 
 for file in $HOME/.gcloud/google-cloud-sdk/{path.bash.inc,completion.bash.inc}; do
   if [[ -f $file ]]; then
@@ -78,3 +77,4 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="/usr/local/opt/llvm/bin:$PATH"
+. "$HOME/.cargo/env"

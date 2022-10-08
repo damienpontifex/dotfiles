@@ -14,6 +14,7 @@
   rb-onto = "!f() { git rebase --onto ${2:-origin/main} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
   # Delete any branches where the tracking remote has been deleted
   clean-gone = "!f() { git fetch --prune && for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
+	root = rev-parse --show-toplevel
 [push]
   default = current
 [fetch]
@@ -40,7 +41,7 @@
 	branch = false
 [credential]
 	helper = osxkeychain
-	helper =
+	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager-core
 [submodule]
 	recurse = true

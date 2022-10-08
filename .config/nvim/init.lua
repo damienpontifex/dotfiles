@@ -79,16 +79,16 @@ require'packer'.startup(function(use)
     end,
     wants = { "cmp-nvim-lsp" }
   }
-  --use {
-  --  'simrat39/rust-tools.nvim',
-  --  config = function()
-  --    require('config.rusttools').setup()
-  --  end,
-  --  requires = {
-  --    'mfussenegger/nvim-dap',
-  --    'nvim-lua/plenary.nvim',
-  --  }
-  --}
+  -- use {
+  --   'simrat39/rust-tools.nvim',
+  --   config = function()
+  --     require('config.rusttools').setup()
+  --   end,
+  --   requires = {
+  --     'mfussenegger/nvim-dap',
+  --     'nvim-lua/plenary.nvim',
+  --   }
+  -- }
   use { 
     'rcarriga/nvim-dap-ui', 
     config = function()

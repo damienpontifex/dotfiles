@@ -9,6 +9,7 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 [ -d /opt/homebrew/bin ] && PATH="/opt/homebrew/bin:$PATH"
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.dotnet/tools" ] && PATH="$HOME/.dotnet/tools:$PATH"
 
 plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
@@ -69,13 +70,6 @@ alias getmyip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias http-server="python3 -m http.server"
 [ -x "$(command -v brew)" ] && [ -d "$(brew --prefix python3)" ] && export PATH="$(brew --prefix python3)/libexec/bin:$PATH"
 
-# gcloud cli https://cloud.google.com/sdk/install
-for file in $HOME/.gcloud/google-cloud-sdk/{path.zsh.inc,completion.zsh.inc}; do
-  [ -f $file ] && source $file
-done
-unset file
-export CLOUDSDK_PYTHON=python3
-
 # Use llvm from homebrew
 if [ -x "$(command -v brew)" ]; then
   export PATH="$(brew --prefix llvm)/bin:$PATH"
@@ -103,6 +97,9 @@ alias watch='watch '
 # az cli
 alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
+
+# anaconda
+[[ -x $(command -v brew) ]] && export PATH="$(brew --prefix)/anaconda3/bin:$PATH"
 
 function renew-aks-credentials {
   local CURRENT_SUBSCRIPTION=$(az account show --query 'name' -o tsv)
@@ -170,3 +167,10 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/ponti/.google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ponti/.google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/ponti/.google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ponti/.google-cloud-sdk/completion.zsh.inc'; fi

@@ -4,6 +4,15 @@ function M.setup()
 
   local lsp_config = require'lspconfig'
 
+  -- vim.api.nvim_create_autocmd('LspAttach', {
+  --   callback = function(args) 
+  --     local client = vim.lsp.get_client_by_id(args.data.client_id)
+  --     if client.server_capabilities.hoverProvider then
+  --       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = args.buf })
+  --     end
+  --   end,
+  -- })
+
   local function on_attach(client, bufnr)
     vim.notify("Attaching LSP client "..client.name.." to buffer "..bufnr)
 
@@ -15,10 +24,10 @@ function M.setup()
     local opts = { silent = true, buffer = true }
 
     --vim.keymap.set('n', 'gD', ':vs<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gd'    ,vim.lsp.buf.definition, opts)
     vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gr'    ,vim.lsp.buf.references, opts)
-    vim.keymap.set('n', 'K'     ,vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<F12>' ,vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<F2>'  ,vim.lsp.buf.rename, opts)
     vim.keymap.set('n', 'ca'    ,vim.lsp.buf.code_action, opts)
@@ -33,12 +42,7 @@ function M.setup()
     vim.keymap.set('n', '<leader>af', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>kf', vim.lsp.buf.formatting, opts)
 
-    -- Set some keybinds conditional on server capabilities
-    if client.resolved_capabilities.document_formatting then
-      vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, opts)
-    elseif client.resolved_capabilities.document_range_formatting then
-      vim.keymap.set("n", "<space>f", vim.lsp.buf.range_formatting, opts)
-    end
+    vim.keymap.set("n", "<space>f", vim.lsp.buf.format, opts)
   end
 
   -- Setup lspconfig.
@@ -114,12 +118,6 @@ function M.setup()
     capabilities = capabilities,
   }
 
-end
-
-function restart_lsp_servers()
-  vim.lsp.stop_client(vim.lsp.get_active_clients())
-  -- Force LSP for current buffer to start
-  vim.cmd('edit')
 end
 
 function open_lsp_log()

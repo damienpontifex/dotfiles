@@ -56,6 +56,8 @@ opt.wildmenu = true -- show options as list when switching buffers etc
 opt.wrap = false
 opt.conceallevel = 0 -- never conceal
 
+opt.winbar = "%f"
+opt.spell = true
 -- g.mapleader = ' '
 -- g.maplocalleader = ' '
 
