@@ -131,6 +131,9 @@ function renew-aks-credentials {
 export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
 alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
+function kgsecv {
+  kgsec "${1}" -o yaml | yq '.data | map_values(@base64d)'
+}
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
