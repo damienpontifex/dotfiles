@@ -55,22 +55,22 @@ require'packer'.startup(function(use)
   --use 'tomasiser/vim-code-dark'
   --use 'arcticicestudio/nord-vim'
   --use 'chriskempson/base16-vim'
+  -- use {
+  --   'catppuccin/nvim',
+  --   as = 'catppuccin',
+  --   config = function()
+  --     vim.cmd[[colorscheme catppuccin]]
+  --   end,
+  -- }
   use {
-    'catppuccin/nvim',
-    as = 'catppuccin',
-    config = function()
-      vim.cmd[[colorscheme catppuccin]]
-    end,
+   'vv9k/vim-github-dark',
+   config = function()
+     vim.cmd 'colorscheme ghdark'
+     -- set hlsearch " highlight matches
+     -- See :h cterm-colors for colours
+     -- vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
+   end,
   }
-  --use {
-  --  'vv9k/vim-github-dark',
-  --  config = function()
-  --    -- vim.cmd 'colorscheme ghdark'
-  --    -- set hlsearch " highlight matches
-  --    -- See :h cterm-colors for colours
-  --    -- vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
-  --  end,
-  --}
 
   use {
     'neovim/nvim-lspconfig',
