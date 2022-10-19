@@ -36,10 +36,6 @@ add_ext() {
 
 add_ext https://github.com/tmux-plugins/tpm.git ~/.tmux/plugins/tpm
 
-function download-powerline-font() {
-  curl -o "$1/Inconsolata for Powerline.otf" https://github.com/powerline/fonts/raw/master/Inconsolata/Inconsolata%20for%20Powerline.otf
-}
-
 function mac-installs {
   # Turn off bouncing dock icons
   defaults write com.apple.dock no-bouncing -bool TRUE
@@ -47,14 +43,9 @@ function mac-installs {
   defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
   killall Finder
 
-  # download-powerline-font "$HOME/Library/Fonts"
-
   if [ ! -x $(command -v brew) ]; then
-    echo 'Installing Homebrew...'
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     export PATH="/opt/homebrew/bin:${PATH}"
-  else
-    echo 'Homebrew exists'
   fi
   
   brew tap homebrew/cask-fonts
@@ -62,13 +53,16 @@ function mac-installs {
 
   brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font jq)
   brew reinstall "${brew_packages[@]}" || true
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
-  $(brew --prefix)/opt/fzf/install --all
+  $(brew --prefix fzf)/install --all
 
-  brew cask reinstall powershell
-  brew install --cask git-credential-manager-core
+  brew install --cask powershell git-credential-manager-core
   
   rustup-init
+
+  brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
+  sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
   
   echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 }
