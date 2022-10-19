@@ -23,6 +23,6 @@ Or by cloning the repo as
 ```bash
 git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout
-source $HOME/.bash_profile
-dotfiles config --local status.showUntrackedFiles no
+source $HOME/.zshrc
+config config --local status.showUntrackedFiles no
 ```
