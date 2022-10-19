@@ -1,0 +1,115 @@
+#!/usr/bin/env zsh
+
+# Stop on error
+set -e
+# Echo all commands executed
+set -x
+
+pushd $HOME
+
+if [ ! -d "${HOME}/.dotfiles" ]; then
+  # dotfiles
+  echo "dotfiles setup"
+  git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
+fi
+function config {
+   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+}
+config checkout --force
+config submodule update --init --recursive
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
+
+# Install oh-my-zsh
+[ -d "${HOME}/.oh-my-zsh" ] \
+  && upgrade_oh_my_zsh \
+  || git clone https://github.com/ohmyzsh/ohmyzsh.git $HOME/.oh-my-zsh 
+
+# source $HOME/.zshrc
+
+add_ext() {
+  if [[ -d "$2" ]]; then
+    git -C "$2" pull
+  else
+    git clone "$1" "$2"
+  fi
+}
+
+add_ext https://github.com/tmux-plugins/tpm.git ~/.tmux/plugins/tpm
+
+function download-powerline-font() {
+  curl -o "$1/Inconsolata for Powerline.otf" https://github.com/powerline/fonts/raw/master/Inconsolata/Inconsolata%20for%20Powerline.otf
+}
+
+function mac-installs {
+  # Turn off bouncing dock icons
+  defaults write com.apple.dock no-bouncing -bool TRUE
+  # VSCode vim key repeat
+  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+  killall Finder
+
+  # download-powerline-font "$HOME/Library/Fonts"
+
+  if [ ! -x $(command -v brew) ]; then
+    echo 'Installing Homebrew...'
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    export PATH="/opt/homebrew/bin:${PATH}"
+  else
+    echo 'Homebrew exists'
+  fi
+  
+  brew tap homebrew/cask-fonts
+  brew tap microsoft/git
+
+  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font jq)
+  brew reinstall "${brew_packages[@]}" || true
+
+  $(brew --prefix)/opt/fzf/install --all
+
+  brew cask reinstall powershell
+  brew install --cask git-credential-manager-core
+  
+  rustup-init
+  
+  echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
+}
+
+function linux-installs {
+  curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+  sudo add-apt-repository ppa:neovim-ppa/unstable
+  sudo apt update
+  sudo apt install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    neovim \
+    fzf \
+    ripgrep \
+    tmux
+    
+  # kubectl
+  sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  sudo apt update
+  sudo apt install -y kubectl
+
+  # Rust
+  curl https://sh.rustup.rs -sSf | sh -s -- -y
+  
+  # download-powerline-font "$HOME/.local/share/fonts"
+
+  # pyenv install if missing
+  # [[ -d "$HOME/.pyenv" ]] || curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+}
+
+if [[ $(uname -s ) == "Darwin" ]]; then
+  mac-installs
+else
+  linux-installs
+fi
+
+mkdir -p $HOME/.npm-global
+
+[ -f $HOME/.git-completion.zsh ] || \
+  curl -L -o $HOME/.git-completion.zsh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh 
+
