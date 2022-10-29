@@ -7,9 +7,10 @@ HIST_STAMPS="yyyy-mm-dd"
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
-[ -d /opt/homebrew/bin ] && PATH="/opt/homebrew/bin:$PATH"
-[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
-[ -d "$HOME/.dotnet/tools" ] && PATH="$HOME/.dotnet/tools:$PATH"
+[ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
+[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
+[ -d /usr/local/share/dotnet ] && export PATH="/usr/local/share/dotnet:$PATH"
 
 plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git

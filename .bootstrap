@@ -51,7 +51,7 @@ function mac-installs {
   brew tap homebrew/cask-fonts
   brew tap microsoft/git
 
-  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font jq)
+  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font jq mitmproxy)
   brew reinstall "${brew_packages[@]}" || true
   nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
