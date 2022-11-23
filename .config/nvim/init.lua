@@ -77,7 +77,10 @@ require'packer'.startup(function(use)
     config = function()
       require('config.lsp').setup()
     end,
-    wants = { "cmp-nvim-lsp" }
+    wants = { "cmp-nvim-lsp" },
+    requires = {
+      "Hoffs/omnisharp-extended-lsp.nvim"
+    }
   }
   -- use {
   --   'simrat39/rust-tools.nvim',

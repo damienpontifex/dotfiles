@@ -66,6 +66,9 @@ function M.setup()
     cmd = { "dotnet", "/opt/bin/omnisharp/Omnisharp.dll", "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "--verbose" };
     on_attach = on_attach,
     capabilities = capabilities,
+    handlers = {
+      ["textDocument/definition"] = require('omnisharp_extended').handler,
+    },
   }
 
   lsp_config.rust_analyzer.setup({
@@ -87,7 +90,7 @@ function M.setup()
     }
   })
 
-  --vim.lsp.set_log_level('debug')
+  vim.lsp.set_log_level('debug')
 
   lsp_config.yamlls.setup{
     capabilities = capabilities,
