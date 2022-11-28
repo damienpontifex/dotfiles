@@ -4,6 +4,8 @@ ZSH_THEME="amuse"
 
 HIST_STAMPS="yyyy-mm-dd"
 
+
+
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
@@ -23,6 +25,7 @@ plugins=(
   vscode
   colored-man-pages
   dotenv  # Auto load .env file when you cd into project root directory
+  vi-mode
 )
 source $ZSH/oh-my-zsh.sh
 RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
