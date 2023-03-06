@@ -57,7 +57,6 @@ function M.setup()
       capabilities = capabilities,
     }
   end
-  lsp_config.jsonls.setup{}
 
   -- python3 -m pip install --upgrade pyright
   lsp_config.pyright.setup{}
@@ -98,7 +97,7 @@ function M.setup()
       yaml = {
         schemas = {
           ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = { "azure-pipelines.yml", "azdo/**/*.yml", ".pipelines/**/*.yml" },
-          ["https://json.schemastore.org/github-workflow.json"] = ".github/**",
+          ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*",
           ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = "tye.yaml",
           ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] = "helmfile.yaml",
           ["https://json.schemastore.org/catalog-info.json"] = "catalog-info.yaml",
