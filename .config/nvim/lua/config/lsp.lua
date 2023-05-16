@@ -52,12 +52,22 @@ function M.setup()
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-  local servers = {'gopls', 'tsserver', 'omnisharp', 'pyright', 'terraformls', 'bicep'}
+  local servers = {'gopls', 'tsserver', 'pyright', 'terraformls', 'bicep'}
   for _, lsp in ipairs(servers) do
     lsp_config[lsp].setup {
       capabilities = capabilities,
     }
   end
+
+  lsp_config.omnisharp.setup({
+    capabilities = capabilities,
+    enable_roslyn_analyzers = true,
+    organize_imports_on_format = true,
+    enable_import_completion = true,
+    handlers = {
+      ["textDocument/definition"] = require('omnisharp_extended').handler,
+    },
+  })
 
   lsp_config.rust_analyzer.setup({
     capabilities = capabilities,

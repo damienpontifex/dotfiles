@@ -71,7 +71,7 @@ require'packer'.startup(function(use)
     requires = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      --"Hoffs/omnisharp-extended-lsp.nvim"
+      "Hoffs/omnisharp-extended-lsp.nvim",
     }
   }
 
