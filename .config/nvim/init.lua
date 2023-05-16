@@ -43,7 +43,7 @@ require'packer'.startup(function(use)
       'vim-airline/vim-airline-themes',
     },
   }
-  use 'editorconfig/editorconfig-vim'
+
   use {
     'numToStr/Comment.nvim',
     config = function()
@@ -52,16 +52,6 @@ require'packer'.startup(function(use)
   }
 
   -- Themes
-  --use 'tomasiser/vim-code-dark'
-  --use 'arcticicestudio/nord-vim'
-  --use 'chriskempson/base16-vim'
-  -- use {
-  --   'catppuccin/nvim',
-  --   as = 'catppuccin',
-  --   config = function()
-  --     vim.cmd[[colorscheme catppuccin]]
-  --   end,
-  -- }
   use {
    'vv9k/vim-github-dark',
    config = function()
@@ -73,15 +63,33 @@ require'packer'.startup(function(use)
   }
 
   use {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
     config = function()
       require('config.lsp').setup()
     end,
-    wants = { "cmp-nvim-lsp" },
+    -- wants = { "cmp-nvim-lsp" },
     requires = {
-      "Hoffs/omnisharp-extended-lsp.nvim"
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      --"Hoffs/omnisharp-extended-lsp.nvim"
     }
   }
+
+  use { 
+    'hrsh7th/nvim-cmp',
+    config = function()
+      require('config.cmp').setup()
+    end,
+    requires = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-emoji',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+    }
+  }
+
   -- use {
   --   'simrat39/rust-tools.nvim',
   --   config = function()
@@ -103,20 +111,6 @@ require'packer'.startup(function(use)
       'theHamsta/nvim-dap-virtual-text',
       'nvim-telescope/telescope-dap.nvim'
     } 
-  }
-  use {
-    'hrsh7th/nvim-cmp',
-    config = function()
-      require('config.cmp').setup()
-    end,
-    requires = {
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lua',
-      'hrsh7th/cmp-emoji',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-    }
   }
 
   -- Languages
