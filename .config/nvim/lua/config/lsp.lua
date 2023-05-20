@@ -46,6 +46,24 @@ function M.setup()
       vim.keymap.set('n', '<leader>kf', vim.lsp.buf.format, opts)
 
       vim.keymap.set("n", "<space>f", vim.lsp.buf.format, opts)
+
+      -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2483
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      local function toSnakeCase(str)
+        return string.gsub(str, "%s*[- ]%s*", "_")
+      end
+
+      if client.name == 'omnisharp' then
+        local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
+        for i, v in ipairs(tokenModifiers) do
+          tokenModifiers[i] = toSnakeCase(v)
+        end
+        local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
+        for i, v in ipairs(tokenTypes) do
+          tokenTypes[i] = toSnakeCase(v)
+        end
+      end
+      --
     end,
   })
 
@@ -99,6 +117,7 @@ function M.setup()
           ["https://raw.githubusercontent.com/dotnet/tye/main/src/schema/tye-schema.json"] = "tye.yaml",
           ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] = "helmfile.yaml",
           ["https://json.schemastore.org/catalog-info.json"] = "catalog-info.yaml",
+          ["https://raw.githubusercontent.com/microsoft/vscode-dapr/main/assets/schemas/dapr.io/dapr/cli/run-file.json"] = "dapr.yaml",
           kubernetes = "/*.yaml"
         }
       }

@@ -15,6 +15,7 @@ function M.setup()
   vim.keymap.set('n', '<Leader>gf', builtin.git_files, opts)
   vim.keymap.set('n', '<Leader>fg', builtin.live_grep, opts)
   vim.keymap.set('n', '<Leader>fb', builtin.buffers, opts)
+  vim.keymap.set('n', '<Leader>fc', builtin.commands, opts)
   vim.keymap.set('n', '<Leader>fh', builtin.help_tags, opts)
   vim.keymap.set('n', '<Leader>gs', builtin.git_status, opts)
 
