@@ -46,6 +46,18 @@ function tm {
   tmux new-session -A -s "${SESSION_NAME}"
 }
 
+function set-proxy {
+  https_proxy=wxmbp.localdomain:8080
+}
+function unset-proxy {
+  unset https_proxy
+}
+
+export NVM_DIR="$HOME/.nvm"
+mkdir -p "${NVM_DIR}"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 function new-tsc-project {
   npm init -y
 
