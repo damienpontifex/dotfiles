@@ -18,7 +18,6 @@ plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-  kubectl
   helm
   kube-ps1
   zsh-syntax-highlighting
@@ -26,9 +25,11 @@ plugins=(
   colored-man-pages
   dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
-)
+ kubectl)
 source $ZSH/oh-my-zsh.sh
-RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
+if [[ "$(tmux display-message -p '#S')" != stream ]]; then
+  RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
+fi
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
@@ -95,8 +96,9 @@ fi
 
 # Node and npm
 export NODE_ENV=development
-export PATH=$HOME/.npm_global/bin:$PATH
-export NPM_CONFIG_PREFIX=$HOME/.npm_global
+if [[ -x $(command -v nvm) ]]; then
+  nvm use stable
+fi
 
 # golang
 if [[ -x $(command -v go) ]]; then
@@ -116,32 +118,6 @@ alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r 
 
 # anaconda
 [[ -x $(command -v brew) ]] && export PATH="$(brew --prefix)/anaconda3/bin:$PATH"
-
-function renew-aks-credentials {
-  local CURRENT_SUBSCRIPTION=$(az account show --query 'name' -o tsv)
-  local CURRENT_CONTEXT=$(k config current-context)
-
-  az account set --subscription WOWDEVTEST
-  az aks get-credentials --resource-group wow-dev-k8s-ecommerce-aae --name wowdk8suiaae --overwrite-existing
-  kcn trader-ui
-
-  az account set --subscription WOWUAT
-  az aks get-credentials --resource-group wow-uat-k8s-ecommerce-aae --name wowuk8suiaae --overwrite-existing
-  kcn trader-ui
-  az aks get-credentials --resource-group wow-uat-k8s-ecommerce-aas --name wowuk8suiaas --overwrite-existing
-  kcn trader-ui
-
-  az account set --subscription WOWPROD
-  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aae --name wowpk8suiaae-2 --overwrite-existing
-  kcn trader-ui
-  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aae --name wowpk8suiaae --overwrite-existing
-  kcn trader-ui
-  az aks get-credentials --resource-group wow-prod-k8s-ecommerce-aas --name wowpk8suiaas --overwrite-existing
-  kcn trader-ui
-
-  az account set --subscription "${CURRENT_SUBSCRIPTION}"
-  k config use-context "${CURRENT_CONTEXT}"
-}
 
 # k8s
 export KUBE_EDITOR=nvim
@@ -193,3 +169,6 @@ if [ -f '/Users/ponti/.google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ponti/.g
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/ponti/.google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ponti/.google-cloud-sdk/completion.zsh.inc'; fi
+
+source /Users/ponti/.docker/init-zsh.sh || true # Added by Docker Desktop
+
