@@ -70,13 +70,6 @@ function M.setup()
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-  local servers = {'gopls', 'tsserver', 'pyright', 'terraformls', 'bicep'}
-  for _, lsp in ipairs(servers) do
-    lsp_config[lsp].setup {
-      capabilities = capabilities,
-    }
-  end
-
   lsp_config.omnisharp.setup({
     capabilities = capabilities,
     enable_roslyn_analyzers = true,
@@ -118,11 +111,19 @@ function M.setup()
           ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] = "helmfile.yaml",
           ["https://json.schemastore.org/catalog-info.json"] = "catalog-info.yaml",
           ["https://raw.githubusercontent.com/microsoft/vscode-dapr/main/assets/schemas/dapr.io/dapr/cli/run-file.json"] = "dapr.yaml",
+          ["https://json.schemastore.org/catalog-info.json"] = "catalog-info.yaml",
           kubernetes = "/*.yaml"
         }
       }
     },
   }
+
+  local servers = {'gopls', 'tsserver', 'pyright', 'terraformls', 'bicep', 'helm_ls'}
+  for _, lsp in ipairs(servers) do
+    lsp_config[lsp].setup {
+      capabilities = capabilities,
+    }
+  end
 
 end
 

@@ -118,6 +118,7 @@ require'packer'.startup(function(use)
   use 'pprovost/vim-ps1'
   use 'plasticboy/vim-markdown'
   use 'jparise/vim-graphql'
+  use 'towolf/vim-helm'
 
   use { 
     'nvim-treesitter/nvim-treesitter',
