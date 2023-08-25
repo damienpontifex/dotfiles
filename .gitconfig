@@ -1,7 +1,7 @@
 [core]
 	excludesfile = /Users/ponti/.gitignore_global
 	editor = nvim
-	autocrlf = input
+	autocrlf = false
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
@@ -13,7 +13,7 @@
   # Rebase branch back onto main off of original base $1
   rb-onto = "!f() { git rebase --onto ${2:-origin/main} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
   # Delete any branches where the tracking remote has been deleted
-  clean-gone = "!f() { git fetch --prune && for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
+  clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
 	root = rev-parse --show-toplevel
 [push]
   default = current
@@ -42,7 +42,7 @@
 [credential]
 	helper = osxkeychain
 	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager-core
+	helper = /usr/local/share/gcm-core/git-credential-manager
 [submodule]
 	recurse = true
 	fetchJobs = 8

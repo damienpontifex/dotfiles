@@ -42,6 +42,10 @@ alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo 
 
 export EDITOR=nvim
 
+function gmain {
+  git switch $(git_main_branch) && git pull --prune && git clean-gone
+}
+
 function tm {
   SESSION_NAME=${1:-default}
   tmux new-session -A -s "${SESSION_NAME}"
