@@ -55,11 +55,18 @@ require'packer'.startup(function(use)
   use {
    'vv9k/vim-github-dark',
    config = function()
-     vim.cmd 'colorscheme ghdark'
+     -- vim.cmd 'colorscheme ghdark'
      -- set hlsearch " highlight matches
      -- See :h cterm-colors for colours
      -- vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
    end,
+  }
+  use { 
+    "catppuccin/nvim", 
+    as = "catppuccin",
+    config = function()
+      vim.cmd.colorscheme 'catppuccin-mocha'
+    end,
   }
 
   use {
