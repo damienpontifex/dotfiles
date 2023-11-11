@@ -36,7 +36,12 @@ require'packer'.startup(function(use)
   }
 
   use 'ryanoasis/vim-devicons'
-  use 'tpope/vim-fugitive'
+  use {
+    'tpope/vim-fugitive',
+    config = function()
+      require('config.fugitive').setup()
+    end,
+  }
   use {
     'vim-airline/vim-airline',
     requires = {
