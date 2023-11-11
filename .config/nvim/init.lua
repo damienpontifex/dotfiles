@@ -43,10 +43,19 @@ require'packer'.startup(function(use)
     end,
   }
   use {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('config.gitsigns').setup()
+    end,
+  }
+  use {
     'vim-airline/vim-airline',
     requires = {
       'vim-airline/vim-airline-themes',
     },
+    config = function()
+      vim.g.airline_theme = 'catppuccin'
+    end,
   }
 
   use {
