@@ -3,13 +3,37 @@ local M = {}
 -- Useful page of adapters
 -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
 
+function M.setup_csharp(dap)
+
+  dap.adapters.coreclr = {
+    type = 'executable',
+    command = vim.fn.stdpath('data') .. '/mason/bin/netcoredbg',
+    args = {'--interpreter=vscode'}
+  }
+
+  dap.configurations.cs = {
+    {
+      type = 'coreclr',
+      name = 'launch - netcoredbg',
+      request = 'launch',
+      program = function()
+        return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug', 'file')
+      end
+    },
+    {
+      name = 'Attach to process',
+      type = 'coreclr',
+      request = 'attach',
+      processId = require('dap.utils').pick_process,
+    }
+  }
+
+end
+
 function M.setup_node(dap)
   dap.adapters.node = {
     type = 'executable',
-    command = 'node',
-    args = { 
-      vim.fn.stdpath('data')..'/vscode-node-debug2/out/src/nodeDebug.js',
-    }
+    command = vim.fn.stdpath('data') .. '/mason/bin/node-debug2-adapter',
   }
   dap.adapters.javsacript = dap.adapters.node
   dap.adapters.typescript = dap.adapters.node
@@ -168,14 +192,12 @@ function M.setup()
   require('telescope').load_extension('dap')
   require('dap-python').setup()
 
+  M.setup_csharp(dap)
   M.setup_node(dap)
 
   M.setup_rust(dap)
 
-  vim.keymap.set('n', '<F5>', function()
-    --print('attaching')
-    dap.continue()
-  end, nil)
+  vim.keymap.set('n', '<F5>', dap.continue)
   vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint)
   vim.keymap.set('n', '<F10>', dap.step_over)
   vim.keymap.set('n', '<F11>', dap.step_into)
@@ -189,6 +211,7 @@ function M.setup()
   -- :h dap-launch.json
   require('dap.ext.vscode').load_launchjs(nil, {
     node = { 'typescript', 'javascript' },
+    coreclr = { 'cs' },
   })
 end
 
