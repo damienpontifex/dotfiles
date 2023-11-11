@@ -2,7 +2,6 @@ local M = {}
 
 function M.setup()
 
-  print('fugitive setup')
   local opts = { noremap = true, silent = true }
 
   -- Toggle git pane
