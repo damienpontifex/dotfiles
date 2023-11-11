@@ -5,6 +5,8 @@
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
+[includeIf "gitdir:~/wooliesx/"]
+  path = ~/wooliesx/.gitconfig
 [alias]
   graph-log = log --oneline --decorate --graph --all
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
@@ -41,20 +43,13 @@
 	branch = false
 [credential]
 	helper = osxkeychain
-	helper = 
+	helper =
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [submodule]
 	recurse = true
 	fetchJobs = 8
 [http]
 	cookiefile = /Users/ponti/.gitcookies
-
-[includeIf "gitdir:~/wooliesx"]
-  path = ~/wooliesx/.gitconfig
-# [includeIf "gitdir:~/purple/"]
-#   path = ~/purple/.gitconfig
-# [includeIf "gitdir:~/developer/"]
-#   path = ~/developer/.gitconfig
 
 [credential "https://dev.azure.com"]
 	useHttpPath = true
