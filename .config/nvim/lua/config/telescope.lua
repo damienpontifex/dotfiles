@@ -19,7 +19,23 @@ function M.setup()
   vim.keymap.set('n', '<Leader>fh', builtin.help_tags, opts)
   vim.keymap.set('n', '<Leader>gs', builtin.git_status, opts)
 
-  vim.keymap.set('n', '<C-p>', function() builtin.find_files(themes.get_dropdown({ previewer = false })) end, opts)
+  local is_inside_work_tree = {}
+  -- git_files if in git directory, otherwise find_files
+  vim.keymap.set('n', '<C-p>', function()
+    local opts = {} -- define here if you want to define something
+
+    local cwd = vim.fn.getcwd()
+    if is_inside_work_tree[cwd] == nil then
+      vim.fn.system("git rev-parse --is-inside-work-tree")
+      is_inside_work_tree[cwd] = vim.v.shell_error == 0
+    end
+
+    if is_inside_work_tree[cwd] then
+      builtin.git_files(opts)
+    else
+      builtin.find_files(opts)
+    end
+  end, opts)
   -- vim.keymap.set('n', '<C-p>', require('config/telescope').project_files, opts)
   --vim.keymap.set('n', '<C-f>', builtin.live_grep, opts)
   require('telescope').load_extension('live_grep_args')
