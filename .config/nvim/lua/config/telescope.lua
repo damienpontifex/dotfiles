@@ -1,12 +1,5 @@
 local M = {}
 
-M.project_files = function()
-  local opts = {} -- define here if you want to define something
-  local theme = require('telescope.themes').get_dropdown({ previewer = false })
-  local ok = pcall(function() require"telescope.builtin".git_files(theme) end, opts)
-  if not ok then require"telescope.builtin".find_files(theme, opts) end
-end
-
 function M.setup()
 
   local opts = { noremap = true, silent = true }
@@ -49,6 +42,14 @@ function M.setup()
   local actions = require('telescope.actions')
   require('telescope').setup{
     defaults = {
+      theme = "center",
+      sorting_strategy = "ascending",
+      layout_config = {
+        horizontal = {
+          prompt_position = "top",
+          preview_width = 0.3,
+        },
+      },
       mappings = {
         i = {
           ["<esc>"] = actions.close
