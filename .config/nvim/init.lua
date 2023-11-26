@@ -1,8 +1,23 @@
 local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
+
+-- Autocommand that reloads neovim whenever you save this file
+-- local mygroup = vim.api.nvim_create_augroup('packer_user_config', { clear = true })
+-- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+--   pattern = {"plugins.lua"},
+--   command = "source <afile> | LazyInstall",
+-- })
 
 vim.filetype.add({
   extension = {
@@ -11,148 +26,74 @@ vim.filetype.add({
   }
 })
 
+require('lazy').setup('plugins')
 
-require'packer'.startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-
-  use {
-    'nvim-telescope/telescope.nvim',
-    config = function()
-      require('config.telescope').setup()
-    end,
-    requires = {
-      'nvim-lua/popup.nvim',
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-live-grep-raw.nvim',
-    }
-  }
-
-  use {
-    'scrooloose/nerdtree',
-    config = function() 
-      require('config.nerdtree').setup()
-    end,
-  }
-
-  use 'ryanoasis/vim-devicons'
-  use {
-    'tpope/vim-fugitive',
-    config = function()
-      require('config.fugitive').setup()
-    end,
-  }
-  use {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('config.gitsigns').setup()
-    end,
-  }
-  use {
-    'vim-airline/vim-airline',
-    requires = {
-      'vim-airline/vim-airline-themes',
-    },
-    config = function()
-      vim.g.airline_theme = 'catppuccin'
-    end,
-  }
-
-  use {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end
-  }
-
-  -- Themes
-  use {
-   'vv9k/vim-github-dark',
-   config = function()
-     -- vim.cmd 'colorscheme ghdark'
-     -- set hlsearch " highlight matches
-     -- See :h cterm-colors for colours
-     -- vim.cmd 'autocmd ColorScheme * highlight Search ctermbg=LightBlue ctermfg=Black'
-   end,
-  }
-  use { 
-    "catppuccin/nvim", 
-    as = "catppuccin",
-    config = function()
-      vim.cmd.colorscheme 'catppuccin-mocha'
-    end,
-  }
-
-  use {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require('config.lsp').setup()
-    end,
-    -- wants = { "cmp-nvim-lsp" },
-    requires = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "Hoffs/omnisharp-extended-lsp.nvim",
-    }
-  }
-
-  use { 
-    'hrsh7th/nvim-cmp',
-    config = function()
-      require('config.cmp').setup()
-    end,
-    requires = {
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lua',
-      'hrsh7th/cmp-emoji',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-    }
-  }
-
-  -- use {
-  --   'simrat39/rust-tools.nvim',
-  --   config = function()
-  --     require('config.rusttools').setup()
-  --   end,
-  --   requires = {
-  --     'mfussenegger/nvim-dap',
-  --     'nvim-lua/plenary.nvim',
-  --   }
-  -- }
-  use { 
-    'rcarriga/nvim-dap-ui', 
-    config = function()
-      require('config.dap').setup()
-    end,
-    requires = {
-      'mfussenegger/nvim-dap',
-      'mfussenegger/nvim-dap-python',
-      'theHamsta/nvim-dap-virtual-text',
-      'nvim-telescope/telescope-dap.nvim'
-    } 
-  }
-
-  -- Languages
-  use 'hashivim/vim-terraform'
-  use 'pprovost/vim-ps1'
-  use 'plasticboy/vim-markdown'
-  use 'jparise/vim-graphql'
-  use 'towolf/vim-helm'
-
-  use { 
-    'nvim-treesitter/nvim-treesitter',
-    config = function()
-      require('config.treesitter').setup()
-    end,
-    run = ':TSUpdate' 
-  }
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  if packer_bootstrap then
-    require('packer').sync()
-  end
-
-end)
+--   -- git
+--   {
+--     'tpope/vim-fugitive',
+--     config = function()
+--       require('config.fugitive').setup()
+--     end,
+--   }
+--   {
+--     'lewis6991/gitsigns.nvim',
+--     config = function()
+--       require('config.gitsigns').setup()
+--     end,
+--   }
+--   {
+--     'vim-airline/vim-airline',
+--     dependencies = {
+--       'vim-airline/vim-airline-themes',
+--     },
+--     config = function()
+--       vim.g.airline_theme = 'catppuccin'
+--     end,
+--   }
+--
+--   {
+--     'numToStr/Comment.nvim',
+--     config = function()
+--       require('Comment').setup()
+--     end
+--   }
+--
+--   -- {
+--   --   'simrat39/rust-tools.nvim',
+--   --   config = function()
+--   --     require('config.rusttools').setup()
+--   --   end,
+--   --   dependencies = {
+--   --     'mfussenegger/nvim-dap',
+--   --     'nvim-lua/plenary.nvim',
+--   --   }
+--   -- }
+--   { 
+--     'rcarriga/nvim-dap-ui', 
+--     config = function()
+--       require('config.dap').setup()
+--     end,
+--     dependencies = {
+--       'mfussenegger/nvim-dap',
+--       'mfussenegger/nvim-dap-python',
+--       'theHamsta/nvim-dap-virtual-text',
+--       'nvim-telescope/telescope-dap.nvim'
+--     } 
+--   }
+--
+--   -- Languages
+--   'hashivim/vim-terraform'
+--   'pprovost/vim-ps1'
+--   'plasticboy/vim-markdown'
+--   'jparise/vim-graphql'
+--   'towolf/vim-helm'
+--
+--   { 
+--     'nvim-treesitter/nvim-treesitter',
+--     config = function()
+--       require('config.treesitter').setup()
+--     end,
+--     run = ':TSUpdate' 
+--   }
+-- })
 
