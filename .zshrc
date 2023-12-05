@@ -46,6 +46,12 @@ function gmain {
   git switch $(git_main_branch) && git pull --prune && git clean-gone
 }
 
+function update-packages {
+  brew update && brew outdated && brew upgrade
+  npm update --global
+  dotnet tool list --global | awk 'NR > 2 {print $1}' | xargs -L1 dotnet tool update --global
+}
+
 function tm {
   SESSION_NAME=${1:-default}
   tmux new-session -A -s "${SESSION_NAME}"
