@@ -12,13 +12,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Autocommand that reloads neovim whenever you save this file
--- local mygroup = vim.api.nvim_create_augroup('packer_user_config', { clear = true })
--- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
---   pattern = {"plugins.lua"},
---   command = "source <afile> | LazyInstall",
--- })
-
 vim.filetype.add({
   extension = {
     bicep = "bicep",
@@ -26,7 +19,15 @@ vim.filetype.add({
   }
 })
 
-require('lazy').setup('plugins')
+require('config.options')
+require('config.autocmds')
+require('config.keymaps')
+
+require('lazy').setup('plugins', {
+  change_detection = {
+    notify = false,
+  },
+})
 
 --   -- git
 --   {
@@ -41,23 +42,6 @@ require('lazy').setup('plugins')
 --       require('config.gitsigns').setup()
 --     end,
 --   }
---   {
---     'vim-airline/vim-airline',
---     dependencies = {
---       'vim-airline/vim-airline-themes',
---     },
---     config = function()
---       vim.g.airline_theme = 'catppuccin'
---     end,
---   }
---
---   {
---     'numToStr/Comment.nvim',
---     config = function()
---       require('Comment').setup()
---     end
---   }
---
 --   -- {
 --   --   'simrat39/rust-tools.nvim',
 --   --   config = function()
@@ -81,19 +65,4 @@ require('lazy').setup('plugins')
 --     } 
 --   }
 --
---   -- Languages
---   'hashivim/vim-terraform'
---   'pprovost/vim-ps1'
---   'plasticboy/vim-markdown'
---   'jparise/vim-graphql'
---   'towolf/vim-helm'
---
---   { 
---     'nvim-treesitter/nvim-treesitter',
---     config = function()
---       require('config.treesitter').setup()
---     end,
---     run = ':TSUpdate' 
---   }
--- })
 

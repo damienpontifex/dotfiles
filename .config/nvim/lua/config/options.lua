@@ -20,8 +20,7 @@ opt.backup = false -- don't make backups before writing
 opt.belloff = 'all' -- never ring the bell for any reason
 opt.cindent = true
 opt.clipboard = 'unnamed' -- Use OS clipboard
-opt.completeopt = 'menuone' -- show menu even if there is only one candidate
-opt.completeopt:append { 'noselect' } -- don't automatically select candidate
+vim.o.completeopt = "menu,menuone,noselect"
 opt.cursorline = true -- highlight current line
 opt.emoji = false -- don't assume all emoji are double width
 opt.errorbells = false
@@ -61,9 +60,6 @@ opt.spell = true
 -- g.mapleader = ' '
 -- g.maplocalleader = ' '
 
--- Highlight on yank
-vim.api.nvim_create_autocmd({ "TextYankPost" }, {
-  callback = function()
-    vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
-  end,
-})
+if vim.fn.has("nvim-0.10") == 1 then
+  opt.smoothscroll = true
+end
