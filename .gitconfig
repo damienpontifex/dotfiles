@@ -43,13 +43,17 @@
 	branch = false
 [credential]
 	helper = osxkeychain
-	helper =
+	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [submodule]
 	recurse = true
 	fetchJobs = 8
 [http]
 	cookiefile = /Users/ponti/.gitcookies
-
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [credential "https://dev.azure.com"]
 	useHttpPath = true

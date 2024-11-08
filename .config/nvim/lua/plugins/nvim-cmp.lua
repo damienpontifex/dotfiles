@@ -1,6 +1,5 @@
 return { 
   'hrsh7th/nvim-cmp',
-  -- load cmp on InsertEnter
   event = "InsertEnter",
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
@@ -29,24 +28,24 @@ return {
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-          end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
-          end
-        end, { "i", "s" }),
+        -- ["<Tab>"] = cmp.mapping(function(fallback)
+        --   if cmp.visible() then
+        --     cmp.select_next_item()
+        --   elseif luasnip.expand_or_jumpable() then
+        --     luasnip.expand_or_jump()
+        --   elseif has_words_before() then
+        --     cmp.complete()
+        --   else
+        --     fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        --   end
+        -- end, { "i", "s" }),
+        -- ["<S-Tab>"] = cmp.mapping(function()
+        --   if cmp.visible() then
+        --     cmp.select_prev_item()
+        --   elseif luasnip.jumpable(-1) then
+        --     luasnip.jump(-1)
+        --   end
+        -- end, { "i", "s" }),
       }),
       completion = { 
         completeopt = 'menu,menuone,noinsert',
@@ -59,6 +58,7 @@ return {
         { name = 'luasnip' },
         { name = 'emoji' },
       }),
+      -- Enable luasnip to handle snippet expansion for nvim-cmp
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)

@@ -1,0 +1,7 @@
+{
+    "RoslynExtensionsOptions": {
+        "enableDecompilationSupport": true,
+        "EnableAnalyzersSupport": true,
+        "LocationPaths": []
+    }
+}

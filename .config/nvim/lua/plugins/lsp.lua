@@ -1,4 +1,28 @@
 return {
+  -- lsp servers
+  {
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate",
+    lazy = false,
+    opts = {
+      ensure_installed = { 
+        "rust_analyzer",
+        "tsserver",
+        "bicep",
+        "omnisharp",
+        "helm_ls",
+        "terraformls",
+        "gopls",
+      },
+      automatic_installation = true,
+    },
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    lazy = false,
+  },
+  
   -- lspconfig
   {
     "neovim/nvim-lspconfig",
@@ -6,14 +30,12 @@ return {
     -- event = "VeryLazy",
     lazy = false,
     dependencies = {
-      "mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
       "Hoffs/omnisharp-extended-lsp.nvim",
     },
     config = function()
-      local lsp_config = require'lspconfig'
+      local lsp_config = require('lspconfig')
 
-      vim.api.nvim_create_autocmd('LspAttach', {
+      vim.api.nvim_create_autocmd({ 'LspAttach' }, {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
           -- print(vim.inspect(client.resolved_capabilities))
@@ -23,6 +45,9 @@ return {
           local opts = { buffer = ev.buf }
 
           vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+          vim.keymap.set('n', 'gD', function()
+            require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
+          end, opts)
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
           vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
@@ -68,6 +93,7 @@ return {
 
       lsp_config.omnisharp.setup({
         capabilities = capabilities,
+        cmd = { vim.fn.stdpath "data" .. "/mason/packages/omnisharp/omnisharp" },
         enable_roslyn_analyzers = true,
         organize_imports_on_format = true,
         enable_import_completion = true,
@@ -94,7 +120,7 @@ return {
         }
       })
 
-      -- vim.lsp.set_log_level('debug')
+      vim.lsp.set_log_level('debug')
 
       lsp_config.yamlls.setup{
         capabilities = capabilities,
@@ -114,7 +140,7 @@ return {
         },
       }
 
-      local servers = {'gopls', 'tsserver', 'pyright', 'terraformls', 'bicep', 'helm_ls'}
+      local servers = {'gopls', 'pyright', 'terraformls', 'bicep', 'helm_ls'}
       for _, lsp in ipairs(servers) do
         lsp_config[lsp].setup {
           capabilities = capabilities,
@@ -124,25 +150,4 @@ return {
     end
   },
 
-  -- lsp servers
-  {
-    "williamboman/mason.nvim",
-    build = ":MasonUpdate",
-    opts = {
-      ensure_installed = { 
-        "rust_analyzer",
-        "tsserver",
-        "bicep",
-        "omnisharp",
-        "helm_ls",
-        "terraformls",
-        "gopls",
-      },
-      automatic_installation = true,
-      registries = {
-          "file:" .. vim.fn.getenv("HOME") .. "/dev/mason-registry",
-          "github:mason-org/mason-registry",
-      },
-    },
-  }
 }

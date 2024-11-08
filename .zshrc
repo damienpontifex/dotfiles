@@ -4,6 +4,7 @@ ZSH_THEME="amuse"
 
 HIST_STAMPS="yyyy-mm-dd"
 
+zstyle ':omz:update' mode auto
 
 
 # Ensure `code` command is available
@@ -14,22 +15,30 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
 [ -d /usr/local/share/dotnet ] && export PATH="/usr/local/share/dotnet:$PATH"
 
+[ -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm" ] || git clone https://github.com/lukechilds/zsh-nvm "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm"
+export NVM_LAZY_LOAD=true
+export NVM_AUTO_USE=true
+
 plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
   helm
-  kube-ps1
+  # kube-ps1
   zsh-syntax-highlighting
   vscode
   colored-man-pages
   dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
- kubectl)
+  kubectl
+  zsh-nvm
+  docker
+  docker-compose
+)
 source $ZSH/oh-my-zsh.sh
-if [[ "$(tmux display-message -p '#S')" != stream ]]; then
-  RPROMPT='$(az account show --output tsv --query "name") $(kube_ps1)'
-fi
+# if [[ "$(tmux display-message -p '#S')" != stream ]]; then
+RPROMPT='$(az account show --output tsv --query "name")'
+# fi
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
@@ -49,12 +58,12 @@ function gmain {
 function update-packages {
   brew update && brew outdated && brew upgrade
   npm update --global
+  rustup update
   dotnet tool list --global | awk 'NR > 2 {print $1}' | xargs -L1 dotnet tool update --global
 }
 
 function tm {
-  SESSION_NAME=${1:-default}
-  tmux new-session -A -s "${SESSION_NAME}"
+  tmux new-session -A -s "${1:-default}"
 }
 
 function set-proxy {
@@ -63,11 +72,6 @@ function set-proxy {
 function unset-proxy {
   unset https_proxy
 }
-
-export NVM_DIR="$HOME/.nvm"
-mkdir -p "${NVM_DIR}"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 function new-tsc-project {
   npm init -y
@@ -106,9 +110,6 @@ fi
 
 # Node and npm
 export NODE_ENV=development
-if [[ -x $(command -v nvm) ]]; then
-  nvm use stable
-fi
 
 # golang
 if [[ -x $(command -v go) ]]; then
