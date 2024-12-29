@@ -31,6 +31,7 @@ return {
     lazy = false,
     dependencies = {
       "Hoffs/omnisharp-extended-lsp.nvim",
+      "saghen/blink.cmp",
     },
     config = function()
       local lsp_config = require('lspconfig')
@@ -89,7 +90,8 @@ return {
       })
 
       -- Setup lspconfig.
-      local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      -- local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       lsp_config.omnisharp.setup({
         capabilities = capabilities,
@@ -159,7 +161,7 @@ return {
         },
       }
 
-      local servers = {'gopls', 'pyright', 'terraformls', 'bicep', 'helm_ls'}
+      local servers = {'lua_ls', 'gopls', 'pyright', 'terraformls', 'bicep', 'helm_ls'}
       for _, lsp in ipairs(servers) do
         lsp_config[lsp].setup {
           capabilities = capabilities,
