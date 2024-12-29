@@ -122,6 +122,25 @@ return {
 
       vim.lsp.set_log_level('debug')
 
+      vim.diagnostic.config({
+        virtual_text = {
+          source = "always",
+          prefix = "●",
+          spacing = 2,
+          max_width = 30,  -- for a shorter virtual text indicator
+        },
+        float = {
+          source = "always",
+          border = "rounded",
+        },
+      })
+
+      -- vim.api.nvim_create_autocmd("CursorHold", {
+      --   callback = function()
+      --     vim.diagnostic.open_float(nil, { focusable = false, border = "rounded", source = "always" })
+      --   end,
+      -- })
+
       lsp_config.yamlls.setup{
         capabilities = capabilities,
         settings = {
