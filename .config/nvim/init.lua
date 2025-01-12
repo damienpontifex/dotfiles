@@ -13,6 +13,8 @@ vim.opt.relativenumber = true
 -- Enable mouse, can be useful for resizing splits
 vim.opt.mouse = 'a'
 
+vim.g.netrw_liststyle = 3 -- Tree style view in netrw
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  See `:help 'clipboard'`
@@ -30,10 +32,10 @@ vim.opt.cursorline = true
 
 vim.opt.autoread = true
 vim.opt.backspace = 'indent,eol,start' -- allow unrestricted backspacing in insert mode
-vim.opt.backup = false -- don't make backups before writing
+vim.opt.backup = false                 -- don't make backups before writing
 vim.o.completeopt = "menu,menuone,noselect"
-vim.opt.emoji = false -- don't assume all emoji are double width
-vim.opt.foldlevelstart = 99 -- start unfolded
+vim.opt.emoji = false                  -- don't assume all emoji are double width
+vim.opt.foldlevelstart = 99            -- start unfolded
 vim.opt.foldmethod = 'syntax'
 vim.opt.hidden = true
 
@@ -42,15 +44,15 @@ vim.opt.hlsearch = true
 vim.opt.ignorecase = true
 vim.opt.inccommand = 'split' -- highlight and substitute while you type
 vim.opt.incsearch = true
-vim.opt.showmatch = true -- highlight matching [()}]
+vim.opt.showmatch = true     -- highlight matching [()}]
 
 vim.opt.path:append { '**' } -- recursive find/search
-vim.opt.scrolloff = 8 -- keep this number of lines visible above/below the cursor when scrolling
+vim.opt.scrolloff = 8        -- keep this number of lines visible above/below the cursor when scrolling
 vim.opt.sessionoptions = 'buffers,tabpages,winsize'
 
-vim.opt.tabstop = 2 -- Number of visual spaces per TAB
+vim.opt.tabstop = 2      -- Number of visual spaces per TAB
 vim.opt.expandtab = true -- always use spaces instead of tabs
-vim.opt.shiftwidth = 2 -- Number of spaces for each >> or << indent shift
+vim.opt.shiftwidth = 2   -- Number of spaces for each >> or << indent shift
 vim.opt.sidescrolloff = 8
 vim.opt.smartcase = true
 vim.opt.smarttab = true
@@ -61,14 +63,14 @@ vim.opt.splitright = true
 
 vim.opt.swapfile = false
 vim.opt.termguicolors = true -- use guifg/guibg instead of ctermfg/ctermbg in terminal
- -- Smaller updatetime for CurshorHold & CursorHoldI
+-- Smaller updatetime for CurshorHold & CursorHoldI
 vim.opt.updatetime = 250
 vim.opt.errorbells = false
 vim.opt.belloff = 'all' -- never ring the bell for any reason
 vim.opt.visualbell = false
 
 vim.opt.wildignore:append { '*/node_modules/*', '*/bin/*', '*/obj/*' }
-vim.opt.wildmenu = true -- show options as list when switching buffers etc
+vim.opt.wildmenu = true  -- show options as list when switching buffers etc
 vim.opt.conceallevel = 0 -- never conceal
 
 vim.opt.winbar = "%f"
@@ -98,8 +100,8 @@ vim.filetype.add({
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system({'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath})
-   if vim.v.shell_error ~= 0 then
+  local out = vim.fn.system({ 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
@@ -114,41 +116,3 @@ require('lazy').setup({
   checker = { enabled = false },
   change_detection = { notify = false },
 })
-
---   -- git
---   {
---     'tpope/vim-fugitive',
---     config = function()
---       require('config.fugitive').setup()
---     end,
---   }
---   {
---     'lewis6991/gitsigns.nvim',
---     config = function()
---       require('config.gitsigns').setup()
---     end,
---   }
---   -- {
---   --   'simrat39/rust-tools.nvim',
---   --   config = function()
---   --     require('config.rusttools').setup()
---   --   end,
---   --   dependencies = {
---   --     'mfussenegger/nvim-dap',
---   --     'nvim-lua/plenary.nvim',
---   --   }
---   -- }
---   { 
---     'rcarriga/nvim-dap-ui', 
---     config = function()
---       require('config.dap').setup()
---     end,
---     dependencies = {
---       'mfussenegger/nvim-dap',
---       'mfussenegger/nvim-dap-python',
---       'theHamsta/nvim-dap-virtual-text',
---       'nvim-telescope/telescope-dap.nvim'
---     } 
---   }
---
-

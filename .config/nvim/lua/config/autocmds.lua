@@ -40,3 +40,12 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
     vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
   end,
 })
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('custom-term-open', { clear = true }),
+  callback = function()
+    -- No line numbers in terminal
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end
+})

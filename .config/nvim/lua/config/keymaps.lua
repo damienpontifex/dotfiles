@@ -1,5 +1,7 @@
 local opts = { noremap = true, silent = true }
 
+-- vim.keymap.set('n', '<leader>r', ':source ' .. vim.fn.stdpath('config') .. '/init.lua<CR>')
+
 vim.keymap.set('x', 'p', '"_dP', opts)
 
 -- Cancel default behaviour of d, D, c, C to put the text they delete in
@@ -12,7 +14,11 @@ vim.keymap.set({ 'n', 'v' }, 'C', '"_C', opts)
 vim.keymap.set('n', '<Tab>', ':bnext<CR>')
 vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>')
 -- Auto format document
--- vim.keymap.set('n', 'F', "gg=G''<CR>")
+vim.keymap.set('n', '<Leader>f', function() vim.lsp.buf.format() end)
+
+-- Jump through quickfix list
+vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>')
+vim.keymap.set('n', '<M-k>', '<cmd>cnext<CR>')
 
 -- make < > shifts keep selection
 vim.keymap.set('v', '<', '<gv', opts)
@@ -27,6 +33,8 @@ vim.keymap.set('n', '<C-J>', '<C-W><C-J>', { desc = 'Move focus to the window be
 vim.keymap.set('n', '<C-K>', '<C-W><C-K>', { desc = 'Move focus to the window above' })
 vim.keymap.set('n', '<C-L>', '<C-W><C-L>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-H>', '<C-W><C-H>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-Right>', ':vertical resize -3<CR>', { desc = 'Decrease vertical split size' })
+vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { desc = 'Increase vertical split size' })
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
@@ -44,7 +52,7 @@ vim.keymap.set('n', '<M-k> :m', '.-2<CR>==', opts)
 
 vim.keymap.set('i', '∆', '<Esc>:m .+1<CR>==gi', opts)
 vim.keymap.set('i', '˚', '<Esc>:m .-2<CR>==gi', opts)
-vim.keymap.set('v', '∆' , ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set('v', '∆', ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set('v', '<M-j>', ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set('v', '˚', ":m, '<-2<CR>gv=gv", opts)
 vim.keymap.set('v', '<M-k>', ":m '<-2<CR>gv=gv", opts)
@@ -54,6 +62,12 @@ vim.keymap.set('n', '<Esc>', ':silent! nohls<CR>', opts)
 
 -- <leader>q to delete buffer without closing window
 vim.keymap.set('n', '<leader>q', ':bp<CR>:bd#<CR>', opts)
+
+vim.keymap.set('n', '<space><space>x', '<cmd> source %<CR>')
+vim.keymap.set('n', '<space>x', ':.lua<CR>')
+vim.keymap.set('v', '<space>x', ':lua<CR>')
+
+vim.keymap.set('n', '<C-b>', ':25Lex<CR>') -- Toggle netrw tree view
 
 --vim.keymap.set('i', '<CR>', function()
 --  return vim.fn.pumvisible() == 1 and '<C-y>' or '<CR>'
@@ -68,5 +82,3 @@ vim.keymap.set('n', '<leader>q', ':bp<CR>:bd#<CR>', opts)
 -- vim.keymap.set('i', '<S-Tab>', function()
 --   return vim.fn.pumvisible() == 1 and '<C-p>' or '<S-Tab>'
 -- end, { expr = true })
-
-
