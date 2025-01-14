@@ -90,14 +90,23 @@ return {
       vim.cmd.colorscheme 'vscode'
     end,
   },
+  -- Set lualine as statusline
+  -- See `:help lualine.txt`
   {
-    'vim-airline/vim-airline',
-    dependencies = {
-      'vim-airline/vim-airline-themes',
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        icons_enabled = true,
+        theme = 'onedark',
+        component_separator = '|',
+        section_separators = '',
+      },
+      sections = {
+        lualine_a = { 'buffers' },
+        lualine_c = {},
+      },
     },
-    config = function()
-      vim.g.airline_theme = 'deus'
-    end,
   },
   -- Highlight todo, notes, etc in comments
   {
