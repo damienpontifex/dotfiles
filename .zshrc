@@ -6,7 +6,6 @@ HIST_STAMPS="yyyy-mm-dd"
 
 zstyle ':omz:update' mode auto
 
-
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
@@ -36,12 +35,13 @@ plugins=(
   # docker-compose
 )
 source $ZSH/oh-my-zsh.sh
-# if [[ "$(tmux display-message -p '#S')" != stream ]]; then
+
 if [ -x "$(command -v az)" ]; then
   RPROMPT='$(az account show --output tsv --query "name")'
 fi
 
-[ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+[ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || \
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
 [ -x "$(command -v brew)" ] && \
   [ -f "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
@@ -57,7 +57,7 @@ function gmain {
 }
 
 function update-packages {
-  brew update && brew outdated && brew upgrade
+  brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
   rustup update
   dotnet tool list --global | awk 'NR > 2 {print $1}' | xargs -L1 dotnet tool update --global
@@ -173,14 +173,16 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/ponti/.google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ponti/.google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/.google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/ponti/.google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ponti/.google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/completion.zsh.inc"; fi
 
-source /Users/ponti/.docker/init-zsh.sh || true # Added by Docker Desktop
+source "$HOME/.docker/init-zsh.sh" || true # Added by Docker Desktop
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

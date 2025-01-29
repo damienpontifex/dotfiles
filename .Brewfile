@@ -8,7 +8,8 @@ tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "microsoft/git"
 
-brew "fzf"# , postinstall: "${HOMEBREW_PREFIX}/opt/fzf/install --all"
+brew "azure-cli"
+brew "fzf", postinstall: "${HOMEBREW_PREFIX}/opt/fzf/install --all"
 brew "neovim"
 brew "node"
 brew "podman"
@@ -22,4 +23,10 @@ brew "zsh-completions"
 cask "font-hack-nerd-font"
 cask "font-terminus"
 cask "git-credential-manager"
-# cask "iterm2"
+cask "google-chrome"
+cask "google-cloud-sdk", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components update"
+cask "iterm2"
+cask "rectangle"
+
+mas "Menu World Time", id: 1_446_377_255
+mas "Slack", id: 803_453_959

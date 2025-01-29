@@ -53,7 +53,7 @@ function mac-installs {
     export PATH="/opt/homebrew/bin:${PATH}"
   fi
 
-  brew bundle install --upgrade --global --cleanup
+  brew bundle install --upgrade --global --cleanup --verbose
   # nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
   $(brew --prefix fzf)/install --all
