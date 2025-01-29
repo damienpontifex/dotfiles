@@ -23,22 +23,23 @@ plugins=(
   # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   git
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-  helm
+  # helm
   # kube-ps1
   zsh-syntax-highlighting
   vscode
   colored-man-pages
   dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
-  kubectl
-  zsh-nvm
-  docker
-  docker-compose
+  # kubectl
+  # zsh-nvm
+  # docker
+  # docker-compose
 )
 source $ZSH/oh-my-zsh.sh
 # if [[ "$(tmux display-message -p '#S')" != stream ]]; then
-RPROMPT='$(az account show --output tsv --query "name")'
-# fi
+if [ -x "$(command -v az)" ]; then
+  RPROMPT='$(az account show --output tsv --query "name")'
+fi
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 

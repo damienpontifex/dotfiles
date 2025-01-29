@@ -1,20 +1,25 @@
 #!/usr/bin/env zsh
 
-# Stop on error
-set -e
+# Bash strict mode
+# e: Immediately exit if any command has non-zero exit status
+# u: Error if accessing a variable that hasn't previously been defined
+# o pipefile: Prevents errors in pipeline from being masked
+set -euo pipefail
+
 # Echo all commands executed
 set -x
 
 pushd $HOME
 
 if [ ! -d "${HOME}/.dotfiles" ]; then
-  # dotfiles
-  echo "dotfiles setup"
+  echo "Cloning dotrfiles for initial setup"
   git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
 fi
+
 function config {
    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
+
 # config checkout --force
 config submodule update --init --recursive
 config config --local status.showUntrackedFiles no
@@ -48,22 +53,19 @@ function mac-installs {
     export PATH="/opt/homebrew/bin:${PATH}"
   fi
   
-  brew tap homebrew/cask-fonts
   brew tap microsoft/git
 
-  brew_packages=(tmux node go neovim rustup-init azure-cli watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font jq mitmproxy)
+  brew_packages=(tmux neovim rustup watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font)
   brew reinstall "${brew_packages[@]}" || true
   nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
   $(brew --prefix fzf)/install --all
 
   brew install --cask powershell git-credential-manager-core
-  
-  rustup-init
 
   brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
   sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
-  
+
   echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 }
 
