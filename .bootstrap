@@ -57,14 +57,14 @@ function mac-installs {
 
   brew_packages=(tmux neovim rustup watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font)
   brew reinstall "${brew_packages[@]}" || true
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+  # nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
   $(brew --prefix fzf)/install --all
 
   brew install --cask powershell git-credential-manager-core
 
-  brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
-  sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
+  # brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
+  # sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
 
   echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 }
