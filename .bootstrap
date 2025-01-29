@@ -70,8 +70,6 @@ function mac-installs {
 }
 
 function linux-installs {
-  curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
   sudo add-apt-repository ppa:neovim-ppa/unstable
   sudo apt update
   sudo apt install -y \
@@ -82,16 +80,10 @@ function linux-installs {
     fzf \
     ripgrep \
     tmux
-    
-  # kubectl
-  sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-  echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-  sudo apt update
-  sudo apt install -y kubectl
 
   # Rust
   curl https://sh.rustup.rs -sSf | sh -s -- -y
-  
+
   # download-powerline-font "$HOME/.local/share/fonts"
 
   # pyenv install if missing
