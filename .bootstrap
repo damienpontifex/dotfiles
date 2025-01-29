@@ -52,11 +52,8 @@ function mac-installs {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     export PATH="/opt/homebrew/bin:${PATH}"
   fi
-  
-  brew tap microsoft/git
 
-  brew_packages=(tmux neovim rustup watch fzf ripgrep zsh-autosuggestions zsh-completion font-hack-nerd-font)
-  brew reinstall "${brew_packages[@]}" || true
+  brew bundle install --upgrade --global --cleanup
   # nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
   $(brew --prefix fzf)/install --all

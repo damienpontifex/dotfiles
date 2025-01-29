@@ -89,6 +89,9 @@ require('config.autocmds')
 require('config.keymaps')
 
 vim.filetype.add({
+  filename = {
+    ['.Brewfile'] = 'ruby',
+  },
   extension = {
     bicep = 'bicep',
     gotmpl = 'yaml',
