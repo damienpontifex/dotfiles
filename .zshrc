@@ -59,8 +59,9 @@ function gmain {
 function update-packages {
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
+  dotnet tool update --global --all
   rustup update
-  dotnet tool list --global | awk 'NR > 2 {print $1}' | xargs -L1 dotnet tool update --global
+  cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
 }
 
 function tm {
