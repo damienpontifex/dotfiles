@@ -181,7 +181,7 @@ return {
       })
 
       require("lsp_lines").setup()
-      vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+      vim.diagnostic.config { virtual_text = true, virtual_lines = true }
 
       vim.keymap.set("", "<leader>l", function()
         local config = vim.diagnostic.config() or {}
