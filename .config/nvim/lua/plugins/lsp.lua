@@ -34,9 +34,25 @@ return {
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     },
     config = function()
+      -- vim.lsp.set_log_level('info')
+
       local lsp_config = require('lspconfig')
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      local function get_project_rustanalyzer_settings()
+        local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/./.rust-analyzer.json'))
+        if not handle then
+          return {}
+        end
+        local out = handle:read("*a")
+        handle:close()
+        local config = vim.json.decode(out)
+        if type(config) == "table" then
+          return config
+        end
+        return {}
+      end
 
       -- For list of available servers
       -- :h lspconfig-all
@@ -68,18 +84,21 @@ return {
         },
         rust_analyzer = {
           settings = {
-            ["rust-analyzer"] = {
-              assist = {
-                importGranularity = "module",
-                importPrefix = "by_self",
+            ["rust-analyzer"] = vim.tbl_deep_extend("force",
+              {
+                assist = {
+                  importGranularity = "module",
+                  importPrefix = "by_self",
+                },
+                cargo = {
+                  loadOutDirsFromCheck = true,
+                },
+                procMacro = {
+                  enable = true
+                },
               },
-              cargo = {
-                loadOutDirsFromCheck = true
-              },
-              procMacro = {
-                enable = true
-              },
-            }
+              get_project_rustanalyzer_settings()
+            )
           }
         },
         yamlls = {
@@ -191,8 +210,6 @@ return {
           vim.diagnostic.config { virtual_text = true, virtual_lines = false }
         end
       end, { desc = "Toggle lsp_lines" })
-
-      -- vim.lsp.set_log_level('debug')
 
       vim.diagnostic.config({
         virtual_text = {
