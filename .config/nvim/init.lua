@@ -74,7 +74,13 @@ vim.opt.wildmenu = true  -- show options as list when switching buffers etc
 vim.opt.conceallevel = 0 -- never conceal
 
 vim.opt.winbar = "%f"
+vim.o.winborder = 'rounded'
 vim.opt.spell = true
+
+vim.diagnostic.config({
+  virtual_text = true,
+  virtual_lines = true
+})
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
@@ -82,9 +88,7 @@ vim.opt.spell = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.opt.smoothscroll = true
-end
+vim.opt.smoothscroll = true
 require('config.autocmds')
 require('config.keymaps')
 
