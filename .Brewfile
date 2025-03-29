@@ -19,6 +19,7 @@ brew "tmux"
 brew "watch"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
+brew "uv"
 
 cask "font-hack-nerd-font"
 cask "font-terminus"
@@ -27,6 +28,3 @@ cask "google-chrome"
 cask "google-cloud-sdk", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components update"
 cask "iterm2"
 cask "rectangle"
-
-mas "Menu World Time", id: 1_446_377_255
-mas "Slack", id: 803_453_959
