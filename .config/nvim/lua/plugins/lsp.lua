@@ -37,7 +37,7 @@ return {
 
       local lsp_config = require('lspconfig')
 
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local function get_project_rustanalyzer_settings()
         local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/./.rust-analyzer.json'))
@@ -125,9 +125,9 @@ return {
         if config == true then
           config = {}
         end
-        config = vim.tbl_deep_extend('force', {}, {
-          capabilities = capabilities,
-        }, config)
+        -- config = vim.tbl_deep_extend('force', {}, {
+        --   capabilities = capabilities,
+        -- }, config)
 
         lsp_config[name].setup(config)
       end
