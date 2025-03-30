@@ -77,6 +77,10 @@ vim.opt.winbar = "%f"
 vim.o.winborder = 'rounded'
 vim.opt.spell = true
 
+-- Center window after jump up/down
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+
 vim.diagnostic.config({
   virtual_text = true,
   virtual_lines = true
