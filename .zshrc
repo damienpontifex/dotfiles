@@ -17,22 +17,23 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 [ -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm" ] || git clone https://github.com/lukechilds/zsh-nvm "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm"
 export NVM_LAZY_LOAD=true
 export NVM_AUTO_USE=true
+[ -d "$HOME/.oh-my-zsh/custom/plugins/you-should-use" ] || git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$HOME/.oh-my-zsh/custom/plugins/you-should-use"
 
 plugins=(
-  # Shortcuts available https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
-  git
+  git # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
   # helm
   # kube-ps1
+  # kubectl
   zsh-syntax-highlighting
   vscode
   colored-man-pages
   dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
-  # kubectl
   # zsh-nvm
   # docker
   # docker-compose
+  you-should-use
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -62,6 +63,17 @@ function update-packages {
   dotnet tool update --global --all
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
+}
+
+# Ensure brew packages are managed in ~/.Brewfile
+brew() {
+  if [[ "$1" == "install" ]]; then
+    echo "❌ Direct 'brew install' is disabled."
+    echo "✅ Please edit your ~/.Brewfile and use 'brew bundle' instead."
+    return 1
+  else
+    command brew "$@"
+  fi
 }
 
 function tm {
@@ -187,3 +199,4 @@ source "$HOME/.docker/init-zsh.sh" || true # Added by Docker Desktop
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
