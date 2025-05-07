@@ -21,9 +21,7 @@ if [ ! -d "${HOME}/.dotfiles" ]; then
   git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
 fi
 
-function config {
-   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
-}
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME '
 
 # config checkout --force
 config submodule update --init --recursive
