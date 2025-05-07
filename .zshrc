@@ -102,7 +102,7 @@ function new-tsc-project {
 }
 
 ### dotfiles ###
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME '
 alias config=dotfiles
 
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
