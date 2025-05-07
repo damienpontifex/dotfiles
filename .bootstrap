@@ -11,6 +11,11 @@ set -x
 
 pushd $HOME
 
+if [ ! -x $(command -v git) ]; then
+  # Ensure git is installed
+  xcode-select --install
+fi
+
 if [ ! -d "${HOME}/.dotfiles" ]; then
   echo "Cloning dotrfiles for initial setup"
   git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
@@ -41,60 +46,26 @@ add_ext() {
 
 add_ext https://github.com/tmux-plugins/tpm.git ~/.tmux/plugins/tpm
 
-function mac-installs {
-  # Turn off bouncing dock icons
-  defaults write com.apple.dock no-bouncing -bool TRUE
-  # VSCode vim key repeat
-  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
-  killall Finder
+# Turn off bouncing dock icons
+defaults write com.apple.dock no-bouncing -bool TRUE
+# VSCode vim key repeat
+defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+killall Finder
 
-  if [ ! -x $(command -v brew) ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    export PATH="/opt/homebrew/bin:${PATH}"
-  fi
-
-  brew bundle install --upgrade --global --cleanup --verbose
-  # nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-
-  $(brew --prefix fzf)/install --all
-
-  brew install --cask powershell git-credential-manager-core
-
-  # brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
-  # sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
-
-  echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
-}
-
-function linux-installs {
-  sudo add-apt-repository ppa:neovim-ppa/unstable
-  sudo apt update
-  sudo apt install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    neovim \
-    fzf \
-    ripgrep \
-    tmux
-
-  # Rust
-  curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-  # download-powerline-font "$HOME/.local/share/fonts"
-
-  # pyenv install if missing
-  # [[ -d "$HOME/.pyenv" ]] || curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-}
-
-if [[ $(uname -s ) == "Darwin" ]]; then
-  mac-installs
-else
-  linux-installs
+if [ ! -x $(command -v brew) ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  export PATH="/opt/homebrew/bin:${PATH}"
 fi
 
-mkdir -p $HOME/.npm-global
+brew bundle install --upgrade --global --cleanup --verbose
+# nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+
+$(brew --prefix fzf)/install --all
+
+# brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
+# sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
+
+echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 
 [ -f $HOME/.git-completion.zsh ] || \
   curl -L -o $HOME/.git-completion.zsh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh 
-
