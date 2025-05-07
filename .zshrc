@@ -80,27 +80,6 @@ function tm {
   tmux new-session -A -s "${1:-default}"
 }
 
-function set-proxy {
-  https_proxy=wxmbp.localdomain:8080
-}
-function unset-proxy {
-  unset https_proxy
-}
-
-function new-tsc-project {
-  npm init -y
-
-  echo '{\n  "extends": "@tsconfig/node14"\n}' > tsconfig.json
-
-  local PACKAGE_JSON=$(jq $'
-  .scripts.build = "esbuild index.ts --bundle --minify --sourcemap --platform=node --outfile=bin/index.js" |
-  .scripts.start = "nodemon --ext ts --ignore ./bin --exec \'npm run build && node --enable-source-maps ./bin/index.js\'"' package.json)
-  echo $PACKAGE_JSON > package.json
-
-  npm i -D @tsconfig/node14 @types/node ts-node typescript nodemon esbuild
-  touch index.ts
-}
-
 ### dotfiles ###
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME '
 alias config=dotfiles
