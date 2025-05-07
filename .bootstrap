@@ -65,6 +65,10 @@ $(brew --prefix fzf)/install --all
 # brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
 # sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
 
+# Tell iTerm2 to use the custom preferences in the directory
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2"
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+
 echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 
 [ -f $HOME/.git-completion.zsh ] || \
