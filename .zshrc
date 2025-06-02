@@ -61,6 +61,7 @@ function update-packages {
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
   dotnet tool update --global --all
+  dotnet workload update
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
 }
