@@ -4,6 +4,9 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set('x', 'p', '"_dP', opts)
 
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center window after jump up' })
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center window after jump down' })
+
 -- Cancel default behaviour of d, D, c, C to put the text they delete in
 -- the default register.
 vim.keymap.set({ 'n', 'v' }, 'd', '"_d', opts)
@@ -14,11 +17,11 @@ vim.keymap.set({ 'n', 'v' }, 'C', '"_C', opts)
 vim.keymap.set('n', '<Tab>', ':bnext<CR>')
 vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>')
 -- Auto format document
-vim.keymap.set('n', '<Leader>f', function() vim.lsp.buf.format() end)
+vim.keymap.set('n', '<Leader>f', function() vim.lsp.buf.format() end, { desc = 'Format document' })
 
 -- Jump through quickfix list
-vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>')
-vim.keymap.set('n', '<M-k>', '<cmd>cnext<CR>')
+vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>', { desc = 'Next quickfix item' })
+vim.keymap.set('n', '<M-k>', '<cmd>cnext<CR>', { desc = 'Previous quickfix item' })
 
 -- make < > shifts keep selection
 vim.keymap.set('v', '<', '<gv', opts)
@@ -67,7 +70,7 @@ vim.keymap.set('n', '<space><space>x', '<cmd> source %<CR>')
 vim.keymap.set('n', '<space>x', ':.lua<CR>')
 vim.keymap.set('v', '<space>x', ':lua<CR>')
 
-vim.keymap.set('n', '<C-b>', ':25Lex<CR>') -- Toggle netrw tree view
+-- vim.keymap.set('n', '<C-b>', ':25Lex<CR>') -- Toggle netrw tree view
 
 --vim.keymap.set('i', '<CR>', function()
 --  return vim.fn.pumvisible() == 1 and '<C-y>' or '<CR>'

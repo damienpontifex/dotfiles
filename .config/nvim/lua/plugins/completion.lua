@@ -1,4 +1,7 @@
 return {
+  {
+    'github/copilot.vim'
+  }
   -- {
   --   'saghen/blink.cmp',
   --   -- optional: provides snippets for the snippet source
