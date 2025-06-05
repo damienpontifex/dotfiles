@@ -53,9 +53,13 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- vim.keymap.set('i', '<C-Space>', vim.lsp.omnifunc, { desc = 'LSP: Trigger completion', buffer = args.buf })
 
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gD', function()
-      require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
-    end, opts)
+    vim.keymap.set('n', 'gD', '<cmd>vsplit | vim.lsp.buf.definition()<cr>', {
+      desc = 'LSP: Definition in vertical split',
+      buffer = args.buf,
+    })
+    -- vim.keymap.set('n', 'gD', function()
+    --   require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
+    -- end, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
