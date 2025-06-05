@@ -9,6 +9,9 @@ zstyle ':omz:update' mode auto
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+# Ensure postgresql tools are in path
+export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
+
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
@@ -82,8 +85,11 @@ function tm {
 }
 
 ### dotfiles ###
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME '
-alias config=dotfiles
+function config() {
+  /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
+}
+# Enable completion for the function by telling Zsh to treat it like `git`
+compdef dotfiles=git
 
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
@@ -175,8 +181,4 @@ if [ -f "$HOME/.google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.google-cloud-sd
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/completion.zsh.inc"; fi
 
-source "$HOME/.docker/init-zsh.sh" || true # Added by Docker Desktop
-
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
