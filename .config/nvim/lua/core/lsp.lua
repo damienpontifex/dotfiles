@@ -14,48 +14,53 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id), 'must have valid client')
     local bufnr = args.buf
 
+    -- print(vim.inspect(client.capabilities))
+
     -- Auto format on save
-    if client:supports_method('textDocument/formatting', bufnr) then
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
-        buffer = args.buf,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
-        end
-      })
-    end
+    --if client.server_capabilities.documentFormattingProvider then
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+      end
+    })
+    --end
 
-    if client:supports_method('testDocument/foldingRange', bufnr) and vim.fn.exists('*vim.lsp.foldexpr') == 1 then
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = 'v:lua.vim.lsp.foldexpr()'
-    end
+    --if client.server_capabilities.foldingRangeProvider then
+    --if client:supports_method('testDocument/foldingRange') then
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.lsp.foldexpr()'
+    --end
 
-    if client:supports_method('textDocument/inlayHint', bufnr) then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-    end
+    --if client.server_capabilities.inlayHintProvider then
+    --if client:supports_method('textDocument/inlayHint', bufnr) then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    --end
 
-    if client:supports_method('textDocument/codeLens', bufnr) then
-      vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd(
-        { 'BufEnter', 'CursorHold', 'InsertLeave' },
-        {
-          buffer = bufnr,
-          callback = vim.lsp.codelens.refresh,
-        }
-      )
-    end
+    --if client.server_capabilities.codeLensProvider then
+    -- if client:supports_method('textDocument/codeLens', bufnr) then
+    vim.lsp.codelens.refresh()
+    vim.api.nvim_create_autocmd(
+      { 'BufEnter', 'CursorHold', 'InsertLeave' },
+      {
+        buffer = bufnr,
+        callback = vim.lsp.codelens.refresh,
+      }
+    )
+    --end
 
-    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-    -- vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    -- vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
 
-    local opts = { buffer = args.buf }
+    local opts = { buffer = bufnr }
 
-    -- vim.keymap.set('i', '<C-Space>', vim.lsp.omnifunc, { desc = 'LSP: Trigger completion', buffer = args.buf })
+    -- vim.keymap.set('i', '<C-Space>', vim.lsp.omnifunc, { desc = 'LSP: Trigger completion', buffer = bufnr })
 
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gD', '<cmd>vsplit | vim.lsp.buf.definition()<cr>', {
       desc = 'LSP: Definition in vertical split',
-      buffer = args.buf,
+      buffer = bufnr,
     })
     -- vim.keymap.set('n', 'gD', function()
     --   require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })

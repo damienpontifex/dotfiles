@@ -30,6 +30,7 @@ return {
         'terraformls',
         'gopls',
         'lua_ls',
+        'yamlls',
       },
     },
     lazy = false,
