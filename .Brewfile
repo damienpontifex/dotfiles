@@ -26,6 +26,7 @@ brew "lazygit"
 brew "yq"
 brew "bicep"
 brew "golang"
+brew "trivy"
 
 cask "font-hack-nerd-font"
 cask "git-credential-manager"
@@ -33,3 +34,5 @@ cask "google-cloud-sdk", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components 
 cask "iterm2"
 cask "rectangle"
 cask "drawio"
+cask "github-copilot-for-xcode"
+cask "font-cascadia-mono-nf"
