@@ -17,6 +17,7 @@
   # Delete any branches where the tracking remote has been deleted
   clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
 	root = rev-parse --show-toplevel
+  open-remote = "!git remote -v | head -n 1 | awk '{print $2}' | xargs -n1 open"
 [push]
   default = current
 [fetch]
@@ -43,7 +44,7 @@
 	branch = false
 [credential]
 	helper = osxkeychain
-	helper = 
+	helper =
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [submodule]
 	recurse = true
