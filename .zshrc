@@ -69,16 +69,30 @@ function update-packages {
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
 }
 
-# Ensure brew packages are managed in ~/.Brewfile
-brew() {
-  if [[ "$1" == "install" ]]; then
-    echo "❌ Direct 'brew install' is disabled."
-    echo "✅ Please edit your ~/.Brewfile and use 'brew bundle' instead."
-    return 1
-  else
-    command brew "$@"
-  fi
+# Make sure we can run `make` in the current directory or any parent directory
+function make {
+  local dir="$PWD"
+  while [ "$dir" != "/" ]; do
+    if [ -f "$dir/Makefile" ]; then
+      command make -C "$dir" "$@"
+      return
+    fi
+    dir="$(dirname "$dir")"
+  done
+  echo "No Makefile found in current or parent directories." >&2
+  return 1
 }
+
+# Ensure brew packages are managed in ~/.Brewfile
+# brew() {
+#   if [[ "$1" == "install" ]]; then
+#     echo "❌ Direct 'brew install' is disabled."
+#     echo "✅ Please edit your ~/.Brewfile and use 'brew bundle' instead."
+#     return 1
+#   else
+#     command brew "$@"
+#   fi
+# }
 
 function tm {
   tmux new-session -A -s "${1:-default}"
@@ -182,3 +196,4 @@ if [ -f "$HOME/.google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.google-cloud-sd
 if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/completion.zsh.inc"; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+. "/Users/ponti/.deno/env"
