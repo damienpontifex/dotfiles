@@ -10,5 +10,6 @@ vim.filetype.add({
     bicep = 'bicep',
     bicepparam = 'bicep-params',
     gotmpl = 'yaml',
+    workbook = 'json',
   }
 })

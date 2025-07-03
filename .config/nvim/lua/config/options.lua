@@ -36,7 +36,8 @@ vim.opt.backup = false                 -- don't make backups before writing
 vim.o.completeopt = "menu,menuone,noselect"
 vim.opt.emoji = false                  -- don't assume all emoji are double width
 vim.opt.foldlevelstart = 99            -- start unfolded
-vim.opt.foldmethod = 'syntax'
+vim.opt.foldmethod = 'indent'
+vim.opt.foldcolumn = '1'
 vim.opt.hidden = true
 
 vim.opt.cindent = true
