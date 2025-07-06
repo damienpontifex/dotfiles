@@ -45,6 +45,12 @@ return {
     },
     keys = {
       { '<Leader>a', '<cmd>CodeCompanionChat Toggle<CR>', desc = 'Toggle chat buffer' },
+      {
+        '<Leader>i',
+        '<cmd>CodeCompanion<CR>',
+        desc = 'Code companion inline chat',
+        mode = { 'n', 'v' }
+      },
     },
     config = function(_, opts)
       require('codecompanion').setup(opts)
