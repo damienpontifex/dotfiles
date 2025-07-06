@@ -1,5 +1,5 @@
 local function get_project_rustanalyzer_settings()
-  local handle = io.open(vim.fn.resolve(vim.fn.resolve(vim.fn.getcwd() .. '/rust-analyzer.json')), 'r')
+  local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/rust-analyzer.json'), 'r')
   if not handle then
     return {}
   end

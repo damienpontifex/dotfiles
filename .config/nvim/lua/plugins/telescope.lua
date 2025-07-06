@@ -12,13 +12,13 @@ return {
       '<C-p>',
       function()
         -- require('telescope.builtin').git_files()
-        require('telescope.builtin').find_files({})
+        require('telescope.builtin').find_files({ hidden = true, })
       end,
       desc = 'Find files'
     },
     {
       '<Leader>ff',
-      function() require('telescope.builtin').find_files() end,
+      function() require('telescope.builtin').find_files({ hidden = true, }) end,
       desc = 'Find files'
     },
     {
@@ -69,6 +69,8 @@ return {
   },
   opts = {
     defaults = {
+      hidden = true,
+      file_ignore_patterns = { "%.git/" },
       theme = "center",
       sorting_strategy = "ascending",
       layout_config = {
