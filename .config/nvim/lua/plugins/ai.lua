@@ -13,6 +13,9 @@ return {
         level = vim.log.levels.INFO,
       },
     },
+    config = function(_, opts)
+      require("mcphub").setup(opts)
+    end
   },
   {
     "olimorris/codecompanion.nvim",

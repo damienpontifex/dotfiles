@@ -78,6 +78,7 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
 
 
     vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
+    vim.keymap.set('n', 'gD', function() vim.lsp.buf.implementation({ reuse_win = true }) end, opts)
     -- vim.keymap.set('n', 'gD', function()
     --   vim.lsp.buf.definition({
     --     on_list = function(list_opts)
