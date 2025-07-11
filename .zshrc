@@ -31,7 +31,8 @@ plugins=(
   zsh-syntax-highlighting
   vscode
   colored-man-pages
-  dotenv  # Auto load .env file when you cd into project root directory
+  direnv
+  # dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
   # zsh-nvm
   # docker
@@ -61,10 +62,11 @@ function gmain {
 }
 
 function update-packages {
+  brew update
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
   dotnet tool update --global --all
-  dotnet workload update
+  sudo dotnet workload update
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
 }
@@ -123,7 +125,10 @@ fi
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Node and npm
-export NODE_ENV=development
+export NODE_ENV=localdev
+if [[ -x $(command -v fnm) ]]; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 # golang
 if [[ -x $(command -v go) ]]; then
