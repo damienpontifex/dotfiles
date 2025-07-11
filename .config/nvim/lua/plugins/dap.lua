@@ -17,21 +17,23 @@ return {
       "theHamsta/nvim-dap-virtual-text",
       { "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/launch.json
     },
-    config = function()
+    config = function(_, _opts)
       local dap = require('dap')
       local ui = require("dapui")
 
       vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
       vim.fn.sign_define('DapStopped', { text = '🟢', texthl = '', linehl = '', numhl = '' })
 
-      vim.keymap.set('n', '<F5>', dap.continue)
-      vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint)
-      vim.keymap.set('n', '<Right>', dap.step_over)
-      vim.keymap.set('n', '<F10>', dap.step_over)
-      vim.keymap.set('n', '<Down>', dap.step_into)
-      vim.keymap.set('n', '<F11>', dap.step_into)
-      vim.keymap.set('n', '<Up>', dap.step_out)
-      vim.keymap.set('n', '<F12>', dap.step_out)
+      -- This also starts debugging, so <leader>db like leader debug
+      vim.keymap.set('n', '<leader>db', dap.continue, { desc = '[DAP] Start debugging' })
+      vim.keymap.set('n', '<F5>', dap.continue, { desc = '[DAP] Continue debugging' })
+      vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint, { desc = '[DAP] Toggle breakpoint' })
+      vim.keymap.set('n', '<Right>', dap.step_over, { desc = '[DAP] Step over' })
+      vim.keymap.set('n', '<F10>', dap.step_over, { desc = '[DAP] Step over' })
+      vim.keymap.set('n', '<Down>', dap.step_into, { desc = '[DAP] Step into' })
+      vim.keymap.set('n', '<F11>', dap.step_into, { desc = '[DAP] Step into' })
+      vim.keymap.set('n', '<Up>', dap.step_out, { desc = '[DAP] Step out' })
+      vim.keymap.set('n', '<F12>', dap.step_out, { desc = '[DAP] Step out' })
 
       dap.listeners.before.attach.dapui_config = function()
         ui.open()

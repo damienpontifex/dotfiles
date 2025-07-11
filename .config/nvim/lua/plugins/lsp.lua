@@ -1,5 +1,10 @@
 return {
   {
+    -- Useful status updates for LSP.
+    "j-hui/fidget.nvim",
+    opts = {},
+  },
+  {
     'saghen/blink.cmp',
     dependencies = { 'rafamadriz/friendly-snippets' },
     version = '1.*',
@@ -41,6 +46,21 @@ return {
       {
         'williamboman/mason.nvim',
         opts = {},
+        config = function(_, opts)
+          require('mason').setup(opts)
+
+          -- Ensure that other tools, apart from LSP servers, are installed.
+          local registry = require("mason-registry")
+
+          for _, pkg_name in ipairs { "js-debug-adapter", "bash-debug-adapter", "netcoredbg", "codelldb", } do
+            local ok, pkg = pcall(registry.get_package, pkg_name)
+            if ok then
+              if not pkg:is_installed() then
+                pkg:install()
+              end
+            end
+          end
+        end,
       },
       -- see `set runtimepath?` and nvim-lspconfig is on runtimepath, so lsp folder within that is automatically included in config setup
       'neovim/nvim-lspconfig',
