@@ -1,8 +1,10 @@
 return {
   {
     'stevearc/overseer.nvim',
+    lazy = false,
     opts = {
       dap = true,
+      strategy = { 'terminal', use_shell = true },
     },
     keys = {
       { '<Leader>r', function() require('overseer').run_template() end, desc = 'Run overseer template' },
@@ -11,15 +13,18 @@ return {
     },
   },
   {
-    "mfussenegger/nvim-dap",
+    "mfussenegger/nvim-dap-ui",
+    lazy = false,
     dependencies = {
-      "mfussenegger/nvim-dap-ui",
+      "mfussenegger/nvim-dap",
       "theHamsta/nvim-dap-virtual-text",
       { "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/launch.json
     },
-    config = function(_, _opts)
-      local dap = require('dap')
-      local ui = require("dapui")
+    config = function(_, opts)
+      local dap, dapui = require('dap'), require('dapui')
+      dapui.setup(opts)
+
+      -- dap.set_log_level('TRACE')
 
       vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
       vim.fn.sign_define('DapStopped', { text = '🟢', texthl = '', linehl = '', numhl = '' })
@@ -36,20 +41,21 @@ return {
       vim.keymap.set('n', '<F12>', dap.step_out, { desc = '[DAP] Step out' })
 
       dap.listeners.before.attach.dapui_config = function()
-        ui.open()
+        dapui.open()
       end
       dap.listeners.before.launch.dapui_config = function()
-        ui.open()
+        dapui.open()
       end
       dap.listeners.before.event_terminated.dapui_config = function()
-        ui.close()
+        dapui.close()
       end
       dap.listeners.before.event_exited.dapui_config = function()
-        ui.close()
+        dapui.close()
       end
 
-      -- :h dap-launch.json
+      -- Allows trailing commas in launch.json files
       require('dap.ext.vscode').json_decode = require('json5').parse
+      -- :h dap-launch.json
       require('dap.ext.vscode').load_launchjs(nil, {
         node = { 'typescript', 'javascript' },
         coreclr = { 'cs' },
@@ -57,6 +63,19 @@ return {
 
       -- So comletions in the dap-repl work automatically
       -- au FileType dap-repl lua require('dap.ext.autocompl').attach()
+
+      dap.adapters.node = {
+        type = 'executable',
+        command = 'js-debug-adapter',
+      }
+      dap.adapters.javsacript = dap.adapters.node
+      dap.adapters.typescript = dap.adapters.node
+
+      dap.adapters.lldb = {
+        type = 'executable',
+        command = 'codelldb',
+        name = 'lldb',
+      }
     end,
   }
 }

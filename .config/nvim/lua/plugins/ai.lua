@@ -19,6 +19,7 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
+    lazy = false,
     opts = {
       system_prompt = function()
         -- Provide VSCode github copilot instructions as system prompt if they exist
