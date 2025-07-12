@@ -1,12 +1,42 @@
-[core]
-	excludesfile = /Users/ponti/.gitignore_global
-	editor = nvim
-	autocrlf = false
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
+	signingKey = B6A801BF2864870D 
+
+[commit]
+	gpgsign = true
+  template = ~/.config/git/template
+  verbose = true # add more content to commit messages
+
+[tag]
+	gpgSign = true
+  sort = -taggerdate
+
+[core]
+	autocrlf = input # keep newlines as in input
+  compression = 9 # trade cpu for network
+  whitespace = error # treat incorrect whitespace as an error
+  preloadindex = true # preload index for faster status
+	excludesfile = /Users/ponti/.gitignore_global
+	editor = nvim
+
+[blame]
+  coloring = highlightRecent
+  date = relative
+
+[log]
+  abbrevCommit = true
+  graphColors = blue,yellow,cyan,magenta,green,red
+
+[status]
+  branch = true
+  short = true
+  showStash = true
+  showUntrackedFiles = all
+
 [includeIf "gitdir:~/makerx/"]
   path = ~/makerx/.gitconfig
+
 [alias]
   graph-log = log --oneline --decorate --graph --all
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
@@ -18,45 +48,103 @@
   clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
 	root = rev-parse --show-toplevel
   open-remote = "!git remote -v | head -n 1 | awk '{print $2}' | xargs -n1 open"
+
 [push]
+  autoSetupRemote = true
   default = current
+  followTags = true # push tags when pushing branches
+  gpgSign = false
+
 [fetch]
   prune = true
+
 [pull]
   rebase = true
+  default = current
+
 [rebase]
   autostash = true
+  missingCommitsCheck = warn # warn if rebasing onto a branch with commits not in the current branch
+
 [init]
   defaultBranch = main
+
+[branch]
+  sort = -committerdate # sort branches by last commit date
 
 # Use NeoVim diff as diff tool
 [merge]
   tool = vimdiff
+
 [mergetool]
   prompt = true
+
 [mergetool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
 [difftool]
   prompt = false
+
 [diff]
   tool = vimdiff
+  context = 3 # less context in diffs
+  renames = copies # detect renames as copies
+  interHunkContext = 10 # more context between hunks
+
 [pager]
 	branch = false
+
 [credential]
 	helper = osxkeychain
 	helper =
 	helper = /usr/local/share/gcm-core/git-credential-manager
+
 [submodule]
 	recurse = true
-	fetchJobs = 8
+	fetchJobs = 16
+
 [http]
 	cookiefile = /Users/ponti/.gitcookies
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
 [credential "https://dev.azure.com"]
 	useHttpPath = true
+
 [credential "https://github.com"]
 	username = damienpontifex
+
+# URL shortcuts
+[url "https://github.com/"]
+  insteadOf = "gh:"
+
+[url "https://github.com/damienpontifex/"]
+  insteadOf = "dp:"
+
+# Colors
+[color "blame"]
+    highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
+
+[color "branch"]
+    current  = magenta
+    local    = default
+    remote   = yellow
+    upstream = green
+    plain    = blue
+
+[color "diff"]
+    meta       = black bold
+    frag       = magenta
+    context    = white
+    whitespace = yellow reverse
+    old        = red
+
+[color.decorate]
+    HEAD = red
+    branch = blue
+    tag = yellow
+    remoteBranch = magenta
