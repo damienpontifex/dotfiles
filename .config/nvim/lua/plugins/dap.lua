@@ -9,15 +9,16 @@ return {
     keys = {
       { '<Leader>r', function() require('overseer').run_template() end, desc = 'Run overseer template' },
       { '<Leader>R', function() require('overseer').run_last() end,     desc = 'Run last overseer task' },
-      { '<Leader>l', function() require('overseer').toggle() end,       desc = 'Toggle overseer task list' },
+      { '<Leader>t', function() require('overseer').toggle() end,       desc = 'Toggle overseer task list' },
     },
   },
   {
-    "mfussenegger/nvim-dap-ui",
-    lazy = false,
+    "rcarriga/nvim-dap-ui",
+    event = "VimEnter",
     dependencies = {
       "mfussenegger/nvim-dap",
       "theHamsta/nvim-dap-virtual-text",
+      "nvim-neotest/nvim-nio",
       { "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/launch.json
     },
     config = function(_, opts)
@@ -30,7 +31,7 @@ return {
       vim.fn.sign_define('DapStopped', { text = '🟢', texthl = '', linehl = '', numhl = '' })
 
       -- This also starts debugging, so <leader>db like leader debug
-      vim.keymap.set('n', '<leader>db', dap.continue, { desc = '[DAP] Start debugging' })
+      vim.keymap.set('n', '<leader>db', dapui.toggle, { desc = '[DAP] Start debugging' })
       vim.keymap.set('n', '<F5>', dap.continue, { desc = '[DAP] Continue debugging' })
       vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint, { desc = '[DAP] Toggle breakpoint' })
       vim.keymap.set('n', '<Right>', dap.step_over, { desc = '[DAP] Step over' })
@@ -46,12 +47,13 @@ return {
       dap.listeners.before.launch.dapui_config = function()
         dapui.open()
       end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
+      -- dap.listeners.before.event_terminated.dapui_config = function(body)
+      --   -- print(vim.inspect(body))
+      --   dapui.close()
+      -- end
+      -- dap.listeners.before.event_exited.dapui_config = function()
+      --   dapui.close()
+      -- end
 
       -- Allows trailing commas in launch.json files
       require('dap.ext.vscode').json_decode = require('json5').parse
@@ -75,6 +77,11 @@ return {
         type = 'executable',
         command = 'codelldb',
         name = 'lldb',
+      }
+
+      dap.adapters.debugpy = {
+        type = 'executable',
+        command = 'debugpy-adapter',
       }
     end,
   }

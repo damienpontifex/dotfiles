@@ -31,15 +31,16 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- print(vim.inspect(client.capabilities))
 
     -- Auto format on save
-    if client.server_capabilities.documentFormattingProvider then
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
-        end
-      })
-    end
+    -- Removing to test out conform.nvim
+    -- if client.server_capabilities.documentFormattingProvider then
+    --   vim.api.nvim_create_autocmd('BufWritePre', {
+    --     group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+    --     buffer = bufnr,
+    --     callback = function()
+    --       vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
+    --     end
+    --   })
+    -- end
 
     if client.server_capabilities.colorProvider and vim.lsp.document_color then
       vim.lsp.document_color.enable(true, bufnr)

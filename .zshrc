@@ -202,3 +202,5 @@ if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cl
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 . "/Users/ponti/.deno/env"
+
+export GPG_TTY=$(tty)
