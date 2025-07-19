@@ -11,6 +11,7 @@ return {
           "c",
           "c_sharp",
           "diff",
+          "dockerfile",
           "go",
           "helm",
           "html",

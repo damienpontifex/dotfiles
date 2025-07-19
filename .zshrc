@@ -9,6 +9,8 @@ zstyle ':omz:update' mode auto
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Ensure postgresql tools are in path
 export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
 
@@ -35,8 +37,8 @@ plugins=(
   # dotenv  # Auto load .env file when you cd into project root directory
   vi-mode
   # zsh-nvm
-  # docker
-  # docker-compose
+  docker
+  docker-compose
   you-should-use
 )
 source $ZSH/oh-my-zsh.sh
@@ -44,6 +46,8 @@ source $ZSH/oh-my-zsh.sh
 if [ -x "$(command -v az)" ]; then
   RPROMPT='$(az account show --output tsv --query "name")'
 fi
+# Disable AWS CLI pager
+export AWS_PAGE=""
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || \
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
@@ -69,6 +73,7 @@ function update-packages {
   sudo dotnet workload update
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
+  nvim --headless -c "Lazy! update" -c "MasonUpdate" -c "qa"
 }
 
 # Make sure we can run `make` in the current directory or any parent directory
@@ -125,7 +130,7 @@ fi
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Node and npm
-export NODE_ENV=localdev
+export NODE_ENV=development
 if [[ -x $(command -v fnm) ]]; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 fi

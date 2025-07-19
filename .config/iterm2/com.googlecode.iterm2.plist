@@ -3796,7 +3796,7 @@
 			<key>Thin Strokes</key>
 			<integer>4</integer>
 			<key>Transparency</key>
-			<real>0.10137276785714279</real>
+			<real>0.02</real>
 			<key>Treat Option as Alt</key>
 			<true/>
 			<key>Unicode Normalization</key>

@@ -18,9 +18,9 @@ local rust_default_settings = {
     importGranularity = 'module',
     importPrefix = 'by_self',
   },
-  imports = {
-    preferNoStd = true,
-  },
+  -- imports = {
+  --   preferNoStd = true,
+  -- },
   cargo = {
     loadOutDirsFromCheck = true,
   },

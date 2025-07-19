@@ -41,7 +41,7 @@
   graph-log = log --oneline --decorate --graph --all
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
   # main is normally the common parent, so squash back until common ancestor
-  squash = "!f() { git rebase --interactive $(git merge-base --fork-point HEAD ${1:-main}); }; f"
+  squash = "!f() { git fetch origin && git rebase --interactive $(git merge-base --fork-point HEAD ${1:-origin/main}); }; f"
   # Rebase branch back onto main off of original base $1
   rb-onto = "!f() { git rebase --onto ${2:-origin/main} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
   # Delete any branches where the tracking remote has been deleted

@@ -19,7 +19,7 @@ return {
     { "<leader>bz", function() Snacks.zen() end,              desc = "Toggle Zen Mode",        mode = "n" },
     { "<C-b>",      function() Snacks.explorer() end,         desc = "Toggle Snacks Explorer", mode = "n" },
     { "<leader>gg", function() Snacks.lazygit() end,          desc = "Toggle LazyGit",         mode = "n" },
-    { "<leader>gb", function() Snacks.git.git_blame() end,    desc = "Git blame line",         mode = "n" },
+    { "<leader>gb", function() Snacks.git.blame_line() end,   desc = "Git blame line",         mode = "n" },
     { "<leader>gB", function() Snacks.gitbrowse() end,        desc = "Git Browse",             mode = "n" },
     { "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit current file",   mode = "n" },
     { "<leader>gl", function() Snacks.lazygit.log() end,      desc = "Lazygit log (cwd)",      mode = "n" },

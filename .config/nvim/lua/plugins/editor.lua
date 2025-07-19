@@ -1,4 +1,62 @@
 return {
+  -- Render markdown
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown", "codecompanion" },
+  },
+
+  -- Top tab bar to show all buffers
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    opts = {},
+  },
+
+  -- Set lualine as statusline
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        icons_enabled = true,
+        theme = 'onedark',
+        component_separator = '|',
+        section_separators = '',
+      },
+    },
+  },
+
+  -- Highlight todo, notes, etc in comments
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false }
+  },
+
+  -- For showing available keymaps
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
+  },
+
   -- {
   --   "folke/noice.nvim",
   --   event = "VeryLazy",
@@ -33,29 +91,4 @@ return {
   --     }
   --   },
   -- },
-  -- Set lualine as statusline
-  -- See `:help lualine.txt`
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      options = {
-        icons_enabled = true,
-        theme = 'onedark',
-        component_separator = '|',
-        section_separators = '',
-      },
-      sections = {
-        lualine_a = { 'buffers' },
-        lualine_c = {},
-      },
-    },
-  },
-  -- Highlight todo, notes, etc in comments
-  {
-    'folke/todo-comments.nvim',
-    event = 'VimEnter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false }
-  },
 }

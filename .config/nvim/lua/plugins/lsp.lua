@@ -1,56 +1,60 @@
 return {
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        typescript = { 'biome-check', 'prettierd', 'prettier', stop_after_first = true },
-        javascript = { 'biome-check' },
-        typescriptreact = { 'biome-check' },
-        json = { 'biome-check' },
-        css = { 'biome-check' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   event = { 'BufWritePre' },
+  --   cmd = { 'ConformInfo' },
+  --   keys = {
+  --     {
+  --       '<leader>f',
+  --       function()
+  --         require('conform').format { async = true, lsp_format = 'fallback' }
+  --       end,
+  --       mode = '',
+  --       desc = '[F]ormat buffer',
+  --     },
+  --   },
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = function(bufnr)
+  --       -- Disable "format_on_save lsp_fallback" for languages that don't
+  --       -- have a well standardized coding style. You can add additional
+  --       -- languages here or re-enable it for the disabled ones.
+  --       local disable_filetypes = { c = true, cpp = true }
+  --       if disable_filetypes[vim.bo[bufnr].filetype] then
+  --         return nil
+  --       else
+  --         return {
+  --           timeout_ms = 500,
+  --           lsp_format = 'fallback',
+  --         }
+  --       end
+  --     end,
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       typescript = function(bufnr)
+  --         -- Check if cwd containers prettierrc config file
+  --         vim.fn.resolve(vim.fn.getcwd() ..
+  --         return { 'biome-check', 'eslint_d', 'prettierd', 'prettier', stop_after_first = true, require_cwd = true }
+  --       end,
+  --       javascript = { 'biome-check', 'eslint_d', },
+  --       typescriptreact = { 'biome-check', 'eslint_d', },
+  --       json = { 'biome-check' },
+  --       css = { 'biome-check' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use 'stop_after_first' to run the first available formatter from the list
+  --       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+  --     },
+  --   },
+  -- },
   { -- Linting
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
+        -- markdown = { 'markdownlint' },
         typescript = { 'biomejs' },
       }
 
@@ -119,6 +123,11 @@ return {
         nerd_font_variant = 'mono'
       },
       signature = { enabled = true },
+      cmdline = {
+        completion = {
+          menu = { auto_show = true, },
+        },
+      },
       -- completion = { documentation = { auto_show = false } },
       -- sources = {
       --   default = { 'lsp', 'path', 'snippets', 'buffer' },
@@ -133,6 +142,8 @@ return {
       automatic_enable = true,
       ensure_installed = {
         'bicep',
+        'docker_compose_language_service',
+        'dockerls',
         'gopls',
         'helm_ls',
         'lua_ls',

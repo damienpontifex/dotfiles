@@ -31,16 +31,15 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- print(vim.inspect(client.capabilities))
 
     -- Auto format on save
-    -- Removing to test out conform.nvim
-    -- if client.server_capabilities.documentFormattingProvider then
-    --   vim.api.nvim_create_autocmd('BufWritePre', {
-    --     group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
-    --     buffer = bufnr,
-    --     callback = function()
-    --       vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
-    --     end
-    --   })
-    -- end
+    if client.server_capabilities.documentFormattingProvider then
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
+        end
+      })
+    end
 
     if client.server_capabilities.colorProvider and vim.lsp.document_color then
       vim.lsp.document_color.enable(true, bufnr)
@@ -79,29 +78,9 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
 
 
     vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
-    vim.keymap.set('n', 'gD', function() vim.lsp.buf.implementation({ reuse_win = true }) end, opts)
-    -- vim.keymap.set('n', 'gD', function()
-    --   vim.lsp.buf.definition({
-    --     on_list = function(list_opts)
-    --       print(vim.inspect(list_opts))
-    --       if not list_opts.items or #list_opts.items == 0 then
-    --         vim.notify('No definition found', vim.log.levels.INFO)
-    --         return
-    --       elseif #list_opts.items == 1 then
-    --         vim.cmd('vsplit')
-    --         vim.fn.bufadd(list_opts.items[1].filename)
-    --         return
-    --       end
-    --     end
-    --   })
-    -- end, vim.tbl_extend('keep', { desc = 'LSP: Definition in split' }, opts))
-    -- vim.keymap.set('n', 'gD', '<cmd>vsplit | vim.lsp.buf.definition()<cr>', {
-    --   desc = 'LSP: Definition in vertical split',
-    --   buffer = bufnr,
-    -- })
-    -- vim.keymap.set('n', 'gD', function()
-    --   require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
-    -- end, opts)
+    vim.keymap.set('n', 'gD', function()
+      require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
+    end, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)

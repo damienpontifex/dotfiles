@@ -1,6 +1,13 @@
 return {
   {
-    'github/copilot.vim'
+    'github/copilot.vim',
+    event = 'InsertEnter',
+    init = function()
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_workspace_folders = { vim.fn.getcwd() }
+      -- Only accept one line at a time
+      vim.keymap.set('i', '<Tab>', 'copilot#AcceptLine()', { expr = true, replace_keycodes = false, })
+    end,
   },
   {
     'ravitemer/mcphub.nvim',
@@ -13,24 +20,48 @@ return {
         level = vim.log.levels.INFO,
       },
     },
-    config = function(_, opts)
-      require("mcphub").setup(opts)
-    end
+    -- config = function(_, opts)
+    --   require("mcphub").setup(opts)
+    -- end
   },
   {
     "olimorris/codecompanion.nvim",
-    lazy = false,
+    event = "VimEnter",
+    -- Defaults https://github.com/olimorris/codecompanion.nvim/blob/main/lua/codecompanion/config.lua
     opts = {
-      system_prompt = function()
-        -- Provide VSCode github copilot instructions as system prompt if they exist
-        local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/.github/copilot-instructions.md'), 'r')
-        if not handle then
-          return nil
-        end
-        local out = handle:read('*a')
-        handle:close()
-        return out
-      end,
+      -- TODO: Figure out how to conditionally override the system prompt
+      -- system_prompt = function(opts)
+      --   print(vim.inspect(opts))
+      --   -- Provide VSCode github copilot instructions as system prompt if they exist
+      --   local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/.github/copilot-instructions.md'), 'r')
+      --   if not handle then
+      --     return nil
+      --   end
+      --   local out = handle:read('*a')
+      --   handle:close()
+      --   return out
+      -- end,
+      strategies = {
+        chat = {
+          adapter = {
+            name = 'copilot',
+            model = 'claude-sonnet-4',
+          },
+          tools = {
+            opts = {
+              default_tools = {
+                'full_stack_dev',
+              },
+            },
+          },
+        },
+      },
+      display = {
+        chat = {
+          start_in_insert_mode = true,
+          show_settings = true,
+        },
+      },
       extensions = {
         mcphub = {
           callback = 'mcphub.extensions.codecompanion',
