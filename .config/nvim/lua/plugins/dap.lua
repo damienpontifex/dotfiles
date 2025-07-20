@@ -27,8 +27,8 @@ return {
 
       -- dap.set_log_level('TRACE')
 
-      vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
-      vim.fn.sign_define('DapStopped', { text = '🟢', texthl = '', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = '', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapStopped', { text = '▶️', texthl = '', linehl = '', numhl = '' })
 
       -- This also starts debugging, so <leader>db like leader debug
       vim.keymap.set('n', '<leader>db', dapui.toggle, { desc = '[DAP] Start debugging' })
@@ -83,6 +83,75 @@ return {
         type = 'executable',
         command = 'debugpy-adapter',
       }
-    end,
+
+      dap.adapters.netcoredbg = {
+        type = 'executable',
+        command = 'netcoredbg',
+        args = { '--interpreter=vscode' },
+      }
+      dap.adapters.coreclr = dap.adapters.netcoredbg
+
+      dap.configurations.cs = { {
+        type = 'coreclr',
+        name = 'Debug .NET Core',
+        request = 'launch',
+        -- preLaunchTask = 'build',
+        program = function()
+          local csproj_files = vim.fn.glob('**/*.csproj', false, true)
+          if #csproj_files == 0 then
+            vim.notify('No .csproj files found in the current directory.', vim.log.levels.WARN)
+            return nil
+          end
+
+          local project_to_run
+          if #csproj_files == 1 then
+            project_to_run = csproj_files[1]
+          end
+          if #csproj_files > 1 then
+            local projects = {}
+            for _, project in ipairs(csproj_files) do
+              local project_name = vim.fn.fnamemodify(project, ':t:r')
+              projects[project_name] = project
+            end
+            vim.ui.select(projects, {
+              prompt = 'Select a .csproj file:',
+              format_item = function(item)
+                return item
+              end,
+            }, function(selected_project)
+              if selected_project then
+                project_to_run = selected_project
+              end
+            end)
+          end
+          print(project_to_run)
+
+          local project_dir = vim.fn.fnamemodify(project_to_run, ':p:h')
+          local debug_path = project_dir .. '/bin/Debug'
+          local target_frameworks = vim.fn.glob(debug_path .. '/net*', true, true)
+          local target_framework
+          if #target_frameworks == 0 then
+            vim.notify('No target frameworks found in ' .. debug_path, vim.log.levels.WARN)
+            return nil
+          elseif #target_frameworks == 1 then
+            target_framework = vim.fn.fnamemodify(target_frameworks[1], ':t')
+          else -- multiple target frameworks
+            vim.ui.select(target_frameworks, {
+              prompt = 'Select target framework:',
+              format_item = function(item)
+                return vim.fn.fnamemodify(item, ':t')
+              end,
+            }, function(selected_framework)
+              if selected_framework then
+                target_framework = selected_framework
+              end
+            end)
+          end
+          local debug_dll = debug_path ..
+              '/' .. target_framework .. '/' .. vim.fn.fnamemodify(project_to_run, ':t:r') .. '.dll'
+          return debug_dll
+        end,
+      } }
+    end
   }
 }
