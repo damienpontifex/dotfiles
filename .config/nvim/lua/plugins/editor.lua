@@ -8,11 +8,16 @@ return {
   -- Top tab bar to show all buffers
   {
     'romgrk/barbar.nvim',
+    event = 'VimEnter',
     dependencies = {
       'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
       'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
     },
     opts = {},
+    keys = {
+      { "<Tab>",   ":BufferNext<CR>",     desc = "Next buffer", },
+      { "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer", },
+    },
   },
 
   -- Set lualine as statusline

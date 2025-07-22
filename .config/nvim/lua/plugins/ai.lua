@@ -13,12 +13,15 @@ return {
     'ravitemer/mcphub.nvim',
     dependencies = {
       "nvim-lua/plenary.nvim",
+      { "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/mcp.json
     },
-    build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
+    build = "npm install -g mcp-hub@latest",           -- Installs `mcp-hub` node binary globally
     opts = {
       log = {
         level = vim.log.levels.INFO,
       },
+      -- https://github.com/ravitemer/mcphub.nvim/issues/210
+      -- json_decode = require('json5').parse,
     },
     -- config = function(_, opts)
     --   require("mcphub").setup(opts)

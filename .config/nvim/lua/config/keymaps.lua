@@ -14,8 +14,9 @@ vim.keymap.set({ 'n', 'v' }, 'D', '"_D', opts)
 vim.keymap.set({ 'n', 'v' }, 'c', '"_c', opts)
 vim.keymap.set({ 'n', 'v' }, 'C', '"_C', opts)
 
-vim.keymap.set('n', '<Tab>', ':bnext<CR>')
-vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>')
+-- Using behaviour of barbar.nvim for tab buffer navigation
+-- vim.keymap.set('n', '<Tab>', ':bnext<CR>')
+-- vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>')
 -- Auto format document
 vim.keymap.set('n', '<Leader>f', function() vim.lsp.buf.format() end, { desc = 'Format document' })
 
