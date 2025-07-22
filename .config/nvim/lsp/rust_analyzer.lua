@@ -5,7 +5,8 @@ local function get_project_rustanalyzer_settings()
   end
   local out = handle:read('*a')
   handle:close()
-  local config = vim.json.decode(out)
+  -- local config = vim.json.decode(out)
+  local config = require('json5').parse(out)
   if type(config) == 'table' then
     return config
   end
@@ -19,7 +20,8 @@ local function get_vscode_rustanalyzer_settings()
   end
   local out = handle:read('*a')
   handle:close()
-  local config = vim.json.decode(out)
+  --local config = vim.json.decode(out)
+  local config = require('json5').parse(out)
   if type(config) ~= 'table' then
     return config
   end
