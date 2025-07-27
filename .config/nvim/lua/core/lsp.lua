@@ -7,6 +7,15 @@ vim.diagnostic.config({
     source = true,
   },
 })
+vim.keymap.set('n', '<leader>td', function()
+  local current = vim.diagnostic.config().virtual_text
+  vim.diagnostic.config({ virtual_text = not current })
+  if not current then
+    vim.notify('Diagnostics enabled', vim.log.levels.INFO, { title = 'LSP' })
+  else
+    vim.notify('Diagnostics disabled', vim.log.levels.INFO, { title = 'LSP' })
+  end
+end, { desc = 'Toggle diagnostics' })
 
 vim.api.nvim_create_autocmd({ 'LspAttach' }, {
   group = vim.api.nvim_create_augroup('my.lsp', {}),
@@ -15,6 +24,11 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     local bufnr = args.buf
 
     vim.lsp.set_log_level('INFO')
+
+    -- If filetype is 'codecompanion', then return early and don't setup any of the lsp keymaps or autocommands
+    if vim.bo[bufnr].filetype == 'codecompanion' then
+      return
+    end
 
     -- if client.server_capabilities.executeCommandProvider then
     --   for _, command in pairs(client.server_capabilities.executeCommandProvider.commands) do
@@ -29,11 +43,20 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- end
 
     -- print(vim.inspect(client.capabilities))
+    local lsp_group = vim.api.nvim_create_augroup('my.lsp', { clear = false })
+
+    vim.api.nvim_create_autocmd('CursorHold', {
+      group = lsp_group,
+      buffer = bufnr,
+      callback = function()
+        vim.diagnostic.open_float(nil, { scope = 'cursor', border = 'rounded', focusable = false, })
+      end
+    })
 
     -- Auto format on save
     if client.server_capabilities.documentFormattingProvider then
       vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+        group = lsp_group,
         buffer = bufnr,
         callback = function()
           vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
@@ -58,7 +81,7 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
       vim.lsp.codelens.refresh()
       vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' },
         {
-          group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+          group = lsp_group,
           buffer = bufnr,
           callback = function()
             vim.lsp.codelens.refresh({ bufnr = bufnr })
@@ -77,10 +100,10 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     local opts = { buffer = bufnr }
 
 
-    vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
-    vim.keymap.set('n', 'gD', function()
-      require('telescope.builtin').lsp_definitions({ jump_type = 'vsplit' })
-    end, opts)
+    local builtin = require('telescope.builtin')
+    vim.keymap.set('n', 'gd', builtin.lsp_definitions, opts)
+    vim.keymap.set('n', 'gD', function() builtin.lsp_definitions({ jump_type = 'vsplit' }) end, opts)
+    vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)

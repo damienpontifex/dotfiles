@@ -76,7 +76,7 @@ vim.opt.conceallevel = 0 -- never conceal
 
 vim.opt.winbar = "%f"
 vim.o.winborder = 'rounded'
-vim.opt.spell = true
+vim.opt.spell = false
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`

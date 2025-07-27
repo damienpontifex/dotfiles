@@ -12,13 +12,13 @@ return {
       '<C-p>',
       function()
         -- require('telescope.builtin').git_files()
-        require('telescope.builtin').find_files({ hidden = true, })
+          require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
       end,
       desc = 'Find files'
     },
     {
       '<Leader>ff',
-      function() require('telescope.builtin').find_files({ hidden = true, }) end,
+        function() require('telescope.builtin').find_files({ hidden = true, no_ignore = true }) end,
       desc = 'Find files'
     },
     {

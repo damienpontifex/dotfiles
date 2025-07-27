@@ -30,6 +30,9 @@ vim.keymap.set('v', '>', '>gv', opts)
 
 -- Esc to got to normal mode in terminal
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
+-- Navigating out of the terminal with the familiar keymaps
+vim.keymap.set('t', '<C-k>', [[<C-\><C-n><C-w>k]], opts)
+vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], opts)
 
 -- Split navigation using Ctrl+{hjkl}
 -- See `:helm wincmd` for a list of all window commands

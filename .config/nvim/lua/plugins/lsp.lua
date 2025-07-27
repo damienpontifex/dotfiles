@@ -153,6 +153,7 @@ return {
         'ts_ls',
         'yamlls',
         'jsonls',
+        'pyright',
       },
     },
     lazy = false,
