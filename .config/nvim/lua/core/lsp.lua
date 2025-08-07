@@ -45,13 +45,13 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- print(vim.inspect(client.capabilities))
     local lsp_group = vim.api.nvim_create_augroup('my.lsp', { clear = false })
 
-    vim.api.nvim_create_autocmd('CursorHold', {
-      group = lsp_group,
-      buffer = bufnr,
-      callback = function()
-        vim.diagnostic.open_float(nil, { scope = 'cursor', border = 'rounded', focusable = false, })
-      end
-    })
+    -- vim.api.nvim_create_autocmd('CursorHold', {
+    --   group = lsp_group,
+    --   buffer = bufnr,
+    --   callback = function()
+    --     vim.diagnostic.open_float(nil, { scope = 'cursor', border = 'rounded', focusable = false, })
+    --   end
+    -- })
 
     -- Auto format on save
     if client.server_capabilities.documentFormattingProvider then

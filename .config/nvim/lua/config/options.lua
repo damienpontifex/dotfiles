@@ -22,8 +22,6 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
--- ??TODO: vim.opt.guifont = ''
-
 vim.opt.breakindent = true
 vim.opt.autoindent = true
 vim.opt.wrap = true
@@ -33,7 +31,7 @@ vim.opt.cursorline = true
 vim.opt.autoread = true
 vim.opt.backspace = 'indent,eol,start' -- allow unrestricted backspacing in insert mode
 vim.opt.backup = false                 -- don't make backups before writing
-vim.o.completeopt = "menu,menuone,noselect"
+vim.o.completeopt = "menu,menuone,noinsert,fuzzy,popup"
 vim.opt.emoji = false                  -- don't assume all emoji are double width
 vim.opt.foldlevelstart = 99            -- start unfolded
 vim.opt.foldmethod = 'indent'

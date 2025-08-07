@@ -4,8 +4,11 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set('x', 'p', '"_dP', opts)
 
+-- Center screen when jumping
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center window after jump up' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center window after jump down' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Center window after search next' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Center window after search previous' })
 
 -- Cancel default behaviour of d, D, c, C to put the text they delete in
 -- the default register.
@@ -40,8 +43,8 @@ vim.keymap.set('n', '<C-J>', '<C-W><C-J>', { desc = 'Move focus to the window be
 vim.keymap.set('n', '<C-K>', '<C-W><C-K>', { desc = 'Move focus to the window above' })
 vim.keymap.set('n', '<C-L>', '<C-W><C-L>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-H>', '<C-W><C-H>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-Right>', ':vertical resize -3<CR>', { desc = 'Decrease vertical split size' })
-vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { desc = 'Increase vertical split size' })
+vim.keymap.set('n', '<C-Right>', ':vertical resize -5<CR>', { desc = 'Decrease vertical split size' })
+vim.keymap.set('n', '<C-Left>', ':vertical resize +5<CR>', { desc = 'Increase vertical split size' })
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
