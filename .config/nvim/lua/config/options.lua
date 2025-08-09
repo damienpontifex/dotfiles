@@ -38,7 +38,7 @@ vim.opt.foldmethod = 'indent'
 vim.opt.foldcolumn = '1'
 vim.opt.hidden = true
 
-vim.opt.cindent = true
+vim.opt.cindent = false
 vim.opt.hlsearch = true
 vim.opt.ignorecase = true
 vim.opt.inccommand = 'split' -- highlight and substitute while you type

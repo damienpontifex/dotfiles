@@ -3,10 +3,11 @@ return {
     'github/copilot.vim',
     event = 'InsertEnter',
     init = function()
+      vim.api.nvim_set_keymap('i', '<M-CR>', 'copilot#Accept("<CR>")', { expr = true, noremap = true, silent = true })
       vim.g.copilot_no_tab_map = true
       vim.g.copilot_workspace_folders = { vim.fn.getcwd() }
       -- Only accept one line at a time
-      vim.keymap.set('i', '<Tab>', 'copilot#AcceptLine()', { expr = true, replace_keycodes = false, })
+      -- vim.keymap.set('i', '<Tab>', 'copilot#AcceptLine()', { expr = true, replace_keycodes = false, })
     end,
   },
   -- {
@@ -31,9 +32,7 @@ return {
     "yetone/avante.nvim",
     build = 'make',
     event = "VeryLazy",
-    version = false, -- Never set this value to "*"! Never!
-    ---@module 'avante'
-    ---@type avante.Config
+    version = false,
     opts = {
       provider = 'copilot',
       providers = {
@@ -45,6 +44,10 @@ return {
         input = {
           height = 20,
         },
+      },
+      behaviour = {
+        auto_suggestions = true,
+        use_cwd_as_project_root = true,
       },
     },
     dependencies = {

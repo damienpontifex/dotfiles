@@ -1,3 +1,8 @@
+-- Because this file is run before lazy.nvim is loaded, we need to ensure that the
+-- json5 module is available in the package path.
+local mod_dir = vim.fn.stdpath('data') .. '/lazy/lua-json5/lua'
+package.cpath = mod_dir .. '/?.so;' .. mod_dir .. '/?.dylib;' .. package.cpath
+
 local function get_project_rustanalyzer_settings()
   local handle = io.open(vim.fn.resolve(vim.fn.getcwd() .. '/rust-analyzer.json'), 'r')
   if not handle then
