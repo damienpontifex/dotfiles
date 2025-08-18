@@ -14,6 +14,10 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Ensure postgresql tools are in path
 export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
 
+# Install dotnet in user directory
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
@@ -35,19 +39,22 @@ plugins=(
   colored-man-pages
   direnv
   # dotenv  # Auto load .env file when you cd into project root directory
-  vi-mode
   # zsh-nvm
   docker
   docker-compose
   you-should-use
 )
+if [[ -z "$NVIM" ]]; then
+  # Don't enable vi-mode plugin when running terminal already inside neovim
+  plugins+=(vi-mode)
+fi
 source $ZSH/oh-my-zsh.sh
 
 if [ -x "$(command -v az)" ]; then
-  RPROMPT='$(az account show --output tsv --query "name")'
+  RPROMPT="$RPROMPT\$(vi_mode_prompt_info)\$(az account show --output tsv --query \"name\")"
 fi
 # Disable AWS CLI pager
-export AWS_PAGE=""
+export AWS_PAGER=""
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || \
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
@@ -64,13 +71,20 @@ export EDITOR=nvim
 function gmain {
   git switch $(git_main_branch) && git pull --prune && git clean-gone
 }
+# Get password value from keychain
+# Example usage export MY_PASSWORD="$(get_pw MY_PASSWORD)"
+function get-pw {
+  security find-generic-password -ga "$1" -w
+}
+function set-pw {
+  security add-generic-password -a "$1" -s "$1" -w
+}
 
 function update-packages {
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
   dotnet tool update --global --all
-  sudo dotnet workload update
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "Lazy! update" -c "MasonUpdate" -c "qa"
@@ -113,6 +127,11 @@ function config() {
 compdef dotfiles=git
 
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
+
+### Secrets ###
+if [ -f "$HOME/.secrets.sh" ]; then
+  source "$HOME/.secrets.sh"
+fi
 
 ### Utility ###
 alias check_disk='sudo fsck -fy'
