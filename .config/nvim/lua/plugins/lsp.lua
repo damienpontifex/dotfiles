@@ -1,4 +1,18 @@
 return {
+  -- { -- Formatting
+  --   'stevearc/conform.nvim',
+  --   opts = {
+  --     log_level = vim.log.levels.INFO,
+  --     format_on_save = {
+  --       timeout_ms = 500,
+  --       lsp_format = "fallback",
+  --     },
+  --     formatters_by_ft = {
+  --       bicep = { 'bicep' },
+  --       cs = { 'csharpier' },
+  --     },
+  --   },
+  -- },
   { -- Linting
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
@@ -25,13 +39,23 @@ return {
     "j-hui/fidget.nvim",
     opts = {},
   },
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy",
+    priority = 1000,
+  },
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
-    dependencies = { 'rafamadriz/friendly-snippets' },
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      'Kaiser-Yang/blink-cmp-avante',
+    },
     version = '1.*',
     opts = {
       keymap = { preset = 'default' },
+      -- Add 'avante' to the list
+      -- default = { 'avante', 'lsp', 'path', 'luasnip', 'buffer' },
       appearance = {
         nerd_font_variant = 'mono'
       },
@@ -41,10 +65,20 @@ return {
           menu = { auto_show = true, },
         },
       },
+      -- providers = {
+      --   avante = {
+      --     module = 'blink-cmp-avante',
+      --     name = 'Avante',
+      --     opts = {
+      --       -- options for blink-cmp-avante
+      --     }
+      --   }
+      -- },
     },
   },
   { -- LSP Configuration
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
+    event = "VimEnter",
     opts = {
       automatic_enable = true,
       ensure_installed = {
@@ -55,7 +89,7 @@ return {
         'gopls',
         'helm_ls',
         'lua_ls',
-        'omnisharp',
+        -- 'omnisharp',
         'rust_analyzer',
         'terraformls',
         'ts_ls',
@@ -64,33 +98,45 @@ return {
         'pyright',
       },
     },
-    lazy = false,
     dependencies = {
-      {
-        'williamboman/mason.nvim',
-        opts = {},
-        config = function(_, opts)
-          require('mason').setup(opts)
-
-          -- Ensure that other tools, apart from LSP servers, are installed.
-          local registry = require("mason-registry")
-
-          local dap_servers = { "js-debug-adapter", "bash-debug-adapter", "netcoredbg", "codelldb", "debugpy", }
-          local linters_and_formatters = { "biome", "eslint_d", "prettierd", "prettier", "shellcheck", }
-          for _, pkg_name in ipairs(vim.tbl_deep_extend('force', dap_servers, linters_and_formatters)) do
-            local ok, pkg = pcall(registry.get_package, pkg_name)
-            if ok then
-              if not pkg:is_installed() then
-                pkg:install()
-              end
-            end
-          end
-        end,
-      },
       -- see `set runtimepath?` and nvim-lspconfig is on runtimepath, so lsp folder within that is automatically included in config setup
       'neovim/nvim-lspconfig',
+      {
+        'mason-org/mason.nvim',
+        opts = {
+          registries = {
+            "github:mason-org/mason-registry",
+            "github:Crashdummyy/mason-registry",
+          },
+        }
+      },
+      { "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/mcp.json
     },
+    config = function(_, opts)
+      require('mason-lspconfig').setup(opts)
+
+      -- Ensure that other tools, apart from LSP servers, are installed.
+      local registry = require("mason-registry")
+
+      local dap_servers = { "js-debug-adapter", "bash-debug-adapter", "netcoredbg", "codelldb", "debugpy", }
+      local linters_and_formatters = { "biome", "eslint_d", "prettierd", "prettier", "shellcheck", "csharpier", }
+      local other_lsp_servers = { "rolsyn", }
+
+      for _, pkg_name in ipairs(vim.tbl_deep_extend('force', dap_servers, linters_and_formatters)) do
+        local ok, pkg = pcall(registry.get_package, pkg_name)
+        if ok then
+          if not pkg:is_installed() then
+            pkg:install()
+          end
+        end
+      end
+    end,
   },
-  'Hoffs/omnisharp-extended-lsp.nvim',
+  -- {
+  --   "seblyng/roslyn.nvim",
+  --   opts = {
+  --   },
+  -- },
+  -- 'Hoffs/omnisharp-extended-lsp.nvim',
   'b0o/schemastore.nvim',
 }

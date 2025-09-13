@@ -14,18 +14,11 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Ensure postgresql tools are in path
 export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
 
-# Install dotnet in user directory
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
-
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
 [ -d /usr/local/share/dotnet ] && export PATH="/usr/local/share/dotnet:$PATH"
 
-[ -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm" ] || git clone https://github.com/lukechilds/zsh-nvm "${HOME}/.oh-my-zsh/custom/plugins/zsh-nvm"
-export NVM_LAZY_LOAD=true
-export NVM_AUTO_USE=true
 [ -d "$HOME/.oh-my-zsh/custom/plugins/you-should-use" ] || git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$HOME/.oh-my-zsh/custom/plugins/you-should-use"
 
 plugins=(
@@ -37,9 +30,7 @@ plugins=(
   zsh-syntax-highlighting
   vscode
   colored-man-pages
-  direnv
   # dotenv  # Auto load .env file when you cd into project root directory
-  # zsh-nvm
   docker
   docker-compose
   you-should-use
@@ -47,11 +38,12 @@ plugins=(
 if [[ -z "$NVIM" ]]; then
   # Don't enable vi-mode plugin when running terminal already inside neovim
   plugins+=(vi-mode)
+  export VI_MODE_SET_CURSOR=true
 fi
 source $ZSH/oh-my-zsh.sh
 
 if [ -x "$(command -v az)" ]; then
-  RPROMPT="$RPROMPT\$(vi_mode_prompt_info)\$(az account show --output tsv --query \"name\")"
+  RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\")"
 fi
 # Disable AWS CLI pager
 export AWS_PAGER=""
@@ -104,17 +96,6 @@ function make {
   return 1
 }
 
-# Ensure brew packages are managed in ~/.Brewfile
-# brew() {
-#   if [[ "$1" == "install" ]]; then
-#     echo "❌ Direct 'brew install' is disabled."
-#     echo "✅ Please edit your ~/.Brewfile and use 'brew bundle' instead."
-#     return 1
-#   else
-#     command brew "$@"
-#   fi
-# }
-
 function tm {
   tmux new-session -A -s "${1:-default}"
 }
@@ -125,8 +106,6 @@ function config() {
 }
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef dotfiles=git
-
-alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 ### Secrets ###
 if [ -f "$HOME/.secrets.sh" ]; then
@@ -149,7 +128,7 @@ fi
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Node and npm
-export NODE_ENV=development
+# export NODE_ENV=${NODE_ENV:-development}
 if [[ -x $(command -v fnm) ]]; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 fi
@@ -167,7 +146,7 @@ export ASPNETCORE_ENVIRONMENT=Development
 alias watch='watch '
 
 # az cli
-alias azswitch='az account list --output tsv --query "[].name" | fzf | xargs -r -I {} az account set --subscription "{}"'
+alias azswitch='az account list --output tsv --query "[].name" --only-show-errors | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 # anaconda
@@ -215,16 +194,5 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/.google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cloud-sdk/completion.zsh.inc"; fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-. "/Users/ponti/.deno/env"
 
 export GPG_TTY=$(tty)

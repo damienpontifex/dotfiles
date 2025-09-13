@@ -7,6 +7,8 @@ vim.keymap.set('x', 'p', '"_dP', opts)
 -- Center screen when jumping
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center window after jump up' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center window after jump down' })
+vim.keymap.set('n', '}', '}zz', { desc = 'Center window after jump to next paragraph' })
+vim.keymap.set('n', '{', '{zz', { desc = 'Center window after jump to previous paragraph' })
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Center window after search next' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Center window after search previous' })
 

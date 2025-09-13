@@ -72,7 +72,7 @@ vim.opt.wildignore:append { '*/node_modules/*', '*/bin/*', '*/obj/*' }
 vim.opt.wildmenu = true  -- show options as list when switching buffers etc
 vim.opt.conceallevel = 0 -- never conceal
 
-vim.opt.winbar = "%f"
+-- vim.opt.winbar = "%f"
 vim.o.winborder = 'rounded'
 vim.opt.spell = false
 

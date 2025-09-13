@@ -25,11 +25,16 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id), 'must have valid client')
     local bufnr = args.buf
 
-    vim.lsp.set_log_level('INFO')
-
-    -- If filetype is 'codecompanion', then return early and don't setup any of the lsp keymaps or autocommands
-    if vim.bo[bufnr].filetype == 'codecompanion' then
+    -- If filetype is 'codecompanion', or any of the Avante panels then return early and don't setup any of the lsp keymaps or autocommands
+    if vim.bo[bufnr].filetype == 'codecompanion' or vim.bo[bufnr].filetype:match('^Avante') then
       return
+    end
+    if client.name == 'GitHub Copilot' then
+      return
+    end
+
+    if client.name == 'bicep' then
+      vim.lsp.set_log_level('TRACE')
     end
 
     -- if client.server_capabilities.executeCommandProvider then
@@ -44,7 +49,7 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     --   end
     -- end
 
-    -- print(vim.inspect(client.capabilities))
+    -- print(vim.inspect(client.server_capabilities))
     local lsp_group = vim.api.nvim_create_augroup('my.lsp', { clear = false })
 
     -- vim.api.nvim_create_autocmd('CursorHold', {
@@ -56,7 +61,8 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- })
 
     -- Auto format on save
-    if client.server_capabilities.documentFormattingProvider then
+    if client:supports_method('textDocument/formatting') then
+      --if client.server_capabilities.documentFormattingProvider or client.name == 'bicep' then
       vim.api.nvim_create_autocmd('BufWritePre', {
         group = lsp_group,
         buffer = bufnr,
@@ -64,33 +70,35 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
           vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
         end
       })
+    else
+      print('LSP client ' .. client.name .. ' does not support document formatting')
     end
 
     if client.server_capabilities.colorProvider and vim.lsp.document_color then
       vim.lsp.document_color.enable(true, bufnr)
     end
 
-    if client.server_capabilities.foldingRangeProvider then
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = 'v:lua.vim.lsp.foldexpr()'
-    end
+    -- if client.server_capabilities.foldingRangeProvider then
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.lsp.foldexpr()'
+    -- end
 
-    if client.server_capabilities.inlayHintProvider then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-    end
+    -- if client.server_capabilities.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    -- end
 
-    if client.server_capabilities.codeLensProvider then
-      vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' },
-        {
-          group = lsp_group,
-          buffer = bufnr,
-          callback = function()
-            vim.lsp.codelens.refresh({ bufnr = bufnr })
-          end,
-        }
-      )
-    end
+    -- if client.server_capabilities.codeLensProvider then
+    vim.lsp.codelens.refresh()
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' },
+      {
+        group = lsp_group,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
+        end,
+      }
+    )
+    -- end
 
     -- Not using in favour of blink.cmp
     -- if client.server_capabilities.completionProvider then
@@ -144,3 +152,5 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     end
   end,
 })
+
+-- vim.lsp.enable('bicep')

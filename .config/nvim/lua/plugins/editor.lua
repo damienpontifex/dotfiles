@@ -5,31 +5,13 @@ return {
     ft = { "markdown", "codecompanion" },
   },
 
-  -- Top tab bar to show all buffers
-  {
-    'romgrk/barbar.nvim',
-    event = 'VimEnter',
-    dependencies = {
-      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-    },
-    opts = {},
-    keys = {
-      { "<Tab>",   ":BufferNext<CR>",     desc = "Next buffer", },
-      { "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer", },
-    },
-  },
-
   -- Set lualine as statusline
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
-        icons_enabled = true,
-        theme = 'onedark',
-        component_separator = '|',
-        section_separators = '',
+        theme = 'catppuccin-macchiato'
       },
     },
   },
@@ -46,11 +28,6 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
     keys = {
       {
         "<leader>?",
@@ -62,38 +39,18 @@ return {
     },
   },
 
+  -- Top tab bar to show all buffers
   -- {
-  --   "folke/noice.nvim",
-  --   event = "VeryLazy",
-  --   opts = {
-  --     -- add any options here
-  --   },
+  --   'romgrk/barbar.nvim',
+  --   event = 'VimEnter',
   --   dependencies = {
-  --     "MunifTanjim/nui.nvim",
-  --   }
-  -- },
-  -- {
-  --   "nvim-neo-tree/neo-tree.nvim",
-  --   branch = "v3.x",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-  --     "MunifTanjim/nui.nvim",
-  --     -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+  --     -- 'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+  --     'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
   --   },
-  --   lazy = false, -- neo-tree will lazily load itself
+  --   opts = {},
   --   keys = {
-  --     { '<C-b>', '<cmd>Neotree toggle<cr>', desc = 'Toggle NeoTree' },
-  --   },
-  --   opts = {
-  --     filesystem = {
-  --       filtered_items = {
-  --         hide_dotfiles = false,
-  --       },
-  --       follow_current_file = {
-  --         enabled = true,
-  --       }
-  --     }
+  --     { "<Tab>",   ":BufferNext<CR>",     desc = "Next buffer", },
+  --     { "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer", },
   --   },
   -- },
 }
