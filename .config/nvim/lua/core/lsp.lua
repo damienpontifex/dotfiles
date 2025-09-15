@@ -109,31 +109,34 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
 
     local opts = { buffer = bufnr }
 
-
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', 'gd', builtin.lsp_definitions, opts)
     vim.keymap.set('n', 'gD', function() builtin.lsp_definitions({ jump_type = 'vsplit' }) end, opts)
-    vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics', buffer = bufnr })
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { desc = 'LSP: Go to Implementation', buffer = bufnr })
     -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<F12>', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', 'g0', vim.lsp.buf.document_symbol, opts)
-    vim.keymap.set('n', 'gW', vim.lsp.buf.workspace_symbol, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'LSP: Hover', buffer = bufnr })
+    vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, { desc = 'LSP: Go to Definition', buffer = bufnr })
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'LSP: References', buffer = bufnr })
+    vim.keymap.set('n', '<F12>', vim.lsp.buf.references, { desc = 'LSP: References', buffer = bufnr })
+    vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, { desc = 'LSP: Rename', buffer = bufnr })
+    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, { desc = 'LSP: Rename', buffer = bufnr })
+    vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, { desc = 'LSP: Code Action', buffer = bufnr })
+    vim.keymap.set('n', 'gr', builtin.lsp_references, { desc = 'LSP: References', buffer = bufnr })
+    vim.keymap.set('n', 'g0', vim.lsp.buf.document_symbol, { desc = 'LSP: Document Symbols', buffer = bufnr })
+    vim.keymap.set('n', 'gW', vim.lsp.buf.workspace_symbol, { desc = 'LSP: Workspace Symbols', buffer = bufnr })
+    vim.keymap.set('n', '<C-t>', builtin.lsp_document_symbols, { desc = 'LSP: workspace symbols', buffer = bufnr })
 
-    vim.keymap.set('n', '<leader>dn', function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
-    vim.keymap.set('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
-    vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float, opts)
-    vim.keymap.set('n', '<leader>af', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', '<leader>kf', vim.lsp.buf.format, opts)
+    vim.keymap.set('n', '<leader>dn', function() vim.diagnostic.jump({ count = 1, float = true }) end,
+      { desc = 'LSP: Next Diagnostic', buffer = bufnr })
+    vim.keymap.set('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1, float = true }) end,
+      { desc = 'LSP: Previous Diagnostic', buffer = bufnr })
+    vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float,
+      { desc = 'LSP: Show Diagnostic in float', buffer = bufnr })
+    vim.keymap.set('n', '<leader>af', vim.lsp.buf.code_action, { desc = 'LSP: Code Action', buffer = bufnr })
+    vim.keymap.set('n', '<leader>kf', vim.lsp.buf.format, { desc = 'LSP: Format file', buffer = bufnr })
 
-    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, opts)
+    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = 'LSP: Format file', buffer = bufnr })
 
     -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2483
     local function toSnakeCase(str)

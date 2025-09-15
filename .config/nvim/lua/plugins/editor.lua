@@ -11,7 +11,10 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
-        theme = 'catppuccin-macchiato'
+        theme = 'catppuccin-macchiato',
+      },
+      sections = {
+        lualine_c = { { 'filename', path = 1, } },
       },
     },
   },

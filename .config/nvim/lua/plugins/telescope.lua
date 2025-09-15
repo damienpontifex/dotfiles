@@ -51,11 +51,12 @@ return {
     vim.keymap.set('n', '<C-f>', telescope.extensions.live_grep_args.live_grep_args, { desc = 'Grep' })
     vim.keymap.set('n', '<Leader>fg', builtin.live_grep, { desc = 'Grep' })
     vim.keymap.set('n', '<Leader>gf', builtin.git_files, { desc = '[G]it [F]iles' })
+    vim.keymap.set('n', '<Leader><space>', builtin.buffers, { desc = 'Find buffers' })
     vim.keymap.set('n', '<Leader>fb', builtin.buffers, { desc = 'Find buffers' })
     vim.keymap.set('n', '<Leader>fc', builtin.commands, { desc = '[F]ind [C]ommands' })
     vim.keymap.set('n', '<Leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
     vim.keymap.set('n', '<Leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
     vim.keymap.set('n', '<Leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
-    vim.keymap.set('n', '<C-t>', builtin.lsp_document_symbols, { desc = 'LSP workspace symbols' })
+    vim.keymap.set('n', '<Leader>km', builtin.filetypes, { desc = 'Change file type' })
   end,
 }
