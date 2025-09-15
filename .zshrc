@@ -11,13 +11,14 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# Ensure postgresql tools are in path
-export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
-
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
 [ -d /usr/local/share/dotnet ] && export PATH="/usr/local/share/dotnet:$PATH"
+
+# Ensure postgresql tools are in path
+export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
+
 
 [ -d "$HOME/.oh-my-zsh/custom/plugins/you-should-use" ] || git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$HOME/.oh-my-zsh/custom/plugins/you-should-use"
 
@@ -72,6 +73,18 @@ function set-pw {
   security add-generic-password -a "$1" -s "$1" -w
 }
 
+function dotenv {
+  local dotenv_file
+  dotenv_file=${1:-.env}
+  if [ ! -f "$dotenv_file" ]; then
+    echo "File $dotenv_file does not exist." >&2
+    return 1
+  fi
+  set -a
+  . "./$dotenv_file"
+  set +a
+}
+
 function update-packages {
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
@@ -79,7 +92,7 @@ function update-packages {
   dotnet tool update --global --all
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
-  nvim --headless -c "Lazy! update" -c "MasonUpdate" -c "qa"
+  nvim --headless -c "Lazy! update" -c "qa"
 }
 
 # Make sure we can run `make` in the current directory or any parent directory
