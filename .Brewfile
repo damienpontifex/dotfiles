@@ -14,6 +14,7 @@ brew "azure-cli"
 brew "azure-functions-core-tools@4"
 brew "bicep"
 brew "coreutils"
+brew "fd"
 brew "ffmpeg"
 brew "fnm" # Node version manager
 brew "fzf", postinstall: "${HOMEBREW_PREFIX}/opt/fzf/install --all"

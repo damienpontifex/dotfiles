@@ -73,10 +73,12 @@
 
 # Use NeoVim diff as diff tool
 [merge]
-  tool = vimdiff
+  # See available tools with `git mergetool --tool-help`
+  tool = nvimdiff1
 
 [mergetool]
-  prompt = true
+  prompt = false
+  keepBackup = false
 
 [mergetool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
@@ -85,7 +87,7 @@
   prompt = false
 
 [diff]
-  tool = vimdiff
+  tool = nvimdiff1
   context = 3 # less context in diffs
   renames = copies # detect renames as copies
   interHunkContext = 10 # more context between hunks
