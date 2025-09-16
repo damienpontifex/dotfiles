@@ -61,18 +61,18 @@ vim.api.nvim_create_autocmd({ 'LspAttach' }, {
     -- })
 
     -- Auto format on save
-    if client:supports_method('textDocument/formatting') then
-      --if client.server_capabilities.documentFormattingProvider or client.name == 'bicep' then
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = lsp_group,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
-        end
-      })
-    else
-      print('LSP client ' .. client.name .. ' does not support document formatting')
-    end
+    -- if client:supports_method('textDocument/formatting') then
+    --   --if client.server_capabilities.documentFormattingProvider or client.name == 'bicep' then
+    --   vim.api.nvim_create_autocmd('BufWritePre', {
+    --     group = lsp_group,
+    --     buffer = bufnr,
+    --     callback = function()
+    --       vim.lsp.buf.format({ bufnr = bufnr, async = false, id = client.id, timeout_ms = 1000 })
+    --     end
+    --   })
+    -- else
+    --   print('LSP client ' .. client.name .. ' does not support document formatting')
+    -- end
 
     if client.server_capabilities.colorProvider and vim.lsp.document_color then
       vim.lsp.document_color.enable(true, bufnr)
