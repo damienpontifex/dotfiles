@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Redirect output to stderr.
+exec 1>&2
+
+# Check if committing to master or main and stop with an error to commit to a branch
+branch_name=$(git symbolic-ref --short HEAD)
+if [[ "$branch_name" == "master" || "$branch_name" == "main" ]]; then
+  echo "Error: You cannot commit directly to the '$branch_name' branch. Please create a new branch and commit your changes there."
+  exit 1
+fi
+
+exit 0
+
