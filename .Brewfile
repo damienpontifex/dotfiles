@@ -9,6 +9,7 @@ tap "jesseduffield/lazygit"
 tap "probe-rs/probe-rs"
 tap "sst/tap"
 
+brew "awscli"
 brew "azcopy"
 brew "azure-cli"
 brew "azure-functions-core-tools@4"

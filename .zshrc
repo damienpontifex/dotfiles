@@ -46,8 +46,12 @@ source $ZSH/oh-my-zsh.sh
 if [ -x "$(command -v az)" ]; then
   RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\")"
 fi
+
 # Disable AWS CLI pager
 export AWS_PAGER=""
+if [[ -x "$(command -v aws)" ]] && [[ -x "$(command -v aws_completer)" ]]; then
+  complete -C "$(command -v aws_completer)" aws
+fi
 
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || \
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
