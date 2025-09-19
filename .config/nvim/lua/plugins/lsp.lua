@@ -8,7 +8,7 @@ return {
 				lsp_format = "fallback",
 			},
 			formatters_by_ft = {
-				bicep = { "bicep" },
+				-- bicep = { "bicep" },
 				cs = { "csharpier" },
 				go = { "goimports", "gofmt" },
 				json = { "jq" },
@@ -23,6 +23,18 @@ return {
 			require("conform").setup(opts)
 
 			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+			-- Override '=' that would normally run 'equalprg'
+			vim.keymap.set({ "n", "v" }, "=", function()
+				require("conform").format({ async = true, lsp_fallback = true }, function(err)
+					if not err then
+						-- If we formatted in visual mode, escape to normal mode after formatting
+						if vim.startswith(vim.api.nvim_get_mode().mode:lower(), "v") then
+							vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+						end
+					end
+				end)
+			end, { desc = "Format buffer" })
 		end,
 	},
 	{ -- Linting
@@ -55,6 +67,7 @@ return {
 		"rachartier/tiny-inline-diagnostic.nvim",
 		event = "VeryLazy",
 		priority = 1000,
+		opts = {},
 	},
 	{ -- Autocompletion
 		"saghen/blink.cmp",
