@@ -108,6 +108,22 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		--   vim.keymap.set('i', '<C-Space>', vim.lsp.completion.get, { desc = 'LSP: Trigger completion', buffer = bufnr })
 		-- end
 
+		if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+			if vim.fn.has("nvim-0.12") == 1 then
+				vim.lsp.inline_completion.enable(true)
+				vim.keymap.set("n", "<M-CR>", function()
+					if not vim.lsp.inline_completion.get() then
+						return "<M-CR>"
+					end
+				end, {
+					expr = true,
+					replace_keycodes = true,
+					desc = "LSP: Accept inline completion",
+					buffer = bufnr,
+				})
+			end
+		end
+
 		local opts = { buffer = bufnr }
 
 		local builtin = require("telescope.builtin")
