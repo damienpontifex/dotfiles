@@ -31,7 +31,7 @@ plugins=(
   zsh-syntax-highlighting
   vscode
   colored-man-pages
-  # dotenv  # Auto load .env file when you cd into project root directory
+  dotenv
   docker
   docker-compose
   you-should-use
@@ -81,12 +81,10 @@ function dotenv {
   local dotenv_file
   dotenv_file=${1:-.env}
   if [ ! -f "$dotenv_file" ]; then
-    echo "File $dotenv_file does not exist." >&2
+    >&2 echo "File $dotenv_file does not exist."
     return 1
   fi
-  set -a
-  . "./$dotenv_file"
-  set +a
+  set -a; source "./$dotenv_file"; set +a
 }
 
 function update-packages {
