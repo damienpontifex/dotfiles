@@ -1,23 +1,26 @@
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
-	signingKey = B6A801BF2864870D 
+  signingKey = ~/.ssh/id_ed25519_git_signing_personal.pub
 
 [commit]
-	gpgsign = true
+  gpgsign = true
   verbose = true # add more content to commit messages
 
 [tag]
-	gpgSign = true
+  gpgSign = true
   sort = -taggerdate
 
+[gpg]
+  format = ssh
+
 [core]
-	autocrlf = input # keep newlines as in input
+  autocrlf = input # keep newlines as in input
   compression = 9 # trade cpu for network
   whitespace = error # treat incorrect whitespace as an error
   preloadindex = true # preload index for faster status
-	excludesfile = /Users/ponti/.gitignore_global
-	editor = nvim
+  excludesfile = /Users/ponti/.gitignore_global
+  editor = nvim
 
 [blame]
   coloring = highlightRecent
@@ -45,7 +48,7 @@
   rb-onto = "!f() { git rebase --onto ${2:-origin/main} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
   # Delete any branches where the tracking remote has been deleted
   clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
-	root = rev-parse --show-toplevel
+  root = rev-parse --show-toplevel
   open-remote = "!git remote -v | head -n 1 | awk '{print $2}' | xargs -n1 open"
 
 [push]
@@ -93,31 +96,31 @@
   interHunkContext = 10 # more context between hunks
 
 [pager]
-	branch = false
+  branch = false
 
 [credential]
-	helper = osxkeychain
-	helper =
-	helper = /usr/local/share/gcm-core/git-credential-manager
+  helper = osxkeychain
+  helper =
+  helper = /usr/local/share/gcm-core/git-credential-manager
 
 [submodule]
-	recurse = true
-	fetchJobs = 16
+  recurse = true
+  fetchJobs = 16
 
 [http]
-	cookiefile = /Users/ponti/.gitcookies
+  cookiefile = /Users/ponti/.gitcookies
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 
 [credential "https://dev.azure.com"]
-	useHttpPath = true
+  useHttpPath = true
 
 [credential "https://github.com"]
-	username = damienpontifex
+  username = damienpontifex
 
 # URL shortcuts
 [url "https://github.com/"]
