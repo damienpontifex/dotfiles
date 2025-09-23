@@ -87,6 +87,10 @@ function dotenv {
   set -a; source "./$dotenv_file"; set +a
 }
 
+function no-history {
+  unset HISTFILE
+}
+
 function update-packages {
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
