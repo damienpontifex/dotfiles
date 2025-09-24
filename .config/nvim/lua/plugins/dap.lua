@@ -1,7 +1,7 @@
 return {
 	{ -- Task runner
 		"stevearc/overseer.nvim",
-		lazy = false,
+		event = "VimEnter",
 		opts = {
 			dap = true,
 			strategy = { "terminal", use_shell = true },
@@ -43,7 +43,7 @@ return {
 			local dap, dapui = require("dap"), require("dapui")
 			dapui.setup(opts)
 
-			-- dap.set_log_level('TRACE')
+			dap.set_log_level("TRACE")
 
 			vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "", linehl = "", numhl = "" })
 			vim.fn.sign_define("DapStopped", { text = "▶️", texthl = "", linehl = "", numhl = "" })
@@ -81,15 +81,32 @@ return {
 				coreclr = { "cs" },
 			})
 
+			-- for `externalTerminal` console setting
+			-- dap.defaults.fallback.external_terminal = {
+			-- 	command = "/usr/bin/alacritty",
+			-- 	args = { "-e" },
+			-- }
+			-- integratedTerminal
+			-- dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
+
 			-- So comletions in the dap-repl work automatically
 			-- au FileType dap-repl lua require('dap.ext.autocompl').attach()
 
-			dap.adapters.node = {
-				type = "executable",
-				command = "js-debug-adapter",
+			local js_debug_adapter = {
+				type = "server",
+				host = "::1",
+				port = "${port}",
+				executable = {
+					command = "js-debug-adapter",
+					args = {
+						"${port}",
+					},
+				},
 			}
-			dap.adapters.javsacript = dap.adapters.node
-			dap.adapters.typescript = dap.adapters.node
+			dap.adapters.node = js_debug_adapter
+			dap.adapters.javsacript = js_debug_adapter
+			dap.adapters.typescript = js_debug_adapter
+			dap.adapters["pwa-node"] = js_debug_adapter
 
 			dap.adapters.lldb = {
 				type = "executable",
@@ -109,73 +126,73 @@ return {
 			}
 			dap.adapters.coreclr = dap.adapters.netcoredbg
 
-			dap.configurations.cs = {
-				{
-					type = "coreclr",
-					name = "Debug .NET Core",
-					request = "launch",
-					-- preLaunchTask = 'build',
-					program = function()
-						local csproj_files = vim.fn.glob("**/*.csproj", false, true)
-						if #csproj_files == 0 then
-							vim.notify("No .csproj files found in the current directory.", vim.log.levels.WARN)
-							return nil
-						end
-
-						local project_to_run
-						if #csproj_files == 1 then
-							project_to_run = csproj_files[1]
-						end
-						if #csproj_files > 1 then
-							local projects = {}
-							for _, project in ipairs(csproj_files) do
-								local project_name = vim.fn.fnamemodify(project, ":t:r")
-								projects[project_name] = project
-							end
-							vim.ui.select(projects, {
-								prompt = "Select a .csproj file:",
-								format_item = function(item)
-									return item
-								end,
-							}, function(selected_project)
-								if selected_project then
-									project_to_run = selected_project
-								end
-							end)
-						end
-						print(project_to_run)
-
-						local project_dir = vim.fn.fnamemodify(project_to_run, ":p:h")
-						local debug_path = project_dir .. "/bin/Debug"
-						local target_frameworks = vim.fn.glob(debug_path .. "/net*", true, true)
-						local target_framework
-						if #target_frameworks == 0 then
-							vim.notify("No target frameworks found in " .. debug_path, vim.log.levels.WARN)
-							return nil
-						elseif #target_frameworks == 1 then
-							target_framework = vim.fn.fnamemodify(target_frameworks[1], ":t")
-						else -- multiple target frameworks
-							vim.ui.select(target_frameworks, {
-								prompt = "Select target framework:",
-								format_item = function(item)
-									return vim.fn.fnamemodify(item, ":t")
-								end,
-							}, function(selected_framework)
-								if selected_framework then
-									target_framework = selected_framework
-								end
-							end)
-						end
-						local debug_dll = debug_path
-							.. "/"
-							.. target_framework
-							.. "/"
-							.. vim.fn.fnamemodify(project_to_run, ":t:r")
-							.. ".dll"
-						return debug_dll
-					end,
-				},
-			}
+			-- dap.configurations.cs = {
+			-- 	{
+			-- 		type = "coreclr",
+			-- 		name = "Debug .NET Core",
+			-- 		request = "launch",
+			-- 		-- preLaunchTask = 'build',
+			-- 		program = function()
+			-- 			local csproj_files = vim.fn.glob("**/*.csproj", false, true)
+			-- 			if #csproj_files == 0 then
+			-- 				vim.notify("No .csproj files found in the current directory.", vim.log.levels.WARN)
+			-- 				return nil
+			-- 			end
+			--
+			-- 			local project_to_run
+			-- 			if #csproj_files == 1 then
+			-- 				project_to_run = csproj_files[1]
+			-- 			end
+			-- 			if #csproj_files > 1 then
+			-- 				local projects = {}
+			-- 				for _, project in ipairs(csproj_files) do
+			-- 					local project_name = vim.fn.fnamemodify(project, ":t:r")
+			-- 					projects[project_name] = project
+			-- 				end
+			-- 				vim.ui.select(projects, {
+			-- 					prompt = "Select a .csproj file:",
+			-- 					format_item = function(item)
+			-- 						return item
+			-- 					end,
+			-- 				}, function(selected_project)
+			-- 					if selected_project then
+			-- 						project_to_run = selected_project
+			-- 					end
+			-- 				end)
+			-- 			end
+			-- 			print(project_to_run)
+			--
+			-- 			local project_dir = vim.fn.fnamemodify(project_to_run, ":p:h")
+			-- 			local debug_path = project_dir .. "/bin/Debug"
+			-- 			local target_frameworks = vim.fn.glob(debug_path .. "/net*", true, true)
+			-- 			local target_framework
+			-- 			if #target_frameworks == 0 then
+			-- 				vim.notify("No target frameworks found in " .. debug_path, vim.log.levels.WARN)
+			-- 				return nil
+			-- 			elseif #target_frameworks == 1 then
+			-- 				target_framework = vim.fn.fnamemodify(target_frameworks[1], ":t")
+			-- 			else -- multiple target frameworks
+			-- 				vim.ui.select(target_frameworks, {
+			-- 					prompt = "Select target framework:",
+			-- 					format_item = function(item)
+			-- 						return vim.fn.fnamemodify(item, ":t")
+			-- 					end,
+			-- 				}, function(selected_framework)
+			-- 					if selected_framework then
+			-- 						target_framework = selected_framework
+			-- 					end
+			-- 				end)
+			-- 			end
+			-- 			local debug_dll = debug_path
+			-- 				.. "/"
+			-- 				.. target_framework
+			-- 				.. "/"
+			-- 				.. vim.fn.fnamemodify(project_to_run, ":t:r")
+			-- 				.. ".dll"
+			-- 			return debug_dll
+			-- 		end,
+			-- 	},
+			-- }
 		end,
 	},
 }
