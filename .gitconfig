@@ -1,6 +1,8 @@
 [user]
   name = Damien Pontifex
   email = damien.pontifex@gmail.com
+  # ssh-keygen -C "damien.pontifex@gmail.com" -f ~/.ssh/id_ed25519_git_signing_personal
+  # gh ssh-key add --title "MBP Personal Signing Key" --type signing ~/.ssh/id_ed25519_git_signing_personal.pub
   signingKey = ~/.ssh/id_ed25519_git_signing_personal.pub
 
 [commit]
