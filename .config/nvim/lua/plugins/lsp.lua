@@ -16,7 +16,7 @@ return {
 				rust = { "rustfmt" },
 				typescript = { "prettierd", "prettier", "eslint", stop_after_first = true },
 				xml = { "xmlformatter" },
-				yaml = { "yq" },
+				yaml = { "yamlfmt" },
 			},
 		},
 		config = function(_, opts)
@@ -154,6 +154,7 @@ return {
 				"csharpier",
 				"xmlformatter",
 				"stylua",
+				"yamlfmt",
 			}
 			local other_lsp_servers = { "rolsyn" }
 
