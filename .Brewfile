@@ -1,15 +1,26 @@
+is_work = ENV["PERSONAL_MACHINE"].to_s.strip.empty?
+
 tap "azure/bicep"
 tap "azure/functions"
-tap "azure/kubelogin"
 tap "codecrafters-io/tap"
-tap "dapr/tap"
-tap "derailed/k9s"
-tap "fluxcd/tap"
+if is_work
+  tap "azure/kubelogin"
+  tap "derailed/k9s"
+  tap "fluxcd/tap"
+  tap "atlassian/homebrew-acli"
+end
 tap "jesseduffield/lazygit"
 tap "probe-rs/probe-rs"
 tap "sst/tap"
 
-brew "awscli"
+brew "acli"
+if is_work
+  brew "awscli"
+  brew "helm"
+  brew "k9s"
+  brew "ktop"
+  brew "kubectl"
+end
 brew "azcopy"
 brew "azure-cli"
 brew "azure-functions-core-tools@4"
@@ -23,7 +34,7 @@ brew "gh"
 brew "git-delta"
 brew "git-filter-repo"
 brew "git-lfs"
-brew "golang"
+brew "go"
 brew "gpg"
 brew "lazydocker"
 brew "lazygit"
@@ -50,13 +61,15 @@ brew "yq"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
 
+if is_work
+  cask "corretto@21"
+  cask "gcloud-cli", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components update"
+end
 cask "drawio"
 cask "font-cascadia-mono-nf"
 cask "font-hack-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "git-credential-manager"
 cask "github-copilot-for-xcode"
-cask "gcloud-cli", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components update"
 cask "iterm2"
-cask "powershell"
 cask "rectangle"
