@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AiModel</key>
+	<string>gpt-4.1</string>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>AutoHideTmuxClientSession</key>
@@ -4025,7 +4027,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>JetBrainsMonoNLNF-Regular 14</string>
+			<string>JetBrainsMonoNLNFM-Regular 14</string>
 			<key>Open Password Manager Automatically</key>
 			<false/>
 			<key>Option Key Sends</key>
@@ -4331,6 +4333,8 @@
 			<string>/Users/ponti</string>
 		</dict>
 	</array>
+	<key>OnlyWhenMoreTabs</key>
+	<false/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>

@@ -43,9 +43,9 @@ if [[ -z "$NVIM" ]]; then
 fi
 source $ZSH/oh-my-zsh.sh
 
-if [ -x "$(command -v az)" ]; then
-  RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\")"
-fi
+# if [ -x "$(command -v az)" ]; then
+#   RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\" --only-show-errors)"
+# fi
 
 # Disable AWS CLI pager
 export AWS_PAGER=""
@@ -158,6 +158,9 @@ if [[ -x $(command -v go) ]]; then
   export PATH="$PATH:${GOPATH}/bin"
 fi
 
+# rust
+export PATH="$PATH:${HOME}/.cargo/bin"
+
 # .NET
 export ASPNETCORE_ENVIRONMENT=Development
 
@@ -215,3 +218,7 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 
 
 export GPG_TTY=$(tty)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

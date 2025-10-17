@@ -38,8 +38,8 @@
   showStash = true
   showUntrackedFiles = all
 
-[includeIf "gitdir:~/makerx/"]
-  path = ~/makerx/.gitconfig
+[includeIf "gitdir:~/atlassian/"]
+  path = ~/atlassian/.gitconfig
 
 [alias]
   graph-log = log --oneline --decorate --graph --all
