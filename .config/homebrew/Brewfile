@@ -1,26 +1,11 @@
-is_work = ENV["PERSONAL_MACHINE"].to_s.strip.empty?
-
 tap "azure/bicep"
 tap "azure/functions"
 tap "codecrafters-io/tap"
-if is_work
-  tap "azure/kubelogin"
-  tap "derailed/k9s"
-  tap "fluxcd/tap"
-  tap "atlassian/homebrew-acli"
-end
 tap "jesseduffield/lazygit"
 tap "probe-rs/probe-rs"
 tap "sst/tap"
 
 brew "acli"
-if is_work
-  brew "awscli"
-  brew "helm"
-  brew "k9s"
-  brew "ktop"
-  brew "kubectl"
-end
 brew "azcopy"
 brew "azure-cli"
 brew "azure-functions-core-tools@4"
@@ -61,10 +46,6 @@ brew "yq"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
 
-if is_work
-  cask "corretto@21"
-  cask "gcloud-cli", postinstall: "${HOMEBREW_PREFIX}/bin/gcloud components update"
-end
 cask "drawio"
 cask "font-cascadia-mono-nf"
 cask "font-hack-nerd-font"
@@ -73,3 +54,10 @@ cask "git-credential-manager"
 cask "github-copilot-for-xcode"
 cask "iterm2"
 cask "rectangle"
+
+# Include a local Brewfile if present (supports both global and project contexts)
+brewfile_dir = File.expand_path(File.dirname(__FILE__))
+local_brewfile_path = File.join(brewfile_dir, "Brewfile.local")
+if File.exist?(local_brewfile_path)
+  instance_eval(File.read(local_brewfile_path))
+end

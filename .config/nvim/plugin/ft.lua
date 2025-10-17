@@ -1,11 +1,13 @@
 vim.filetype.add({
 	filename = {
-		[".Brewfile"] = "ruby",
 		[".env"] = "sh",
 		[".envrc"] = "sh",
 		["*.env"] = "sh",
 		["*.envrc"] = "sh",
 		["*.env.*"] = "sh",
+	},
+	pattern = {
+		["Brewfile.*"] = "ruby",
 	},
 	extension = {
 		bicep = "bicep",
