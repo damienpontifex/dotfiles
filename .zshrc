@@ -63,6 +63,9 @@ fi
 
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
 
+# Replace cat with bat... use `\cat` to use original cat
+alias cat='bat --paging=never'
+
 export EDITOR=nvim
 
 function gmain {
