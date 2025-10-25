@@ -1,3 +1,11 @@
+# zmodload zsh/zprof
+
+# zmodload zsh/datetime
+# setopt promptsubst
+# PS4='+$EPOCHREALTIME %N:%i> '
+# exec 3>&2 2> startlog.$$
+# setopt xtrace prompt_subst
+
 export ZSH="${HOME}/.oh-my-zsh"
 
 ZSH_THEME="amuse"
@@ -11,23 +19,18 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 export XDG_CONFIG_HOME="$HOME/.config"
 
-[ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
-[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+eval "$(brew shellenv)"
+export PATH="/opt/homebrew/bin:$HOME/bin:$PATH"
 [ -d "$HOME/.dotnet/tools" ] && export PATH="$HOME/.dotnet/tools:$PATH"
 [ -d /usr/local/share/dotnet ] && export PATH="/usr/local/share/dotnet:$PATH"
 
 # Ensure postgresql tools are in path
-export PATH="$PATH:$(brew --prefix postgresql@16)/bin"
-
+export PATH="$PATH:${HOMEBREW_PREFIX}/opt/postgresql@16/bin"
 
 [ -d "$HOME/.oh-my-zsh/custom/plugins/you-should-use" ] || git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$HOME/.oh-my-zsh/custom/plugins/you-should-use"
 
 plugins=(
   git # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
-  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-  # helm
-  # kube-ps1
-  # kubectl
   zsh-syntax-highlighting
   vscode
   colored-man-pages
@@ -36,12 +39,15 @@ plugins=(
   docker-compose
   you-should-use
 )
+[ -f ~/.zshrc.plugins.local ] && source ~/.zshrc.plugins.local
 if [[ -z "$NVIM" ]]; then
   # Don't enable vi-mode plugin when running terminal already inside neovim
   plugins+=(vi-mode)
   export VI_MODE_SET_CURSOR=true
 fi
 source $ZSH/oh-my-zsh.sh
+
+RPROMPT='$(kube_ps1)'$RPROMPT
 
 # if [ -x "$(command -v az)" ]; then
 #   RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\" --only-show-errors)"
@@ -56,10 +62,10 @@ fi
 [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || \
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 
-[ -x "$(command -v brew)" ] && \
-  [ -f "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
-  source "$(brew --prefix zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" && \
+if [ -f "${HOMEBREW_PREFIX}/opt/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  source "${HOMEBREW_PREFIX}/opt/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   bindkey '^ ' autosuggest-accept
+fi
 
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
 
@@ -140,12 +146,10 @@ alias getmyip='dig +short myip.opendns.com @resolver1.opendns.com'
 
 ### Static HTTP Server ###
 alias http-server="python3 -m http.server"
-[ -x "$(command -v brew)" ] && [ -d "$(brew --prefix python3)" ] && export PATH="$(brew --prefix python3)/libexec/bin:$PATH"
+[ -d "${HOMEBREW_PREFIX}/opt/python3" ] && export PATH="${HOMEBREW_PREFIX}/opt/python3/libexec/bin:$PATH"
 
 # Use llvm from homebrew
-if [ -x "$(command -v brew)" ]; then
-  export PATH="$(brew --prefix llvm)/bin:$PATH"
-fi
+export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin:$PATH"
 
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
@@ -173,9 +177,6 @@ alias watch='watch '
 # az cli
 alias azswitch='az account list --output tsv --query "[].name" --only-show-errors | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
-
-# anaconda
-[[ -x $(command -v brew) ]] && export PATH="$(brew --prefix)/anaconda3/bin:$PATH"
 
 # k8s
 export KUBE_EDITOR=nvim
@@ -225,3 +226,8 @@ export GPG_TTY=$(tty)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# zprof > /tmp/zprof
+
+# unsetopt xtrace
+# exec 2>&3 3>&-
