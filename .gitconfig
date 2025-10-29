@@ -52,6 +52,8 @@
   clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
   root = rev-parse --show-toplevel
   open-remote = "!git remote -v | head -n 1 | awk '{print $2}' | xargs -n1 open"
+  main-branch = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+  update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
 
 [push]
   autoSetupRemote = true
@@ -154,3 +156,8 @@
     branch = blue
     tag = yellow
     remoteBranch = magenta
+[trace2]
+	eventTarget = af_unix:/Users/dpontifex/.gittrace/trace.sock
+	eventBrief = true
+	eventNesting = 1
+	configparams = custom.metacommands
