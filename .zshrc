@@ -47,7 +47,9 @@ if [[ -z "$NVIM" ]]; then
 fi
 source $ZSH/oh-my-zsh.sh
 
-RPROMPT='$(kube_ps1)'$RPROMPT
+if [[ " ${plugins[@]} " =~ " kube-ps1 " ]]; then
+  RPROMPT='$(kube_ps1)'$RPROMPT
+fi
 
 # if [ -x "$(command -v az)" ]; then
 #   RPROMPT="$RPROMPT\$(az account show --output tsv --query \"name\" --only-show-errors)"
@@ -85,6 +87,9 @@ function get-pw {
 function set-pw {
   security add-generic-password -a "$1" -s "$1" -w
 }
+
+alias nvim-config='(cd ~/.config/nvim; nvim init.lua)'
+alias tmux-config='(cd ~/.config/tmux; nvim tmux.conf)'
 
 function dotenv {
   local dotenv_file

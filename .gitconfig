@@ -78,11 +78,6 @@
 [branch]
   sort = -committerdate # sort branches by last commit date
 
-# Use NeoVim diff as diff tool
-[merge]
-  # See available tools with `git mergetool --tool-help`
-  tool = nvimdiff1
-
 [mergetool]
   prompt = false
   keepBackup = false
@@ -93,11 +88,19 @@
 [difftool]
   prompt = false
 
+# Use NeoVim diff as diff tool
+[merge]
+  # See available tools with `git mergetool --tool-help`
+  tool = nvimdiff
+
 [diff]
   tool = nvimdiff1
   context = 3 # less context in diffs
   renames = copies # detect renames as copies
   interHunkContext = 10 # more context between hunks
+
+[rerere]
+	enabled = true
 
 [pager]
   branch = false
