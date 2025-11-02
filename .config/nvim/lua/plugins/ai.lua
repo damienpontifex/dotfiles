@@ -15,6 +15,7 @@ return {
 			-- vim.keymap.set('i', '<Tab>', 'copilot#AcceptLine()', { expr = true, replace_keycodes = false, })
 		end,
 	},
+	-- OpenCode AI coding assistant
 	{
 		"NickvanDyke/opencode.nvim",
 		event = "VimEnter",
@@ -33,24 +34,30 @@ return {
 
 			local opencode = require("opencode")
 
-			-- Recommended/example keymaps.
-			vim.keymap.set({ "n", "x" }, "<C-a>", function()
-				opencode.ask("@this: ", { submit = true })
-			end, { desc = "Ask opencode" })
+			vim.keymap.set("n", "<leader>ot", opencode.toggle, { desc = "[O]pencode [T]oggle" })
+
+			vim.keymap.set({ "n", "x" }, "<leader>oa", function()
+				-- Should it be @this:
+				opencode.ask("@cursor: ", { submit = true })
+			end, { desc = "[O]pencode [A]sk" })
+
+			vim.keymap.set({ "n", "x" }, "<leader>oe", function()
+				opencode.ask("Explain @cursor and its context", { submit = true })
+			end, { desc = "[O]pencode [E]xplain" })
+
 			vim.keymap.set({ "n", "x" }, "<C-x>", opencode.select, { desc = "Execute opencode action…" })
+
 			vim.keymap.set({ "n", "x" }, "ga", function()
 				opencode.prompt("@this")
 			end, { desc = "Add to opencode" })
-			vim.keymap.set("n", "<C-.>", opencode.toggle, { desc = "Toggle opencode" })
+
 			vim.keymap.set("n", "<S-C-u>", function()
 				opencode.command("messages_half_page_up")
 			end, { desc = "opencode half page up" })
+
 			vim.keymap.set("n", "<S-C-d>", function()
 				opencode.command("messages_half_page_down")
 			end, { desc = "opencode half page down" })
-			-- You may want these if you stick with the opinionated "<C-a>" and "<C-x>" above — otherwise consider "<leader>o".
-			vim.keymap.set("n", "+", "<C-a>", { desc = "Increment", noremap = true })
-			vim.keymap.set("n", "-", "<C-x>", { desc = "Decrement", noremap = true })
 		end,
 	},
 }

@@ -78,10 +78,12 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 			vim.lsp.document_color.enable(true, bufnr)
 		end
 
-		-- if client.server_capabilities.foldingRangeProvider then
-		vim.wo.foldmethod = "expr"
-		vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
-		-- end
+		if client.server_capabilities.foldingRangeProvider then
+			-- Use LSP for folding of the current buffer
+			local winid = vim.api.nvim_get_current_win()
+			vim.wo[winid][0].foldmethod = "expr"
+			vim.wo[winid][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+		end
 
 		-- if client.server_capabilities.inlayHintProvider then
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

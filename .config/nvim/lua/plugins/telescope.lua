@@ -49,6 +49,7 @@ return {
 		vim.keymap.set("n", "<Leader>ff", function()
 			builtin.find_files({ hidden = true, no_ignore = true })
 		end, { desc = "Find files" })
+		-- e.g. `-g*.lua leader` see `rg -h` for options
 		vim.keymap.set("n", "<C-f>", telescope.extensions.live_grep_args.live_grep_args, { desc = "Grep" })
 		vim.keymap.set("n", "<Leader>fg", builtin.live_grep, { desc = "Grep" })
 		vim.keymap.set("n", "<Leader>gf", builtin.git_files, { desc = "[G]it [F]iles" })
