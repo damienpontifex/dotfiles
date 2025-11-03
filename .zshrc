@@ -12,7 +12,8 @@ ZSH_THEME="amuse"
 
 HIST_STAMPS="yyyy-mm-dd"
 
-zstyle ':omz:update' mode auto
+# zstyle ':omz:update' mode auto
+export DISABLE_AUTO_UPDATE="true"
 
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -67,6 +68,7 @@ fi
 if [ -f "${HOMEBREW_PREFIX}/opt/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
   source "${HOMEBREW_PREFIX}/opt/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   bindkey '^ ' autosuggest-accept
+  bindkey '^f' forward-word  # Ctrl+F
 fi
 
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
@@ -106,6 +108,7 @@ function no-history {
 }
 
 function update-packages {
+  omz update
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
