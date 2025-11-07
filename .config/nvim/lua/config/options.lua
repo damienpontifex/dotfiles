@@ -27,16 +27,26 @@ vim.opt.autoindent = true
 vim.opt.wrap = true
 vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
+vim.opt.colorcolumn = "120" -- Show a marker to indicate 120 characters width
 
 vim.opt.autoread = true
 vim.opt.backspace = "indent,eol,start" -- allow unrestricted backspacing in insert mode
 vim.opt.backup = false -- don't make backups before writing
 vim.o.completeopt = "menu,menuone,noinsert,fuzzy,popup"
 vim.opt.emoji = false -- don't assume all emoji are double width
-vim.opt.foldlevelstart = 99 -- start unfolded
-vim.opt.foldmethod = "indent"
-vim.opt.foldcolumn = "1"
 vim.opt.hidden = true
+
+-- Folding
+vim.opt.foldlevelstart = 99 -- start unfolded
+-- vim.opt.foldenable = true -- don't fold by default
+vim.opt.foldmethod = "indent"
+vim.opt.foldcolumn = "1" -- See our folds on left of line numbers
+-- Loop over z0, z1, z2…z9 to set foldlevel
+for i = 0, 9 do
+	vim.keymap.set("n", "z" .. i, function()
+		vim.opt.foldlevel = i
+	end, { desc = "Set foldlevel to " .. i })
+end
 
 vim.opt.cindent = false
 vim.opt.hlsearch = true
