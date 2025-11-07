@@ -4,11 +4,34 @@ return {
 		opts = {
 			log_level = vim.log.levels.INFO,
 			format_on_save = {
-				timeout_ms = 500,
+				timeout_ms = 1000,
 				lsp_format = "fallback",
 			},
 			formatters = {
-				detekt = { command = "detekt", args = { "--auto-correct" } },
+				detekt = {
+					command = "detekt",
+					cwd = function(_, ctx)
+						return vim.fs.root(ctx.dirname, { "detekt.yaml", "detekt.yml" })
+					end,
+					require_cwd = true,
+					exit_codes = { 0, 2, 3 },
+					stdin = false,
+					-- "--parallel", Could use this, but passing --input so only single file. Maybe use this if doing project wide
+					args = {
+						"--auto-correct",
+						"--build-upon-default-config",
+						"--config",
+						vim.fn.expand("detekt.y*ml"),
+						"--plugins",
+						-- Find the first file matching detekt-formatting-*.jar under the ~/.gradle/caches/modules-2/files-2.1 directory
+						-- to use for formatting plugin
+						vim.fn.expand(
+							"~/.gradle/caches/modules-2/files-2.1/io.gitlab.arturbosch.detekt/detekt-formatting/**/detekt-formatting-*.jar"
+						),
+						"--input",
+						"$FILENAME",
+					},
+				},
 			},
 			formatters_by_ft = {
 				-- bicep = { "bicep" },
@@ -21,6 +44,7 @@ return {
 				typescript = { "prettierd", "prettier", "eslint", stop_after_first = true },
 				xml = { "xmlformatter" },
 				yaml = { "yamlfmt" },
+				-- ["*"] = { "codespell", "trim_whitespace" },
 			},
 		},
 		config = function(_, opts)
@@ -43,11 +67,35 @@ return {
 	},
 	{ -- Linting
 		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			local lint = require("lint")
+
+			-- Custom detekt linter configuration
+			lint.linters.detekt = {
+				cmd = "detekt",
+				stdin = false,
+				append_fname = true,
+				args = {
+					"--build-upon-default-config",
+					"--config",
+					vim.fn.expand("detekt.y*ml"),
+					"--plugins",
+					-- Find the first file matching detekt-formatting-*.jar under the ~/.gradle/caches/modules-2/files-2.1 directory
+					-- to use for formatting plugin
+					vim.fn.expand(
+						"~/.gradle/caches/modules-2/files-2.1/io.gitlab.arturbosch.detekt/detekt-formatting/**/detekt-formatting-*.jar"
+					),
+					"--input",
+				},
+				stream = nil,
+				ignore_exitcode = true,
+				parser = require("lint.parser").from_errorformat("%f:%l:%c: %m"),
+			}
+
 			lint.linters_by_ft = {
 				-- markdown = { 'markdownlint' },
+				kotlin = { "detekt" },
 				typescript = { "biomejs" },
 				sh = { "shellcheck" },
 			}
@@ -107,7 +155,7 @@ return {
 	},
 	{ -- LSP Configuration
 		"mason-org/mason-lspconfig.nvim",
-		event = "VimEnter",
+		event = "BufReadPre",
 		opts = {
 			automatic_enable = true,
 			ensure_installed = {
@@ -153,6 +201,7 @@ return {
 			local dap_servers = { "js-debug-adapter", "bash-debug-adapter", "netcoredbg", "codelldb", "debugpy" }
 			local linters_and_formatters = {
 				"biome",
+				"detekt",
 				"eslint_d",
 				"prettierd",
 				"prettier",
