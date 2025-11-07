@@ -118,7 +118,7 @@ function no-history {
 }
 
 function update-packages {
-  omz update
+  omz update || true
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global

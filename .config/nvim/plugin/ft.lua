@@ -7,6 +7,7 @@ vim.filetype.add({
 		["*.env.*"] = "sh",
 	},
 	pattern = {
+		[".*%.env%..*"] = "sh",
 		["Brewfile.*"] = "ruby",
 	},
 	extension = {

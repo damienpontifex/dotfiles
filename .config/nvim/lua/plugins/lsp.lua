@@ -37,6 +37,7 @@ return {
 				-- bicep = { "bicep" },
 				cs = { "csharpier" },
 				go = { "goimports", "gofmt" },
+				html = { "djlint" },
 				json = { "jq" },
 				kotlin = { "detekt" },
 				lua = { "stylua" },
@@ -202,6 +203,7 @@ return {
 			local linters_and_formatters = {
 				"biome",
 				"detekt",
+				"djlint",
 				"eslint_d",
 				"prettierd",
 				"prettier",
