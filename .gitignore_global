@@ -1,3 +1,6 @@
 *~
 .DS_Store
 .vimsession.vim
+# ripgrep ignore file https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md
+# For setting specific rules for rg and in consequence telescope-nvim
+.rgignore
