@@ -57,6 +57,7 @@ cask "git-credential-manager"
 cask "github-copilot-for-xcode"
 cask "iterm2"
 cask "rectangle"
+cask "secretive"
 
 # Include a local Brewfile if present (supports both global and project contexts)
 brewfile_dir = File.expand_path(File.dirname(__FILE__))
