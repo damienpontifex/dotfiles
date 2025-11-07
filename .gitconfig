@@ -22,7 +22,7 @@
   compression = 9 # trade cpu for network
   whitespace = error # treat incorrect whitespace as an error
   preloadindex = true # preload index for faster status
-  excludesfile = ~/.gitignore_global
+  excludesfile = ~/.config/git/ignore
   editor = nvim
 
 [blame]
