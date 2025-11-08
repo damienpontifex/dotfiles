@@ -146,9 +146,24 @@ function make {
   return 1
 }
 
+# Create or attach to a tmux session
 function tm {
-  tmux new-session -A -s "${1:-default}"
+  local session="${1:-default}"
+
+  if [ -n "${TMUX}" ]; then
+    # Inside tmux: switch client to session, creating if needed
+    tmux switch-client -t "$session" 2>/dev/null || tmux new-session -A -d -s "$session" \; switch-client -t "$session"
+  else
+    # Outside tmux: attach or create session
+    tmux new-session -A -s "$session"
+  fi
 }
+function _tm_complete {
+  local sessions
+  sessions=("${(@f)$(tmux list-sessions -F '#{session_name}' 2>/dev/null)}")
+  compadd -Q -a sessions
+}
+compdef _tm_complete tm
 
 ### dotfiles ###
 function config() {
@@ -172,8 +187,6 @@ alias http-server="python3 -m http.server"
 
 # Use llvm from homebrew
 export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin:$PATH"
-
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # Node and npm
 # export NODE_ENV=${NODE_ENV:-development}
@@ -203,7 +216,7 @@ alias azswitch='az account list --output tsv --query "[].name" --only-show-error
 # k8s
 export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
-alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
+# alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
 function kgsecv {
   kgsec "${1}" -o yaml | yq '.data | map_values(@base64d)'
 }
