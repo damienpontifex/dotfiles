@@ -108,10 +108,10 @@ return {
 			dap.adapters.typescript = js_debug_adapter
 			dap.adapters["pwa-node"] = js_debug_adapter
 
-			dap.adapters.lldb = {
+			dap.adapters.codelldb = {
 				type = "executable",
 				command = "codelldb",
-				name = "lldb",
+				name = "codelldb",
 			}
 
 			dap.adapters.debugpy = {

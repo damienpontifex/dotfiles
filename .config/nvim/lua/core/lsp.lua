@@ -37,6 +37,122 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 			vim.lsp.set_log_level("TRACE")
 		end
 
+		-- TODO: refine
+		if client.name == "rust_analyzer" then
+			vim.lsp.commands["rust-analyzer.debugSingle"] = function(params)
+				local has_dap, dap = pcall(require, "dap")
+				if not has_dap then
+					vim.notify("nvim-dap not found.", vim.log.levels.ERROR, { title = "LSP" })
+					return
+				end
+
+				local runnable = params.arguments[1]
+				-- print("Debug args: %s", vim.inspect(args))
+				--   Debug args: %s {
+				--   args = {
+				--     cargoArgs = { "run", "--package", "<package-name>", "--bin", "<package-name>" },
+				--     cwd = "<my-cwd>",
+				--     environment = {
+				--       RUSTC_TOOLCHAIN = "<toolchain-path>"
+				--     },
+				--     executableArgs = {},
+				--     workspaceRoot = "<workspace-root-dir>"
+				--   },
+				--   kind = "cargo",
+				--   label = "run <package-name>",
+				--   location = {
+				--     targetRange = {
+				--       ["end"] = {
+				--         character = 1,
+				--         line = 53
+				--       },
+				--       start = {
+				--         character = 0,
+				--         line = 38
+				--       }
+				--     },
+				--     targetSelectionRange = {
+				--       ["end"] = {
+				--         character = 13,
+				--         line = 39
+				--       },
+				--       start = {
+				--         character = 9,
+				--         line = 39
+				--       }
+				--     },
+				--     targetUri = "file:///<path-to-file>/src/main.rs"
+				--   }
+				-- }
+				local cargo_args = vim.iter({ runnable.args.cargoArgs, "--message-format=json" }):flatten():totable()
+				if cargo_args[1] == "run" then
+					cargo_args[1] = "build"
+				elseif cargo_args[1] == "test" then
+					if not vim.list_contains(cargo_args, "--no-run") then
+						table.insert(cargo_args, "--no-run")
+					end
+				end
+
+				vim.system(
+					vim.iter({ "cargo", cargo_args }):flatten():totable(),
+					{ cwd = runnable.args.workspaceRoot },
+					---@param result vim.SystemCompleted
+					vim.schedule_wrap(function(result)
+						if result.code > 0 then
+							vim.notify(
+								"Cargo build failed:\n" .. result.stderr,
+								vim.log.levels.ERROR,
+								{ title = "LSP" }
+							)
+							return
+						end
+						vim.notify("Cargo build succeeded.", vim.log.levels.INFO, { title = "LSP" })
+
+						local executables = {}
+						for _, value in ipairs(vim.split(result.stdout or "", "\n", { trimempty = true })) do
+							local artifact = vim.json.decode(value, { luanil = { object = true } })
+							if artifact.reason == "compiler-artifact" and artifact.executable then
+								local is_binary = vim.list_contains(artifact.target.crate_types, "bin")
+								local is_build_script = vim.list_contains(artifact.target.crate_types, "custom-build")
+								if
+									(cargo_args[1] == "build" and is_binary and not is_build_script)
+									or (cargo_args[1] == "test" and artifact.profile.test)
+								then
+									table.insert(executables, artifact.executable)
+								end
+							end
+						end
+
+						if #executables == 0 then
+							vim.notify("No compilation artifacts found", vim.log.levels.WARN)
+							return
+						elseif #executables > 1 then
+							vim.notify(
+								"Multiple compilation artifacts found, using the first one: "
+									.. table.concat(executables, ", "),
+								vim.log.levels.WARN
+							)
+							-- TODO: could use a picker here to select which one to debug
+							return
+						end
+
+						local dap_config = {
+							name = "Debug " .. runnable.label,
+							type = "codelldb",
+							request = "launch",
+							program = executables[1],
+							args = runnable.args.executableArgs,
+							cwd = vim.fs.root(0, "Cargo.toml") or runnable.args.workspaceRoot,
+							console = "internalConsole",
+							stopOnEntry = false,
+						}
+						vim.lsp.log.debug("Launching DAP with config: %s", dap_config)
+						dap.run(dap_config)
+					end)
+				)
+			end
+		end
+
 		-- if client.server_capabilities.executeCommandProvider then
 		--   for _, command in pairs(client.server_capabilities.executeCommandProvider.commands) do
 		--     -- Strip everything up to the last dot from command
@@ -147,6 +263,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		vim.keymap.set("n", "g0", vim.lsp.buf.document_symbol, { desc = "LSP: Document Symbols", buffer = bufnr })
 		vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, { desc = "LSP: Workspace Symbols", buffer = bufnr })
 		vim.keymap.set("n", "<C-t>", builtin.lsp_document_symbols, { desc = "LSP: workspace symbols", buffer = bufnr })
+		vim.keymap.set("n", "<leader>cr", vim.lsp.codelens.run, { desc = "LSP: Run CodeLens", buffer = bufnr })
 
 		vim.keymap.set("n", "<leader>dn", function()
 			vim.diagnostic.jump({ count = 1, float = true })

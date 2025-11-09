@@ -60,6 +60,10 @@ end
 
 -- Configuration settings https://rust-analyzer.github.io/book/configuration.html
 local rust_default_settings = {
+	check = {
+		-- Use clippy for `cargo check`
+		command = "clippy",
+	},
 	assist = {
 		importGranularity = "module",
 		importPrefix = "by_self",
