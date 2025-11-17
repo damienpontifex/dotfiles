@@ -1,7 +1,8 @@
 return {
-  settings = {
-    Lua = {
-      workspace = { library = { vim.env.VIMRUNTIME, } }
-    }
-  }
+	settings = {
+		Lua = {
+			workspace = { library = { vim.env.VIMRUNTIME } },
+			hint = { enable = true },
+		},
+	},
 }

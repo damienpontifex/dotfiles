@@ -77,7 +77,12 @@ local rust_default_settings = {
 	procMacro = { enable = true },
 	inlayHints = {
 		parameterHints = { type = { enable = true } },
-		typeHints = { enable = true },
+		typeHints = { enable = true, hideNamedConstructor = false, hideClosureInitialization = false },
+		bindingModeHints = { enable = false },
+		chainingHints = { enable = true },
+		closingBraceHints = { enable = true, minLines = 25 },
+		closureReturnTypeHints = { enable = "never" },
+		lifetimeElisionHints = { enable = "never", useParameterNames = false },
 	},
 	lens = {
 		enable = true,
