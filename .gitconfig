@@ -52,7 +52,12 @@
   # Delete any branches where the tracking remote has been deleted
   clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
   root = rev-parse --show-toplevel
-  open-remote = "!git remote -v | head -n 1 | awk '{print $2}' | xargs -n1 open"
+  browser-url = "!f() { git remote get-url origin | sed -E 's|^git@([^:]+):|https://\\1/|' | sed -E 's|\\.git$||'; }; f"
+  open = "!f() { open $(git browser-url); }; f"
+  pr = "!f() { url=$(git browser-url); \
+    [[ "$url" == "*github*" ]] && open "$url/pulls/compare/$(git main-branch)...$(git branch --show-current)"; \
+    [[ "$url" == "*bitbucket*" ]] && open "$url/pull-requests/new?source=$(git branch --show-current)"; \
+  }; f"
   main-branch = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
   update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
 
