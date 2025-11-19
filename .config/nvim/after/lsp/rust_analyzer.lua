@@ -64,6 +64,7 @@ local rust_default_settings = {
 		-- Use clippy for `cargo check`
 		command = "clippy",
 	},
+	diagnostics = { styleLints = { enable = true } },
 	assist = {
 		importGranularity = "module",
 		importPrefix = "by_self",

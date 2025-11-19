@@ -9,6 +9,7 @@ return {
 	},
 	config = function()
 		local telescope = require("telescope")
+		local lga_actions = require("telescope-live-grep-args.actions")
 		telescope.setup({
 			defaults = {
 				hidden = true,
@@ -16,10 +17,9 @@ return {
 				theme = "center",
 				sorting_strategy = "ascending",
 				layout_config = {
-					horizontal = {
-						prompt_position = "top",
-						preview_width = 0.3,
-					},
+					prompt_position = "top",
+					width = 0.99,
+					preview_width = 0.5,
 				},
 				mappings = {
 					i = {
@@ -28,6 +28,11 @@ return {
 							require("telescope.actions").select_default(prompt_bufnr)
 							vim.cmd("normal! zt")
 						end,
+						-- https://github.com/nvim-telescope/telescope-live-grep-args.nvim?tab=readme-ov-file#configuration
+						-- quote prompt to then be able to pass other rg args separated by space
+						-- See https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md for rg args
+						["<C-k>"] = lga_actions.quote_prompt(),
+						["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
 						-- ["<esc>"] = require('telescope.actions').close
 					},
 					n = {

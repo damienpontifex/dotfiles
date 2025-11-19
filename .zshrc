@@ -122,7 +122,6 @@ function no-history {
 }
 
 function update-packages {
-  omz update || true
   brew update
   brew bundle install --upgrade --global --cleanup --verbose
   npm update --global
@@ -130,6 +129,7 @@ function update-packages {
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "Lazy! update" -c "qa"
+  omz update
 }
 
 # Make sure we can run `make` in the current directory or any parent directory
@@ -169,6 +169,7 @@ compdef _tm_complete tm
 function config() {
   /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
+alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef dotfiles=git
 

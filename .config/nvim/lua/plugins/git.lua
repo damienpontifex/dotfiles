@@ -36,6 +36,13 @@ return {
 			vim.keymap.set("n", "<leader>gB", function()
 				neogit.open({ "blame" })
 			end, { desc = "Neogit blame", silent = true, noremap = true })
+
+			vim.keymap.set(
+				"n",
+				"<leader>gd",
+				":DiffviewOpen<CR>",
+				{ desc = "Open Diffview", silent = true, noremap = true }
+			)
 		end,
 	},
 }
