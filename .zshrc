@@ -15,6 +15,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # zstyle ':omz:update' mode auto
 export DISABLE_AUTO_UPDATE="true"
 
+# Expand alias with tab
+zstyle ':completion:*' completer _expand_alias _complete _ignored
+
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
@@ -213,6 +216,9 @@ alias watch='watch '
 # az cli
 alias azswitch='az account list --output tsv --query "[].name" --only-show-errors | fzf | xargs -r -I {} az account set --subscription "{}"'
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
+
+# mise
+[[ -x $(command -v mise) ]] && eval "$(mise activate zsh --shims)"
 
 # k8s
 export KUBE_EDITOR=nvim

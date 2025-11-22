@@ -14,6 +14,11 @@ return {
 				theme = "catppuccin-macchiato",
 			},
 			sections = {
+				lualine_a = { { "buffers", mode = 2 } },
+				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_c = { { "filename", path = 1 } },
+			},
+			inactive_sections = {
 				lualine_c = { { "filename", path = 1 } },
 			},
 		},
