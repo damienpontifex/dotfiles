@@ -31,10 +31,11 @@ return {
 		},
 	},
 	{ -- Debugger
-		"rcarriga/nvim-dap-ui",
+		"mfussenegger/nvim-dap",
 		event = "VimEnter",
 		dependencies = {
-			"mfussenegger/nvim-dap",
+			"rcarriga/nvim-dap-ui",
+			"igorlfs/nvim-dap-view",
 			"theHamsta/nvim-dap-virtual-text",
 			"nvim-neotest/nvim-nio",
 			{ "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/launch.json
@@ -49,7 +50,8 @@ return {
 			vim.fn.sign_define("DapStopped", { text = "▶️", texthl = "", linehl = "", numhl = "" })
 
 			-- This also starts debugging, so <leader>db like leader debug
-			vim.keymap.set("n", "<leader>db", dapui.toggle, { desc = "[DAP] Start debugging" })
+			vim.keymap.set("n", "<leader>db", "<cmd>DapViewToggle<CR>", { desc = "[DAP] Toggle debug view" })
+			-- vim.keymap.set("n", "<leader>db", dapui.toggle, { desc = "[DAP] Start debugging" })
 			vim.keymap.set("n", "<F5>", dap.continue, { desc = "[DAP] Continue debugging" })
 			vim.keymap.set("n", "<Leader>b", dap.toggle_breakpoint, { desc = "[DAP] Toggle breakpoint" })
 			vim.keymap.set("n", "<Right>", dap.step_over, { desc = "[DAP] Step over" })
