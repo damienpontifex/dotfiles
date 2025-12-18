@@ -44,7 +44,7 @@ return {
 				rust = { "rustfmt" },
 				typescript = { "prettierd", "prettier", "eslint", stop_after_first = true },
 				xml = { "xmlformatter" },
-				yaml = { "yamlfmt" },
+				-- yaml = { "yamlfmt" },
 				-- ["*"] = { "codespell", "trim_whitespace" },
 			},
 		},
@@ -184,16 +184,18 @@ return {
 			"neovim/nvim-lspconfig",
 			{
 				"mason-org/mason.nvim",
-				opts = {
-					registries = {
-						"github:mason-org/mason-registry",
-						"github:Crashdummyy/mason-registry",
-					},
-				},
+				-- opts = {
+				-- 	registries = {
+				-- 		"github:mason-org/mason-registry",
+				-- 		"github:Crashdummyy/mason-registry",
+				-- 	},
+				-- },
 			},
 			{ "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/mcp.json
 		},
 		config = function(_, opts)
+      print("Configuring mason-lspconfig.nvim")
+      require("mason").setup()
 			require("mason-lspconfig").setup(opts)
 
 			-- Ensure that other tools, apart from LSP servers, are installed.
