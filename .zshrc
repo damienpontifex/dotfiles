@@ -132,6 +132,7 @@ function update-packages {
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "Lazy! update" -c "qa"
+  ~/.tmux/plugins/tpm/bin/update_plugins all
   omz update
 }
 

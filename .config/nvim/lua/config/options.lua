@@ -30,6 +30,8 @@ vim.opt.cursorline = true
 vim.opt.colorcolumn = "120" -- Show a marker to indicate 120 characters width
 
 vim.opt.autoread = true
+vim.opt.autowrite = true
+vim.opt.autowriteall = true
 vim.opt.backspace = "indent,eol,start" -- allow unrestricted backspacing in insert mode
 vim.opt.backup = false -- don't make backups before writing
 vim.o.completeopt = "menu,menuone,noinsert,fuzzy,popup"
