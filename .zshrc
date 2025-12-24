@@ -126,12 +126,14 @@ function no-history {
 
 function update-packages {
   brew update
-  brew bundle install --upgrade --global --cleanup --verbose
+  brew bundle install --upgrade --global --cleanup # --verbose
   npm update --global
   dotnet tool update --global --all
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "Lazy! update" -c "qa"
+  ~/.tmux/plugins/tpm/bin/clean_plugins
+  ~/.tmux/plugins/tpm/bin/install_plugins
   ~/.tmux/plugins/tpm/bin/update_plugins all
   omz update
 }

@@ -194,8 +194,7 @@ return {
 			{ "Joakker/lua-json5", build = "./install.sh" }, -- Allows trailing comman in .vscode/mcp.json
 		},
 		config = function(_, opts)
-      print("Configuring mason-lspconfig.nvim")
-      require("mason").setup()
+			require("mason").setup()
 			require("mason-lspconfig").setup(opts)
 
 			-- Ensure that other tools, apart from LSP servers, are installed.

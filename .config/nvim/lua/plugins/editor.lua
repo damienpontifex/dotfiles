@@ -14,7 +14,7 @@ return {
 				theme = "catppuccin-macchiato",
 			},
 			sections = {
-				lualine_a = { { "buffers", mode = 2 } },
+				lualine_a = {}, -- { { "buffers", mode = 2 } },
 				lualine_b = { "branch", "diff", "diagnostics" },
 				lualine_c = { { "filename", path = 1 } },
 			},
@@ -63,17 +63,17 @@ return {
 	},
 
 	-- Top tab bar to show all buffers
-	-- {
-	--   'romgrk/barbar.nvim',
-	--   event = 'VimEnter',
-	--   dependencies = {
-	--     -- 'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
-	--     'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-	--   },
-	--   opts = {},
-	--   keys = {
-	--     { "<Tab>",   ":BufferNext<CR>",     desc = "Next buffer", },
-	--     { "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer", },
-	--   },
-	-- },
+	{
+		"romgrk/barbar.nvim",
+		event = "VimEnter",
+		dependencies = {
+			"lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+			"nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+		},
+		opts = {},
+		keys = {
+			{ "<Tab>", ":BufferNext<CR>", desc = "Next buffer" },
+			{ "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer" },
+		},
+	},
 }

@@ -60,6 +60,7 @@
   }; f"
   main-branch = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
   update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
+  compare-branch = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
 
 [push]
   autoSetupRemote = true

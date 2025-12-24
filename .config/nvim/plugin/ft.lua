@@ -15,5 +15,6 @@ vim.filetype.add({
 		bicepparam = "bicep-params",
 		gotmpl = "yaml",
 		workbook = "json",
+		tmpl = "django",
 	},
 })
