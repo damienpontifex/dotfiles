@@ -41,6 +41,8 @@ plugins=(
   git # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
   zsh-syntax-highlighting
   vscode
+  kube-ps1
+  kubectl
   colored-man-pages
   dotenv
   docker
@@ -82,10 +84,11 @@ alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo 
 
 # Replace cat with bat... use `\cat` to use original cat
 alias cat='bat --paging=never'
-alias ls='eza'                                                         # ls
+alias ls='eza --icons --long --group-directories-first'                                                         # ls
 alias l='eza -lbF --git'                                               # list, size, type, git
 alias ll='eza -lbGF --git'                                             # long list
 alias llm='eza -lbGF --git --sort=modified'                            # long list, modified date sort
+alias lt='eza --long --tree --level=3'
 alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list
 alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
 
@@ -228,7 +231,7 @@ export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
 # alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
 function kgsecv {
-  kgsec "${1}" -o yaml | yq '.data | map_values(@base64d)'
+  kgsec "${1}" --output yaml | yq '.data | map_values(@base64d)'
 }
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
