@@ -129,7 +129,7 @@ function no-history {
 
 function update-packages {
   brew update
-  brew bundle install --upgrade --global --cleanup # --verbose
+  brew bundle install --upgrade --cleanup --file ~/.config/homebrew/Brewfile # --verbose
   npm update --global
   dotnet tool update --global --all
   rustup update
@@ -229,6 +229,10 @@ alias azswitch='az account list --output tsv --query "[].name" --only-show-error
 # k8s
 export KUBE_EDITOR=nvim
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
+
+# kubectl krew for kubectl plugin management
+[[ -d "${HOME}/.krew/bin" ]] && export PATH="${HOME}/.krew/bin:${PATH}"
+
 # alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
 function kgsecv {
   kgsec "${1}" --output yaml | yq '.data | map_values(@base64d)'

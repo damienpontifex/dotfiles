@@ -1,13 +1,14 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 git:
   autoFetch: false
-  autoRefresh: false
+  autoRefresh: true
   pagers:
     - colorArg: always
       pager: delta --dark --paging=never --line-numbers
 gui:
   showCommandLog: false
   #--line-numbers --features=colibri --syntax-theme base16-256 -s
+  timeFormat: "2006-01-02 15:04:05"
+  shortTimeFormat: "15:04"
 quitOnTopLevelReturn: false
 disableStartupPopups: true
-
