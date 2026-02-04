@@ -25,6 +25,7 @@ return {
 	},
 	{
 		"nordtheme/vim",
+		name = "nordtheme-vim",
 		lazy = false,
 		priority = 1000,
 		config = function()
