@@ -82,6 +82,8 @@ fi
 
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
 
+alias gstl="git stash list | fzf --preview 'git stash show --patch --color=always \$(echo {} | cut -d: -f1)' --bind 'ctrl-d:preview-page-down' --bind 'ctrl-u:preview-page-up'"
+
 # Replace cat with bat... use `\cat` to use original cat
 alias cat='bat --paging=never'
 alias ls='eza --icons --long --group-directories-first'                                                         # ls
@@ -224,10 +226,12 @@ alias azswitch='az account list --output tsv --query "[].name" --only-show-error
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 # mise
-[[ -x $(command -v mise) ]] && eval "$(mise activate zsh --shims)"
+[[ -x $(command -v mise) ]] && eval "$(mise activate zsh)"
 
 # k8s
 export KUBE_EDITOR=nvim
+# Use ~/.kube/kuberc for kubectl config
+export KUBECTL_KUBERC=true
 [[ -x $(command -v kubectl) ]] && source <(kubectl completion zsh) && complete -F __start_kubectl k
 
 # kubectl krew for kubectl plugin management

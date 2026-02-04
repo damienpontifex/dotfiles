@@ -33,7 +33,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 			return
 		end
 
-		if client.name == "bicep" then
+		if client.name == "bicep" or client.name == "kotlin_lsp" then
 			vim.lsp.set_log_level("TRACE")
 		end
 

@@ -5,6 +5,7 @@ vim.filetype.add({
 		["*.env"] = "sh",
 		["*.envrc"] = "sh",
 		["*.env.*"] = "sh",
+		["kuberc"] = "yaml",
 	},
 	pattern = {
 		[".*%.env%..*"] = "sh",

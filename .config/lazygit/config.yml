@@ -7,6 +7,24 @@ git:
       pager: delta --dark --paging=never --line-numbers
 gui:
   showCommandLog: false
+  theme:
+    activeBorderColor:
+      - "#88C0D0" # Nord 8 (Frost)
+      - bold
+    inactiveBorderColor:
+      - "#4C566A" # Nord 4 (Polar Night)
+    optionsTextColor:
+      - "#81A1C1" # Nord 9 (Frost)
+    selectedLineBgColor:
+      - "#434C5E" # Nord 2 (Polar Night)
+    cherryPickedCommitBgColor:
+      - "#D8DEE9" # Nord 4 (Snow Storm)
+    cherryPickedCommitFgColor:
+      - "#2E3440" # Nord 0 (Polar Night)
+    unstagedChangesColor:
+      - "#BF616A" # Nord 11 (Aurora Red)
+    defaultFgColor:
+      - "#D8DEE9" # Nord 4 (Snow Storm)
   #--line-numbers --features=colibri --syntax-theme base16-256 -s
   timeFormat: "2006-01-02 15:04:05"
   shortTimeFormat: "15:04"
