@@ -39,10 +39,16 @@ vim.opt.emoji = false -- don't assume all emoji are double width
 vim.opt.hidden = true
 
 -- Folding
+vim.opt.foldenable = true
 vim.opt.foldlevelstart = 99 -- start unfolded
--- vim.opt.foldenable = true -- don't fold by default
 vim.opt.foldmethod = "indent"
 vim.opt.foldcolumn = "1" -- See our folds on left of line numbers
+-- use Neovim nightly branch
+if vim.fn.has("nvim-0.12") == 1 then
+	vim.opt.fillchars = "fold: ,eob: ,foldopen:,foldsep: ,foldclose:,foldinner: "
+else
+	vim.opt.fillchars = "fold: ,eob: ,foldopen:,foldsep: ,foldclose:"
+end
 -- Loop over z0, z1, z2…z9 to set foldlevel
 for i = 0, 9 do
 	vim.keymap.set("n", "z" .. i, function()
