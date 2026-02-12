@@ -1,5 +1,12 @@
 return {
 	{
+		"joshdick/onedark.vim",
+		priority = 1000,
+		config = function()
+			vim.cmd.colorscheme("onedark")
+		end,
+	},
+	{
 		"Mofiqul/vscode.nvim",
 		priority = 1000,
 		config = function()
@@ -29,7 +36,7 @@ return {
 		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.cmd.colorscheme("nord")
+			-- vim.cmd.colorscheme("nord")
 		end,
 	},
 }

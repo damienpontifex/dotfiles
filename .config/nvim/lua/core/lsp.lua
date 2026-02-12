@@ -197,8 +197,11 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		if client.server_capabilities.foldingRangeProvider then
 			-- Use LSP for folding of the current buffer
 			local winid = vim.api.nvim_get_current_win()
-			vim.wo[winid][0].foldmethod = "expr"
-			vim.wo[winid][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			local bufname = vim.api.nvim_buf_get_name(bufnr)
+			if vim.fn.buflisted(bufnr) == 1 and bufname ~= "" and vim.bo[bufnr].filetype ~= "" then
+				vim.wo[winid][0].foldmethod = "expr"
+				vim.wo[winid][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			end
 		end
 
 		-- if client.server_capabilities.inlayHintProvider then
@@ -262,7 +265,11 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		vim.keymap.set("n", "gr", builtin.lsp_references, { desc = "LSP: References", buffer = bufnr })
 		vim.keymap.set("n", "g0", vim.lsp.buf.document_symbol, { desc = "LSP: Document Symbols", buffer = bufnr })
 		vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, { desc = "LSP: Workspace Symbols", buffer = bufnr })
-		vim.keymap.set("n", "<C-t>", builtin.lsp_document_symbols, { desc = "LSP: workspace symbols", buffer = bufnr })
+
+		vim.keymap.set("n", "<C-t>", function()
+			builtin.lsp_document_symbols({ ignore_symbols = { "variable", "constant" } })
+		end, { desc = "LSP: workspace symbols", buffer = bufnr })
+
 		vim.keymap.set("n", "<leader>cr", vim.lsp.codelens.run, { desc = "LSP: Run CodeLens", buffer = bufnr })
 
 		vim.keymap.set("n", "<leader>dn", function()

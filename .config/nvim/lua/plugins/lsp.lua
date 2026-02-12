@@ -162,7 +162,7 @@ return {
 			ensure_installed = {
 				"bashls",
 				"bicep",
-				"copilot", -- After nvim-0.12 Can sign in/out with commands LspCopilotSignIn and LspCopilotSignOut
+				-- "copilot", -- After nvim-0.12 Can sign in/out with commands LspCopilotSignIn and LspCopilotSignOut
 				"docker_compose_language_service",
 				"dockerls",
 				"gopls",

@@ -11,7 +11,7 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {
 			options = {
-				theme = "nord",
+				theme = "onedark",
 			},
 			sections = {
 				lualine_a = {}, -- { { "buffers", mode = 2 } },

@@ -52,10 +52,14 @@ vim.keymap.set("n", "<C-Left>", ":vertical resize +5<CR>", { desc = "Increase ve
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
-vim.keymap.set("n", "k", "gk", opts)
-vim.keymap.set("n", "j", "gj", opts)
-vim.keymap.set("n", "0", "g0", opts)
-vim.keymap.set("n", "$", "g$", opts)
+-- vim.keymap.set("n", "k", "gk", opts)
+-- vim.keymap.set("n", "j", "gj", opts)
+-- vim.keymap.set("n", "0", "g0", opts)
+-- vim.keymap.set("n", "$", "g$", opts)
+
+-- When nowrap, jump to the actual start and end of the line
+-- vim.keymap.set("n", "0", "call cursor(line('.'), 1)<CR>")
+-- vim.keymap.set("n", "$", "call cursor(line('.'), col('$'))<CR>")
 
 -- Mappings to move lines with alt+{j,k} in normal, insert, visual modes
 -- Symbols are the real character generated on macOS when pressing Alt+key
@@ -75,7 +79,19 @@ vim.keymap.set("v", "<M-k>", ":m '<-2<CR>gv=gv", opts)
 vim.keymap.set("n", "<Esc>", ":silent! nohls<CR>", opts)
 
 -- <leader>q to delete buffer without closing window
-vim.keymap.set("n", "<leader>q", ":bp<CR>:bd#<CR>", opts)
+-- vim.keymap.set("n", "<leader>q", ":bp<CR>:bd#<CR>", opts)
+vim.keymap.set("n", "<leader>q", function()
+	local listed_buffers = vim.tbl_filter(function(buf)
+		return vim.fn.buflisted(buf) == 1
+	end, vim.api.nvim_list_bufs())
+	if #listed_buffers > 1 then
+		vim.cmd("bp")
+		vim.cmd("bd#")
+	else
+		vim.cmd("bd")
+		vim.cmd("enew")
+	end
+end, { desc = "Smart buffer close & cycle" })
 
 vim.keymap.set("n", "<space><space>x", "<cmd> source %<CR>")
 vim.keymap.set("n", "<space>x", ":.lua<CR>")

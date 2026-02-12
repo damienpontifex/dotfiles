@@ -24,7 +24,7 @@ end)
 
 vim.opt.breakindent = true
 vim.opt.autoindent = true
-vim.opt.wrap = true
+-- vim.opt.wrap = true
 vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 vim.opt.colorcolumn = "120" -- Show a marker to indicate 120 characters width
