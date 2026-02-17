@@ -100,17 +100,49 @@ alias lt='eza --tree --level=2'                                        # tree
 
 export EDITOR=nvim
 
+function gwt_path {
+  local branch_name="${1:?Usage: gwt_path <branch-name>}"
+  gwtls --porcelain | grep -B2 "^branch refs/heads/${branch_name}" | head -1 | cut -d' ' -f2
+}
+# Ensure our origin and main worktree is up to date. Cleanup any stale worktrees. Usage: `gmain`
 function gmain {
-  git switch $(git_main_branch) && git pull --prune && git clean-gone
+  # trap 'set +x' EXIT
+  # set -x;
+  if [[ "$(git rev-parse --is-bare-repository)" == "true" ]]; then
+    # Fetch remove and ensure main branch is up to date
+    git fetch origin --prune && \
+      pushd "$(gwt_path $(git_main_branch))" && \
+      git rebase \
+      && popd
+  elif [[ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]]; then
+      # You are in a linked git worktree
+      # Jump across to worktree root
+      cd "$(git rev-parse --git-common-dir)" && \
+      git fetch origin --prune && \
+      git worktree prune --no-expire && \
+      pushd "$(gwt_path $(git_main_branch))" && \
+      git rebase && popd
+  else
+    # You are in the main worktree or git with local branches
+    git switch $(git_main_branch) && git pull --prune && git clean-gone
+  fi
+}
+
+# New worktree and in that new directory. Usage: `gwta <worktree-name>`
+function gwta {
+  local worktree_name="${1:?Usage: gwta <worktree-name>}"
+  # Ensure we're in the git common directory to ensure create worktree from there
+  [[ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]] \
+    || cd "$(git rev-parse --git-common-dir)"
+
+  git worktree add "$worktree_name"
+  cd "$worktree_name"
 }
 # Get password value from keychain
-# Example usage export MY_PASSWORD="$(get_pw MY_PASSWORD)"
-function get-pw {
-  security find-generic-password -ga "$1" -w
-}
-function set-pw {
-  security add-generic-password -a "$1" -s "$1" -w
-}
+# Example usage export MY_PASSWORD="$(get-pw MY_PASSWORD)"
+alias get-pw="security find-generic-password -gw -a $USER -s"
+
+alias set-pw="security add-generic-password -a "$USER" -s"
 
 alias nvim-config='(cd ~/.config/nvim; nvim init.lua)'
 alias tmux-config='(cd ~/.config/tmux; nvim tmux.conf)'
