@@ -1,7 +1,5 @@
 # Can use `reset` to reload
 
-THIS_DIR="${0:a:h}"
-
 # zmodload zsh/zprof
 
 # zmodload zsh/datetime
@@ -40,14 +38,16 @@ setopt share_history
 unsetopt menu_complete
 unsetopt flowcontrol
 
-source "$THIS_DIR/prompt"
-
 # XDG Base Directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export PATH="$HOME/.local/bin:$PATH"
+
+THIS_DIR="$XDG_CONFIG_HOME/zsh"
+
+source "$THIS_DIR/prompt"
 
 ### dotfiles ###
 function config() {
