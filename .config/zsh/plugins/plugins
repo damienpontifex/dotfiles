@@ -1,0 +1,27 @@
+# vim:ft=zsh
+PLUGINS_DIR="${0:a:h}"
+
+function add_plugin {
+  local plugin_url=${1:?Usage: add_plugin <plugin-repo-url>}
+  local plugin_name="${plugin_url:t:r}"
+  local plugin_folder="$PLUGINS_DIR/$plugin_name"
+  local plugin_script="$plugin_folder/$plugin_name.plugin.zsh"
+
+  if [[ ! -d "$plugin_folder" ]]; then
+    config submodule add "$plugin_url" "$plugin_folder"
+    zcompile "$plugin_script"
+  fi
+
+  source "$plugin_script"
+}
+
+add_plugin https://github.com/MichaelAquilina/zsh-you-should-use.git
+add_plugin https://github.com/zsh-users/zsh-syntax-highlighting.git
+add_plugin https://github.com/zsh-users/zsh-autosuggestions.git
+
+unset PLUGINS_DIR
+unfunction add_plugin
+
+function update_plugins {
+  config submodule update --init --recursive --remote
+}

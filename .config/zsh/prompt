@@ -1,0 +1,34 @@
+# vim:ft=zsh
+# Zsh prompt: path/git left, dashes, kubectl context/namespace right, 1 line
+autoload -Uz vcs_info
+
+precmd() {
+  vcs_info
+  # Left: path+branch
+  local left_part="%F{green}%~%f%F{red}${vcs_info_msg_0_}%f "
+
+  # Right: K8s context and namespace
+  local k8s_context
+  local k8s_ns
+  k8s_context=$(kubectl config current-context 2>/dev/null)
+  k8s_ns=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
+  if [[ -z $k8s_ns ]]; then k8s_ns="default"; fi
+  local right_part=" %F{cyan}k8s:$k8s_context/$k8s_ns%f"
+
+  # Calculate dash fill
+  local total_len=$(( ${#left_part} + ${#right_part} ))
+  local dash_len=$(( COLUMNS - total_len ))
+  if (( dash_len < 1 )); then dash_len=1; fi
+  PROMPT_HEADER="${left_part}${(l.$dash_len..-.)}${right_part}"
+}
+
+setopt prompt_subst
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' formats '  %b'
+zstyle ':vcs_info:*' actionformats ' (%b|%a)'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vsc_info:*' unstagedstr '!'
+
+PROMPT='${PROMPT_HEADER}
+%# '

@@ -1,0 +1,21 @@
+# vim:ft=zsh
+
+# kubectl completion zsh 2> /dev/null 
+alias k=kubectl
+alias kgp=kubectl get pods
+alias kgd=kubectl get deployment
+
+# k8s
+export KUBE_EDITOR=nvim
+# Use ~/.kube/kuberc for kubectl config
+export KUBECTL_KUBERC=true
+source <(kubectl completion zsh)
+
+# kubectl krew for kubectl plugin management
+[[ -d "${HOME}/.krew/bin" ]] && export PATH="${HOME}/.krew/bin:${PATH}"
+
+# alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
+function kgsecv {
+  kgsec "${1}" --output yaml | yq '.data | map_values(@base64d)'
+}
+
