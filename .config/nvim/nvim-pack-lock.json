@@ -195,8 +195,7 @@
     },
     "vim-markdown": {
       "rev": "1bc9d0cd8e1cc3e901b0a49c2b50a843f1c89397",
-      "src": "https://github.com/plasticboy/vim-markdown",
-      "version": "'master'"
+      "src": "https://github.com/plasticboy/vim-markdown"
     },
     "vim-ps1": {
       "rev": "839cec1550e09fc902c74103053e9e765051083d",

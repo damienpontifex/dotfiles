@@ -14,7 +14,6 @@ require(folderOfThisFile .. "trouble")
 require(folderOfThisFile .. "auto-session")
 require(folderOfThisFile .. "hardtime")
 require(folderOfThisFile .. "ai")
-require(folderOfThisFile .. "snacks")
 require(folderOfThisFile .. "dap")
 
 vim.pack.add({
