@@ -1,8 +1,8 @@
-return {
-	"m4xshen/hardtime.nvim",
-	lazy = false,
-	dependencies = { "MunifTanjim/nui.nvim" },
-	opts = {
-		disable_mouse = false,
-	},
-}
+vim.pack.add({
+	"https://github.com/MunifTanjim/nui.nvim",
+	"https://github.com/m4xshen/hardtime.nvim",
+})
+
+require("hardtime").setup({
+	disable_mouse = false,
+})

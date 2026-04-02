@@ -11,8 +11,8 @@ vim.diagnostic.config({
 -- ufo: Neovim hasn't added foldingRange to default capabilities, users must add it manually
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
 }
 
 -- Toggle diagnostic text
@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		end
 
 		if client.name == "bicep" or client.name == "kotlin_lsp" then
-			vim.lsp.set_log_level("TRACE")
+			vim.lsp.log.set_level(vim.lsp.log_levels.TRACE)
 		end
 
 		-- TODO: refine
@@ -198,7 +198,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		-- end
 
 		if client.server_capabilities.colorProvider and vim.lsp.document_color then
-			vim.lsp.document_color.enable(true, bufnr)
+			vim.lsp.document_color.enable(true, { bufnr = bufnr })
 		end
 
 		if client.server_capabilities.foldingRangeProvider then
@@ -216,14 +216,15 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		-- end
 
 		-- if client.server_capabilities.codeLensProvider then
-		vim.lsp.codelens.refresh()
+		vim.lsp.codelens.enable(true, { bufnr = bufnr })
 		vim.api.nvim_create_autocmd(
 			{ "BufEnter", "InsertLeave" }, -- 'CursorHold',  },
 			{
 				group = lsp_group,
 				buffer = bufnr,
 				callback = function()
-					vim.lsp.codelens.refresh({ bufnr = bufnr })
+					-- Refresh
+					vim.lsp.codelens.enable(true, { bufnr = bufnr })
 				end,
 			}
 		)

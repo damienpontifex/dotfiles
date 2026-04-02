@@ -1,2 +1,7 @@
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+# Defaults https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/yazi-default.toml
+
 [mgr]
+ratio = [2, 4, 3]
 show_hidden = true

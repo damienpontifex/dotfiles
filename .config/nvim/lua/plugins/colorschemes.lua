@@ -1,42 +1,9 @@
-return {
-	{
-		"joshdick/onedark.vim",
-		priority = 1000,
-		config = function()
-			vim.cmd.colorscheme("onedark")
-		end,
-	},
-	{
-		"Mofiqul/vscode.nvim",
-		priority = 1000,
-		config = function()
-			-- vim.cmd.colorscheme 'vscode'
-		end,
-	},
-	{
-		"folke/tokyonight.nvim",
-		lazy = false,
-		priority = 1000,
-		opts = {},
-		config = function()
-			-- vim.cmd.colorscheme("tokyonight-night")
-		end,
-	},
-	{
-		"projekt0n/github-nvim-theme",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			-- vim.cmd.colorscheme("github_dark_dimmed")
-		end,
-	},
-	{
-		"nordtheme/vim",
-		name = "nordtheme-vim",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			-- vim.cmd.colorscheme("nord")
-		end,
-	},
-}
+vim.pack.add({
+	"https://github.com/joshdick/onedark.vim",
+	"https://github.com/Mofiqul/vscode.nvim",
+	"https://github.com/folke/tokyonight.nvim",
+	"https://github.com/projekt0n/github-nvim-theme",
+	{ src = "https://github.com/nordtheme/vim", name = "nordtheme-vim" },
+})
+
+vim.cmd.colorscheme("onedark")

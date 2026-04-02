@@ -1,79 +1,52 @@
-return {
-	-- Render markdown
-	{
-		"MeanderingProgrammer/render-markdown.nvim",
-		ft = { "markdown", "codecompanion" },
-	},
+vim.pack.add({
+	"https://github.com/nvim-tree/nvim-web-devicons",
+	"https://github.com/nvim-lualine/lualine.nvim",
+	"https://github.com/romgrk/barbar.nvim",
+	"https://github.com/folke/which-key.nvim",
+	"https://github.com/nvim-lua/plenary.nvim",
+	"https://github.com/folke/todo-comments.nvim",
+	"https://github.com/norcalli/nvim-colorizer.lua",
+	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
+	"https://github.com/echasnovski/mini.surround",
+})
 
-	-- Set lualine as statusline
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = {
-			options = {
-				theme = "onedark",
-			},
-			sections = {
-				lualine_a = {}, -- { { "buffers", mode = 2 } },
-				lualine_b = { "branch", "diff", "diagnostics" },
-				lualine_c = { { "filename", path = 1 } },
-			},
-			inactive_sections = {
-				lualine_c = { { "filename", path = 1 } },
-			},
-		},
-	},
+-- render-markdown
+require("render-markdown").setup({})
 
-	-- Highlight todo, notes, etc in comments
-	{
-		"folke/todo-comments.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
+-- lualine
+require("lualine").setup({
+	options = {
+		theme = "onedark",
 	},
+	sections = {
+		lualine_a = {},
+		lualine_b = { "branch", "diff", "diagnostics" },
+		lualine_c = {},
+	},
+	inactive_sections = {
+		lualine_c = {},
+	},
+})
 
-	-- For showing available keymaps
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		keys = {
-			{
-				"<leader>?",
-				function()
-					require("which-key").show({ global = false })
-				end,
-				desc = "Buffer Local Keymaps (which-key)",
-			},
-		},
-	},
+-- todo-comments
+require("todo-comments").setup({ signs = false })
 
-	-- Colorize color codes
-	{
-		"norcalli/nvim-colorizer.lua",
-		event = "VimEnter",
-		opts = {
-			"*", -- Highlight all files
-			css = { rgb_fn = true }, -- Enable parsing rgb(...) functions in css files
-		},
-	},
+-- which-key
+require("which-key").setup({})
+vim.keymap.set("n", "<leader>?", function()
+	require("which-key").show({ global = false })
+end, { desc = "Buffer Local Keymaps (which-key)" })
 
-	{
-		"echasnovski/mini.surround",
-		opts = {},
-	},
+-- nvim-colorizer
+require("colorizer").setup({
+	"*",
+	css = { rgb_fn = true },
+})
 
-	-- Top tab bar to show all buffers
-	{
-		"romgrk/barbar.nvim",
-		event = "VimEnter",
-		dependencies = {
-			"lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-			"nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
-		},
-		opts = {},
-		keys = {
-			{ "<Tab>", ":BufferNext<CR>", desc = "Next buffer" },
-			{ "<S-Tab>", ":BufferPrevious<CR>", desc = "Previous buffer" },
-		},
-	},
-}
+-- mini.surround
+require("mini.surround").setup({})
+
+-- barbar
+require("barbar").setup({})
+vim.keymap.set("n", "<Tab>", ":BufferNext<CR>", { desc = "Next buffer", silent = true })
+vim.keymap.set("n", "<S-Tab>", ":BufferPrevious<CR>", { desc = "Previous buffer", silent = true })
