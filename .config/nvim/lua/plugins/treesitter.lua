@@ -22,3 +22,20 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 	end,
 })
+
+vim.api.nvim_create_autocmd("PackChanged", {
+	desc = "Handle nvim-treesitter updates",
+	group = vim.api.nvim_create_augroup("damienpontifex/nvim-treesitter", { clear = true }),
+	callback = function(event)
+		if event.data.kind == "update" and event.data.spec.name == "nvim-treesitter" then
+			vim.notify("nvim-treesitter updated, running TSUpdate...", vim.log.levels.INFO)
+			---@diagnostic disable-next-line: param-type-mismatch
+			local ok = pcall(vim.cmd, "TSUpdate")
+			if ok then
+				vim.notify("TSUpdate completed successfully", vim.log.levels.INFO)
+			else
+				vim.notify("TSUpdated command failed", vim.log.levels.WARN)
+			end
+		end
+	end,
+})

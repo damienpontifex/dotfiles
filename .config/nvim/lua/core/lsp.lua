@@ -27,16 +27,14 @@ vim.keymap.set("n", "<leader>td", function()
 end, { desc = "Toggle diagnostics" })
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
-	group = vim.api.nvim_create_augroup("my.lsp", {}),
+	group = vim.api.nvim_create_augroup("damienpontifex/lsp", { clear = true }),
+	desc = "LSP setup",
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 		local bufnr = args.buf
 
 		-- If filetype is 'codecompanion', or any of the Avante panels then return early and don't setup any of the lsp keymaps or autocommands
 		if vim.bo[bufnr].filetype == "codecompanion" or vim.bo[bufnr].filetype:match("^Avante") then
-			return
-		end
-		if client.name == "GitHub Copilot" then
 			return
 		end
 
@@ -238,19 +236,17 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		-- end
 
 		if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
-			if vim.fn.has("nvim-0.12") == 1 then
-				vim.lsp.inline_completion.enable(true)
-				vim.keymap.set("n", "<M-CR>", function()
-					if not vim.lsp.inline_completion.get() then
-						return "<M-CR>"
-					end
-				end, {
-					expr = true,
-					replace_keycodes = true,
-					desc = "LSP: Accept inline completion",
-					buffer = bufnr,
-				})
-			end
+			-- vim.lsp.inline_completion.enable()
+			vim.keymap.set({ "n", "i" }, "<M-CR>", function()
+				if not vim.lsp.inline_completion.get() then
+					return "<M-CR>"
+				end
+			end, {
+				expr = true,
+				replace_keycodes = true,
+				desc = "LSP: Accept inline completion",
+				buffer = bufnr,
+			})
 		end
 
 		local opts = { buffer = bufnr }

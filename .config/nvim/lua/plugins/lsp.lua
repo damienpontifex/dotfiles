@@ -118,6 +118,14 @@ require("blink.cmp").setup({
 	appearance = {
 		nerd_font_variant = "mono",
 	},
+	completion = {
+		menu = {
+			-- Delay before the menu opens. Prevents blink from calling set_cursor
+			-- on the floating window during fast typing, which causes the cursor
+			-- to jump back in the editing window (Neovim floating window bug).
+			auto_show_delay_ms = 500,
+		},
+	},
 	signature = { enabled = true },
 	cmdline = {
 		completion = {
@@ -133,6 +141,7 @@ require("mason-lspconfig").setup({
 	ensure_installed = {
 		"bashls",
 		"bicep",
+		"copilot",
 		"docker_compose_language_service",
 		"dockerls",
 		"gopls",

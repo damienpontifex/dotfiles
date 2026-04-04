@@ -17,8 +17,7 @@ vim.keymap.set("x", "p", '"_dP', opts)
 vim.keymap.set({ "n", "v" }, "d", '"_d', opts)
 vim.keymap.set({ "n", "v" }, "D", '"_D', opts)
 vim.keymap.set({ "n", "v" }, "c", '"_c', opts)
-vim.keymap.set("n", "C", '"_c$', opts)
-vim.keymap.set("v", "C", '"_C', opts)
+vim.keymap.set({ "n", "v" }, "C", '"_C', opts)
 
 -- Using behaviour of barbar.nvim for tab buffer navigation
 -- vim.keymap.set('n', '<Tab>', ':bnext<CR>')
