@@ -17,7 +17,8 @@ vim.keymap.set("x", "p", '"_dP', opts)
 vim.keymap.set({ "n", "v" }, "d", '"_d', opts)
 vim.keymap.set({ "n", "v" }, "D", '"_D', opts)
 vim.keymap.set({ "n", "v" }, "c", '"_c', opts)
-vim.keymap.set({ "n", "v" }, "C", '"_C', opts)
+vim.keymap.set("n", "C", '"_c$', opts)
+vim.keymap.set("v", "C", '"_C', opts)
 
 -- Using behaviour of barbar.nvim for tab buffer navigation
 -- vim.keymap.set('n', '<Tab>', ':bnext<CR>')
@@ -49,6 +50,14 @@ vim.keymap.set("n", "<C-L>", "<C-W><C-L>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-H>", "<C-W><C-H>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-Right>", ":vertical resize -5<CR>", { desc = "Decrease vertical split size" })
 vim.keymap.set("n", "<C-Left>", ":vertical resize +5<CR>", { desc = "Increase vertical split size" })
+
+-- Folding
+-- Loop over z0, z1, z2…z9 to set foldlevel
+for i = 0, 9 do
+	vim.keymap.set("n", "z" .. i, function()
+		vim.opt.foldlevel = i
+	end, { desc = "Set foldlevel to " .. i })
+end
 
 -- Section: Moving around
 -- Move cursor by display lines when wrapping
@@ -94,6 +103,7 @@ vim.keymap.set("n", "<leader>q", function()
 end, { desc = "Smart buffer close & cycle" })
 
 vim.keymap.set("n", "<space><space>x", "<cmd> source %<CR>")
+-- Run current lua line
 vim.keymap.set("n", "<space>x", ":.lua<CR>")
 vim.keymap.set("v", "<space>x", ":lua<CR>")
 
