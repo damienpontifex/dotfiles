@@ -1,6 +1,10 @@
+--  For more options, you can see `:help option-list`
+
 -- ============================================================
 -- UI
 -- ============================================================
+vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "120"

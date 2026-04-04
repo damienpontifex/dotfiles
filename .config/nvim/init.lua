@@ -6,10 +6,6 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
---  For more options, you can see `:help option-list`
-vim.opt.number = true
-vim.opt.relativenumber = true
-
 require("config.options")
 require("winbar")
 
