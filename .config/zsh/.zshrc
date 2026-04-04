@@ -14,45 +14,47 @@ autoload -Uz compinit && compinit
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
+zstyle ':completion:*' menu select # tab opens cmp menu
+zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
+zstyle ':completion:*' sqeeze-slashes flase # explicit disable to allow /*/ expansion
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Expand alias with tab
 zstyle ':completion:*' completer _expand_alias _complete _ignored
 
 # `man zshoptions`
+# View all options and set values `set -o`
 setopt alwaystoend
-setopt append_history
-setopt auto_cd
-setopt auto_menu
-setopt auto_pushd
-setopt complete_in_word
-setopt extended_glob
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_save_no_dups
-setopt share_history
+setopt append_history inc_append_history share_history
+setopt hist_find_no_dups hist_ignore_all_dups hist_ignore_dups hist_ignore_space hist_save_no_dups
+setopt auto_cd auto_pushd auto_param_slash
+setopt auto_menu menu_complete
+setopt complete_in_word no_case_glob no_case_match
+setopt globdots extended_glob
+setopt interactive_comments
 
 unsetopt menu_complete
 unsetopt flowcontrol
 
 # XDG Base Directories
+# https://wiki.archlinux.org/title/XDG_Base_Directory
+# Applications that use this https://wiki.archlinux.org/title/XDG_Base_Directory#Support
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export PATH="$HOME/.local/bin:$PATH"
 
+# History opts
+HISTZIE=100000000
+SAVEHIST=100000000
+HISTFILE="$XDG_CACHE_HOME/zsh_history"
 THIS_DIR="$XDG_CONFIG_HOME/zsh"
 
 source "$THIS_DIR/prompt"
 
 ### dotfiles ###
-function config() {
-  /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
-}
+alias config='/usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef dotfiles=git
@@ -82,6 +84,7 @@ fi
 
 # Keybindings
 # https://zsh.sourceforge.io/Doc/Release/Editor-Functions-Index.html
+# For list of things that could bind to `zle -al`
 
 bindkey '^P' up-history
 bindkey '^N' down-history
@@ -186,6 +189,16 @@ function dotenv {
   set -a; source "./$dotenv_file"; set +a
 }
 
+# --- Yazi Setup ---
+function y {
+  local tmp="$(mktemp -t "yazi-cmd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "PWD" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
 function no-history {
   unset HISTFILE
 }
@@ -197,10 +210,12 @@ function update-packages {
   dotnet tool update --global --all
   rustup update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
-  nvim --headless -c "Lazy! update" -c "qa"
+  nvim --headless -c "lua vim.pack.update()" -c "qa"
   ~/.tmux/plugins/tpm/bin/clean_plugins
   ~/.tmux/plugins/tpm/bin/install_plugins
   ~/.tmux/plugins/tpm/bin/update_plugins all
+
+  config submodule update --recursive --remote --init
 }
 
 source "${THIS_DIR}/tmux.zsh"
