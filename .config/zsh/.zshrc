@@ -9,6 +9,7 @@
 # setopt xtrace prompt_subst
 
 # Load completions
+autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
 # Completion styling
