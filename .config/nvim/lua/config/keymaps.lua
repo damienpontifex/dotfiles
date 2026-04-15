@@ -98,5 +98,5 @@ vim.keymap.set("n", "<leader>q", function()
 end, { desc = "Smart buffer close & cycle" })
 
 vim.keymap.set("n", "<space><space>x", "<cmd> source %<CR>", { desc = "Run current lua file" })
-vim.keymap.set("n", "<space>x", ":.lua<CR>", { desc = "Run current lua line" })
-vim.keymap.set("v", "<space>x", ":lua<CR>", { desc = "Run selected lua code" })
+vim.keymap.set("n", "<leader>x", ":.lua<CR>", { desc = "Run current lua line" })
+vim.keymap.set("v", "<leader>x", ":lua<CR>", { desc = "Run selected lua code" })

@@ -5,9 +5,9 @@ vim.pack.add({
 local nvim_treesitter = require("nvim-treesitter")
 -- Supported languages https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
 -- nvim_treesitter.install({ "all" })
--- require("nvim-treesitter").install({
--- "bash",
--- })
+nvim_treesitter.install({
+	"bash",
+})
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = nvim_treesitter.get_available(),

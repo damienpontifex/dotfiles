@@ -13,7 +13,6 @@ require(folderOfThisFile .. "ufo")
 require(folderOfThisFile .. "trouble")
 require(folderOfThisFile .. "auto-session")
 require(folderOfThisFile .. "hardtime")
-require(folderOfThisFile .. "ai")
 require(folderOfThisFile .. "dap")
 
 vim.pack.add({
