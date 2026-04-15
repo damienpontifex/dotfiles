@@ -1,11 +1,19 @@
 # vim:ft=zsh
 
 alias g=git
-alias gc=git commit
-alias gcm=git commit -m
-alias gp=git push
-alias gpf=git push --force-with-lease --force-if-includes
+alias ga="git add"
+alias gst="git status"
+alias gc="git commit"
+alias gcm="git commit -m"
+alias gp="git push"
+alias gpf="git push --force-with-lease --force-if-includes"
+alias gl="git pull"
+alias gwtls="git worktree list"
+alias gwtrm="git worktree remove"
 
+function git_main_branch {
+  git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+}
 function gwt_path {
   local branch_name="${1:?Usage: gwt_path <branch-name>}"
   gwtls --porcelain | grep -B2 "^branch refs/heads/${branch_name}" | head -1 | cut -d' ' -f2
@@ -41,7 +49,8 @@ function gwta {
   [[ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]] \
     || cd "$(git rev-parse --git-common-dir)"
 
-  git worktree add "$worktree_name"
+  # Ensure if name has path separators in it, the path and branch both have those separators
+  git worktree add "$worktree_name" -b "$worktree_name"
   cd "$worktree_name"
 }
 

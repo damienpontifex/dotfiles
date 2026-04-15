@@ -54,6 +54,11 @@ THIS_DIR="$XDG_CONFIG_HOME/zsh"
 
 source "$THIS_DIR/prompt"
 
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
 ### dotfiles ###
 alias config='/usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
@@ -74,7 +79,36 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 if [[ -z "$NVIM" ]]; then
   # Don't enable vi-mode plugin when running terminal already inside neovim
   export VI_MODE_SET_CURSOR=true
+  # Set Zsh Line Editor (ZLE) to Vi emulation mode
   bindkey -v
+  set -o vi
+  # Allow backspace to delete past the start of the current insert session
+  bindkey -M viins '^?' backward-delete-char
+  bindkey -M viins '^H' backward-delete-char
+
+  # Function to change cursor shape
+  # 2 = steady block, 6 = steady bar (use 1 and 5 for blinking versions)
+  function zle-keymap-select {
+    if [[ ${KEYMAP} == vicmd ]]; then
+      echo -ne '\e[2 q'
+    else
+      echo -ne '\e[5 q'
+    fi
+  }
+  zle -N zle-keymap-select
+
+  # Ensure the cursor starts as a bar when the prompt first appears
+  zle-line-init() {
+      zle -K viins
+      echo -ne '\e[5 q'
+  }
+  zle -N zle-line-init
+
+  # Fix cursor shape when a command finishes
+  precmd() {
+      echo -ne '\e[5 q'
+  }
+
   export KEYTIMEOUT=1
   _fix_cursor() {
      echo -ne '\e[5 q'
