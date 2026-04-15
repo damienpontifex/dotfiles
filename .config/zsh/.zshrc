@@ -105,15 +105,10 @@ if [[ -z "$NVIM" ]]; then
   zle -N zle-line-init
 
   # Fix cursor shape when a command finishes
-  precmd() {
-      echo -ne '\e[5 q'
-  }
-
   export KEYTIMEOUT=1
   _fix_cursor() {
      echo -ne '\e[5 q'
   }
-
   precmd_functions+=(_fix_cursor)
 fi
 
