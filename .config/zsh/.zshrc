@@ -149,6 +149,11 @@ alias utcnow='TZ=UTC strftime "%FT%T%z"'
 alias perthnow='TZ=Australia/Perth strftime "%FT%T%z"'
 alias sydneynow='TZ=Australia/Sydney strftime "%FT%T%z"'
 
+# fzf search man entries
+alias fman="man -k . | fzf --preview \"echo {} | awk '{print \$1}' | cut -d'(' -f1 | xargs man\" \
+  --preview-window=right:60% \
+  --bind \"enter:execute(echo {} | awk '{print \$1}' | cut -d'(' -f1 | xargs man)\""
+
 # Suffix aliases - open files by extension
 alias -s md=bat
 alias -s rst=bat
