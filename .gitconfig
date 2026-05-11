@@ -96,10 +96,14 @@
 [difftool]
   prompt = false
 
+[difftool "nvim_difftool"]
+  cmd = nvim -c \"packadd nvim.difftool\" -d \"$LOCAL\" \"$REMOTE\"
+
 # Use NeoVim diff as diff tool
 [merge]
   # See available tools with `git mergetool --tool-help`
-  tool = nvimdiff3
+  # tool = nvimdiff3
+  tool = nvim_difftool
 
 [rerere]
   enabled = true

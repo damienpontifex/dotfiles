@@ -22,6 +22,7 @@ brew "ffmpeg"
 brew "fnm" # Node version manager
 brew "fzf", postinstall: "${HOMEBREW_PREFIX}/opt/fzf/install --all"
 brew "gh"
+brew "git"
 brew "git-delta"
 brew "git-filter-repo"
 brew "git-lfs"

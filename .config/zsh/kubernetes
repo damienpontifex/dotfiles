@@ -4,6 +4,9 @@
 alias k=kubectl
 alias kgp='kubectl get pods'
 alias kgd='kubectl get deployment'
+alias kgcm='kubectl get configmaps'
+alias kgsec='kubectl get secret'
+alias kgns='kubectl get namespace'
 alias kcn='kubectl config set-context --current --namespace'
 
 # k8s
@@ -17,6 +20,6 @@ source <(kubectl completion zsh)
 
 # alias kcu='kubectl config get-contexts -o name | fzf | xargs -r -I {} kubectl config use-context "{}"'
 function kgsecv {
-  kgsec "${1}" --output yaml | yq '.data | map_values(@base64d)'
+  kubectl get secret "${1}" --output yaml | yq '.data | map_values(@base64d)'
 }
 

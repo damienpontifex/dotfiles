@@ -9,12 +9,19 @@ alias gp="git push"
 alias gpf="git push --force-with-lease --force-if-includes"
 alias gwtls="git worktree list"
 alias gwtrm="git worktree remove"
+alias gswc="git switch -c"
 
 function gl {
   if [[ "$(git rev-parse --is-bare-repository)" == "true" ]]; then
-    git fetch
+    git fetch --all
+    # Fast-forward the default branch to match origin
+    local default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+    if [[ -n "$default" ]]; then
+      git branch --force "$default" "origin/$default"
+    fi
   else
-    git pull
+    # If no upstream is set, pull will fail so fetch only
+    git pull --prune 2>/dev/null || git fetch --prune
   fi
 }
 
@@ -95,11 +102,18 @@ function gmain {
 function gwta {
   local worktree_name="${1:?Usage: gwta <worktree-name>}"
   # Ensure we're in the git common directory to ensure create worktree from there
-  [[ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]] \
-    || cd "$(git rev-parse --git-common-dir)"
+  if [[ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]]; then
+    cd "$(git rev-parse --git-common-dir)"
+  fi
 
+  # Check if matching remote branch
+  if git rev-parse --verify "origin/$worktree_name" > /dev/null 2>&1; then
+  fi
+
+  local remote_main=$(git rev-parse --abbrev-ref origin/HEAD)
   # Ensure if name has path separators in it, the path and branch both have those separators
-  git worktree add "$worktree_name" -b "$worktree_name"
+  git worktree add -b "$worktree_name" "$worktree_name" "$remote_main"
   cd "$worktree_name"
   [[ -f .pre-commit-config.yaml ]] && pre-commit install
+  [[ -d .run ]] && find .run -name '*.template' -print0 | xargs -I {} cp {} ${{}%.template}
 }

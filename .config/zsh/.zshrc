@@ -37,6 +37,11 @@ setopt interactive_comments
 unsetopt menu_complete
 unsetopt flowcontrol
 
+# make `help` available similar to bash for builtins
+autoload -Uz run-help
+unalias run-help 2>/dev/null
+alias help=run-help
+
 # XDG Base Directories
 # https://wiki.archlinux.org/title/XDG_Base_Directory
 # Applications that use this https://wiki.archlinux.org/title/XDG_Base_Directory#Support
