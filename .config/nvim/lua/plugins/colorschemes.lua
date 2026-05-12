@@ -7,3 +7,6 @@ vim.pack.add({
 })
 
 vim.cmd.colorscheme("onedark")
+
+-- Make comments stand out
+vim.api.nvim_set_hl(0, "Comment", { fg = "#e5c07b", italic = true })
