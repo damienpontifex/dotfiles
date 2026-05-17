@@ -4,8 +4,17 @@ autoload -Uz vcs_info
 
 precmd() {
   vcs_info
-  # Left: path+branch
-  local left_part="%F{green}%~%f%F{red}${vcs_info_msg_0_}%f "
+  # Stash count (only inside a git repo)
+  local stash_info=""
+  if git rev-parse --git-dir &>/dev/null 2>&1; then
+    local stash_count
+    stash_count=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+    if (( stash_count > 0 )); then
+      stash_info="%F{yellow} ✦${stash_count}%f"
+    fi
+  fi
+  # Left: path+branch+stash
+  local left_part="%F{green}%~%f%F{red}${vcs_info_msg_0_}%f${stash_info} "
 
   # Right: K8s context and namespace
   local k8s_context

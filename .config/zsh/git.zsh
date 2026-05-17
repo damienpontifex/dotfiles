@@ -10,6 +10,7 @@ alias gpf="git push --force-with-lease --force-if-includes"
 alias gwtls="git worktree list"
 alias gwtrm="git worktree remove"
 alias gswc="git switch -c"
+alias gss="git stash show --patch"
 
 function gl {
   if [[ "$(git rev-parse --is-bare-repository)" == "true" ]]; then
