@@ -4,5 +4,6 @@ vim.pack.add({
 })
 
 require("hardtime").setup({
+	enabled = false, -- Have i learnt anything, test without this for a while
 	disable_mouse = false,
 })

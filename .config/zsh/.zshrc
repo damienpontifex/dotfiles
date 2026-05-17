@@ -177,7 +177,7 @@ function auto_nvm() {
 }
 add-zsh-hook chpwd auto_nvm
 function ls_on_cd {
-  eza --icons --long --group-directories-first    
+  # eza --icons --long --group-directories-first    
 }
 add-zsh-hook chpwd ls_on_cd
 
@@ -249,6 +249,7 @@ function update-packages {
   npm update --global
   dotnet tool update --global --all
   rustup update
+  cargo update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "lua vim.pack.update()" -c "qa"
   ~/.tmux/plugins/tpm/bin/clean_plugins
