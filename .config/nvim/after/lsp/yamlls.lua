@@ -8,6 +8,11 @@ return {
 				["kubernetes"] = "*.yaml",
 			}),
 			kubernetesCRDStore = { enable = true },
+			format = {
+				enable = false,
+				singleQuote = false,
+			},
+			validate = true,
 		},
 	},
 	capabilities = {
