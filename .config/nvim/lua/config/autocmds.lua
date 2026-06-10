@@ -35,38 +35,38 @@ vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
 })
 
 -- Highlight references on cursor hold
-vim.api.nvim_create_autocmd("CursorMoved", {
-	group = vim.api.nvim_create_augroup("LspReferenceHighlight", { clear = true }),
-	desc = "Highlight references under cursor",
-	callback = function()
-		-- Only run if the cursor is not in insert mode
-		if vim.fn.mode() == "i" then
-			return
-		end
+-- vim.api.nvim_create_autocmd("CursorMoved", {
+-- 	group = vim.api.nvim_create_augroup("LspReferenceHighlight", { clear = true }),
+-- 	desc = "Highlight references under cursor",
+-- 	callback = function()
+-- 		-- Only run if the cursor is not in insert mode
+-- 		if vim.fn.mode() == "i" then
+-- 			return
+-- 		end
+--
+-- 		local clients = vim.lsp.get_clients({ bufnr = 0 })
+-- 		local supports_highlight = false
+-- 		for _, client in pairs(clients) do
+-- 			if client.server_capabilities.documentHighlightProvider then
+-- 				supports_highlight = true
+-- 				break
+-- 			end
+-- 		end
+--
+-- 		if supports_highlight then
+-- 			vim.lsp.buf.clear_references()
+-- 			vim.lsp.buf.document_highlight()
+-- 		end
+-- 	end,
+-- })
 
-		local clients = vim.lsp.get_clients({ bufnr = 0 })
-		local supports_highlight = false
-		for _, client in pairs(clients) do
-			if client.server_capabilities.documentHighlightProvider then
-				supports_highlight = true
-				break
-			end
-		end
-
-		if supports_highlight then
-			vim.lsp.buf.clear_references()
-			vim.lsp.buf.document_highlight()
-		end
-	end,
-})
-
-vim.api.nvim_create_autocmd("CursorMovedI", {
-	group = "LspReferenceHighlight",
-	desc = "Clear reference highlights on cursor move in insert mode",
-	callback = function()
-		vim.lsp.buf.clear_references()
-	end,
-})
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+-- 	group = "LspReferenceHighlight",
+-- 	desc = "Clear reference highlights when entering insert mode",
+-- 	callback = function()
+-- 		vim.lsp.buf.clear_references()
+-- 	end,
+-- })
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -156,3 +156,15 @@ vim.api.nvim_create_autocmd("TermClose", {
 --     end
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd("PackChanged", {
+	group = vim.api.nvim_create_augroup("damienpontifex/packchanged", { clear = true }),
+	desc = "Plugin cleanup after PackChanged",
+	callback = function(ev)
+		print(vim.inspect(ev.data))
+		local path = ev.data.path
+		local is_deleted = ev.data.kind == "deleted"
+		local plugins = vim.pack.get()
+		local pack_directory = vim.fn.stdpath("data") .. "/site/pack/core/opt"
+	end,
+})

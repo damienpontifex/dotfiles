@@ -7,11 +7,15 @@ vim.pack.add({
 	"https://github.com/folke/todo-comments.nvim",
 	"https://github.com/norcalli/nvim-colorizer.lua",
 	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
-	"https://github.com/echasnovski/mini.surround",
+	"https://github.com/nvim-mini/mini.nvim",
+  "https://github.com/lukas-reineke/indent-blankline.nvim",
 })
 
 -- render-markdown
 require("render-markdown").setup({})
+
+-- indent-blankline
+require("ibl").setup()
 
 -- lualine
 require("lualine").setup({
@@ -44,7 +48,15 @@ require("colorizer").setup({
 })
 
 -- mini.surround
+-- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-surround.md
 require("mini.surround").setup({})
+
+
+-- Progress and notifications
+-- fidget.nvim (LSP progress)
+-- require("fidget").setup({})
+-- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-notify.md
+require("mini.notify").setup()
 
 -- barbar
 require("barbar").setup({})
