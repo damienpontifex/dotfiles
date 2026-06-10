@@ -1,4 +1,28 @@
---@param expression string
+-- Package manager
+vim.api.nvim_create_user_command("PackClean", function()
+	local non_active = vim.iter(vim.pack.get())
+		:filter(function(x)
+			return not x.active
+		end)
+		:map(function(x)
+			return x.spec.name
+		end)
+		:totable()
+
+	if #non_active == 0 then
+		vim.notify("No plugins to clean", vim.log.levels.INFO)
+		return
+	end
+
+	vim.pack.del(non_active)
+	vim.notify("Deleted " .. #non_active .. " non-active plugins", vim.log.levels.INFO)
+end, { desc = "Clean inactive plugsin" })
+
+vim.api.nvim_create_user_command("PackUpdate", function()
+	vim.pack.update()
+end, { desc = "Update all plugsin" })
+
+-- Copying paths
 local function copy_to_clipboard(expression)
 	local path = vim.fn.expand(expression)
 	vim.fn.setreg("+", path)

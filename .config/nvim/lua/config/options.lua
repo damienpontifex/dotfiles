@@ -10,6 +10,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "120"
 vim.opt.termguicolors = true
 vim.opt.winborder = "rounded"
+vim.opt.pumborder = "rounded"
 vim.opt.smoothscroll = true
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
@@ -61,6 +62,8 @@ vim.opt.undofile = true
 -- Completion & Navigation
 -- ============================================================
 vim.opt.completeopt:append({"menuone", "noselect",  "noinsert", "fuzzy"})
+-- Include omnifunc in nvim complete
+vim.opt.complete:append("o")
 vim.opt.path:append({ "**" }) -- recursive :find / :sfind / :tabfind
 vim.opt.wildignore:append({ "*/node_modules/*", "*/bin/*", "*/obj/*" })
 

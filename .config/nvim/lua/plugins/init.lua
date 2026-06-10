@@ -1,45 +1,15 @@
-local folderOfThisFile = (...) .. "."
-
-require(folderOfThisFile .. "colorschemes")
-require(folderOfThisFile .. "lsp")
-require(folderOfThisFile .. "treesitter")
-require(folderOfThisFile .. "telescope")
-require(folderOfThisFile .. "git")
-require(folderOfThisFile .. "editor")
-require(folderOfThisFile .. "flash")
-require(folderOfThisFile .. "yazi")
-require(folderOfThisFile .. "tabout")
-require(folderOfThisFile .. "ufo")
-require(folderOfThisFile .. "trouble")
-require(folderOfThisFile .. "auto-session")
-require(folderOfThisFile .. "hardtime")
-require(folderOfThisFile .. "dap")
+-- Load lua files in plugins folder
+local config_dir = vim.fn.stdpath("config") .. "/lua/plugins"
+local files = vim.fn.split(vim.fn.glob(config_dir .. "/*.lua"), "\n")
+for _, file in ipairs(files) do
+	-- Extract the module name out of the absolute path
+	local module_name = file:match("([^/]+)%.lua$")
+	if module_name ~= "init" then
+		require("plugins." .. module_name)
+	end
+end
 
 vim.pack.add({
 	"https://github.com/numToStr/Comment.nvim",
 })
-
 require("Comment").setup()
-
-vim.api.nvim_create_user_command("PackClean", function()
-	local non_active = vim.iter(vim.pack.get())
-		:filter(function(x)
-			return not x.active
-		end)
-		:map(function(x)
-			return x.spec.name
-		end)
-		:totable()
-
-	if #non_active == 0 then
-		vim.notify("No plugins to clean", vim.log.levels.INFO)
-		return
-	end
-
-	vim.pack.del(non_active)
-	vim.notify("Deleted " .. #non_active .. " non-active plugins", vim.log.levels.INFO)
-end, { desc = "Clean inactive plugsin" })
-
-vim.api.nvim_create_user_command("PackUpdate", function()
-	vim.pack.update()
-end, { desc = "Update all plugsin" })

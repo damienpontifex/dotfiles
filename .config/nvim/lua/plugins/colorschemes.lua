@@ -9,4 +9,10 @@ vim.pack.add({
 vim.cmd.colorscheme("onedark")
 
 -- Make comments stand out
+-- see |highlight-groups| or |lsp-highlight|
 vim.api.nvim_set_hl(0, "Comment", { fg = "#e5c07b", italic = true })
+vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "DarkGray", bg = "none" })
+vim.api.nvim_set_hl(0, "LspCodeLens", { link = "LspInlayHint" })
+vim.api.nvim_set_hl(0, "LspCodeLensSeparator", { link = "LspInlayHint" })
+-- For lsp inline completion hint
+vim.api.nvim_set_hl(0, "ComplHint", { link = "LspInlayHint" })

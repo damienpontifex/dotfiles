@@ -13,7 +13,7 @@ require("winbar")
 require("vim._core.ui2").enable({ msg = { target = "cmd" } })
 
 require("plugins")
-require("core.lsp")
+require("config.lsp")
 
 require("config.autocmds")
 require("config.keymaps")
