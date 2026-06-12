@@ -1,9 +1,7 @@
-vim.keymap.set(
-	"n",
-	"<leader>r",
-	":source " .. vim.fn.stdpath("config") .. "/init.lua<CR>",
-	{ desc = "Reload neovim config" }
-)
+vim.keymap.set("n", "<leader>re", function()
+	require("auto-session").save_session()
+	vim.cmd("restart AutoSession restore")
+end, { desc = "Save session, restart neovim, and reload session" })
 
 vim.keymap.set("x", "p", '"_dP')
 

@@ -16,3 +16,16 @@ vim.api.nvim_set_hl(0, "LspCodeLens", { link = "LspInlayHint" })
 vim.api.nvim_set_hl(0, "LspCodeLensSeparator", { link = "LspInlayHint" })
 -- For lsp inline completion hint
 vim.api.nvim_set_hl(0, "ComplHint", { link = "LspInlayHint" })
+
+vim.api.nvim_set_hl(0, "TodoComment", { bg = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" }).fg })
+vim.api.nvim_set_hl(0, "FixmeComment", { link = "DiagnosticError" })
+vim.api.nvim_set_hl(0, "NoteComment", { link = "DiagnosticHint" })
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = "*",
+	callback = function()
+		vim.fn.matchadd("TodoComment", "TODO:")
+		vim.fn.matchadd("FixmeComment", "FIXME:")
+		vim.fn.matchadd("NoteComment", "NOTE:")
+	end,
+})

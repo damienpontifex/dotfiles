@@ -7,7 +7,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("config.options")
-require("winbar")
 
 -- Enable the new experimental command-line features.
 require("vim._core.ui2").enable({ msg = { target = "cmd" } })

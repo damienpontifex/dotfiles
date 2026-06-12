@@ -1,13 +1,22 @@
 -- Load lua files in plugins folder
-local config_dir = vim.fn.stdpath("config") .. "/lua/plugins"
-local files = vim.fn.split(vim.fn.glob(config_dir .. "/*.lua"), "\n")
-for _, file in ipairs(files) do
-	-- Extract the module name out of the absolute path
-	local module_name = file:match("([^/]+)%.lua$")
-	if module_name ~= "init" then
-		require("plugins." .. module_name)
-	end
-end
+
+require("plugins.lsp")
+require("plugins.auto-session")
+require("plugins.editor")
+require("plugins.git")
+require("plugins.linting")
+require("plugins.tabout")
+require("plugins.trouble")
+require("plugins.colorschemes")
+require("plugins.flash")
+require("plugins.hardtime")
+require("plugins.telescope")
+require("plugins.ufo")
+require("plugins.dap")
+require("plugins.formatting")
+require("plugins.luasnip")
+require("plugins.treesitter")
+require("plugins.yazi")
 
 vim.pack.add({
 	"https://github.com/numToStr/Comment.nvim",

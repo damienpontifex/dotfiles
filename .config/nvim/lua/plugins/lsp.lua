@@ -4,13 +4,18 @@ vim.pack.add({
 	"https://github.com/mason-org/mason-lspconfig.nvim",
 	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
 	"https://github.com/Kaiser-Yang/blink-cmp-avante",
-	-- "https://github.com/j-hui/fidget.nvim",
 	"https://github.com/rachartier/tiny-inline-diagnostic.nvim",
 	"https://github.com/b0o/schemastore.nvim",
 	"https://github.com/rafamadriz/friendly-snippets",
 	{ src = "https://github.com/Joakker/lua-json5" },
 })
 
+vim.api.nvim_create_autocmd("VimEnter", {
+	once = true,
+	callback = function()
+		-- TODO: Load plugins that should only load after 'VimEnter'
+	end,
+})
 -- tiny-inline-diagnostic.nvim
 require("tiny-inline-diagnostic").setup({})
 
