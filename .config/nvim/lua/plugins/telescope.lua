@@ -3,13 +3,20 @@ vim.pack.add({
 	"https://github.com/nvim-tree/nvim-web-devicons",
 	"https://github.com/nvim-telescope/telescope.nvim",
 	"https://github.com/nvim-telescope/telescope-live-grep-args.nvim",
+	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
 })
 
-local telescope = require("telescope")
 local lga_actions = require("telescope-live-grep-args.actions")
 local builtin = require("telescope.builtin")
 
-telescope.setup({
+require("telescope").setup({
+	pickers = {
+		find_files = {},
+	},
+	extensions = {
+		fzf = {},
+		live_grep_args = {},
+	},
 	defaults = {
 		hidden = true,
 		theme = "center",
@@ -19,6 +26,8 @@ telescope.setup({
 			width = 0.99,
 			preview_width = 0.5,
 		},
+		-- path_display = { "smart" },
+		path_display = { "filename_first", shorten = { len = 3, exclude = { 1, -1 } } },
 		mappings = {
 			i = {
 				["<CR>"] = function(prompt_bufnr)
@@ -38,15 +47,19 @@ telescope.setup({
 	},
 })
 
-telescope.load_extension("live_grep_args")
-
 vim.keymap.set("n", "<C-p>", function()
-	builtin.find_files({ hidden = true, no_ignore = false, file_ignore_patterns = { ".git" } })
+	builtin.find_files({
+		hidden = true,
+		no_ignore = false,
+		file_ignore_patterns = { ".git" },
+	})
 end, { desc = "Find files" })
+
 vim.keymap.set("n", "<Leader>ff", function()
 	builtin.find_files({ hidden = true, no_ignore = true })
 end, { desc = "Find files (all)" })
-vim.keymap.set("n", "<C-f>", telescope.extensions.live_grep_args.live_grep_args, { desc = "Grep" })
+
+vim.keymap.set("n", "<C-f>", require("telescope").extensions.live_grep_args.live_grep_args, { desc = "Grep" })
 vim.keymap.set("n", "<Leader>fg", builtin.live_grep, { desc = "Grep" })
 vim.keymap.set("n", "<Leader>gf", builtin.git_files, { desc = "[G]it [F]iles" })
 vim.keymap.set("n", "<Leader><space>", builtin.buffers, { desc = "Find buffers" })
@@ -57,3 +70,35 @@ vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
 vim.keymap.set("n", "<Leader>gs", builtin.git_status, { desc = "[G]it [S]tatus" })
 vim.keymap.set("n", "<Leader>gb", builtin.git_branches, { desc = "[G]it [B]ranches" })
 vim.keymap.set("n", "<Leader>km", builtin.filetypes, { desc = "Change file type" })
+
+vim.api.nvim_create_autocmd("PackChanged", {
+	desc = "Handle telescope required setup",
+	group = vim.api.nvim_create_augroup("damienpontifex/telescope", { clear = true }),
+	callback = function(event)
+		if
+			(event.data.kind == "update" or event.data.kind == "install")
+			and event.data.spec.name == "telescope-fzf-native"
+		then
+			vim.notify("telescope-fzf-native updated, running TSUpdate...", vim.log.levels.INFO)
+			vim.system({ "make", "-C", event.data.path }, {
+				on_stdout = function(_, data)
+					if data then
+						print(data)
+					end
+				end,
+				on_stderr = function(_, data)
+					if data then
+						print("ERR:", data)
+					end
+				end,
+				on_exit = function(_, code)
+					if code == 0 then
+						vim.notify("telescope-fzf-native.nvim built successfully!", vim.log.levels.INFO)
+					else
+						vim.notify("Failed to build telescope-fzf-native.nvim", vim.log.levels.ERROR)
+					end
+				end,
+			})
+		end
+	end,
+})
