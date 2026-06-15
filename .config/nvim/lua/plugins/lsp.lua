@@ -48,7 +48,7 @@ require("mason-lspconfig").setup({
 	ensure_installed = {
 		"bashls",
 		"bicep",
-		"copilot",
+		-- "copilot",
 		"docker_compose_language_service",
 		"dockerls",
 		"gopls",
