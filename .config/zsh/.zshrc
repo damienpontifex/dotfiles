@@ -18,6 +18,8 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select # tab opens cmp menu
 zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
 zstyle ':completion:*' sqeeze-slashes flase # explicit disable to allow /*/ expansion
+
+# https://github.com/aloxaf/fzf-tab#configure
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Expand alias with tab
@@ -50,14 +52,16 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export PATH="$HOME/.local/bin:$PATH"
+export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
+fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
 # History opts
 HISTZIE=100000000
 SAVEHIST=100000000
 HISTFILE="$XDG_CACHE_HOME/zsh_history"
-THIS_DIR="$XDG_CONFIG_HOME/zsh"
 
-source "$THIS_DIR/prompt"
+source "$ZDOTDIR/prompt"
 
 alias -g ...='../..'
 alias -g ....='../../..'
@@ -70,7 +74,7 @@ alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef dotfiles=git
 
-source "$THIS_DIR/plugins/plugins"
+source "$ZDOTDIR/plugins/plugins"
 
 eval "$(brew shellenv)"
 export PATH="/opt/homebrew/bin:$PATH"
@@ -150,9 +154,21 @@ bindkey '^Xc' copy-buffer-to-clipboard
 alias watch='watch '
 
 # ISO8601
-alias utcnow='TZ=UTC strftime "%FT%T%z"'
-alias perthnow='TZ=Australia/Perth strftime "%FT%T%z"'
-alias sydneynow='TZ=Australia/Sydney strftime "%FT%T%z"'
+alias utcnow='date -u +"%Y-%m-%dT%H:%M:%SZ"'
+alias perthnow='TZ=Australia/Perth date +"%Y-%m-%dT%H:%M:%SZ"'
+alias sydneynow='TZ=Australia/Sydney date +"%Y-%m-%dT%H:%M:%SZ"'
+function rel-utcnow() {
+  local offset="${1:?Provide a offset as parameter [+|-]val[y|m|w|d|H|M|S]}"
+  date -u -v "$offset" +"%Y-%m-%dT%H:%M:%SZ"
+}
+function rel-perthnow() {
+  local offset="${1:?Provide a offset as parameter [+|-]val[y|m|w|d|H|M|S]}"
+  TZ=Australia/Perth date -v "$offset" +"%Y-%m-%dT%H:%M:%SZ"
+}
+function rel-sydneynow() {
+  local offset="${1:?Provide a offset as parameter [+|-]val[y|m|w|d|H|M|S]}"
+  TZ=Australia/Sydney date -v "$offset" +"%Y-%m-%dT%H:%M:%SZ"
+}
 
 # fzf search man entries
 alias fman="man -k . | fzf --preview \"echo {} | awk '{print \$1}' | cut -d'(' -f1 | xargs man\" \
@@ -251,18 +267,25 @@ function update-packages {
   rustup update
   cargo update
   cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
-  nvim --headless -c "lua vim.pack.update()" -c "qa"
+  nvim --headless -c "lua vim.pack.update(nil, { force = true })" -c "qa"
   ~/.tmux/plugins/tpm/bin/clean_plugins
   ~/.tmux/plugins/tpm/bin/install_plugins
   ~/.tmux/plugins/tpm/bin/update_plugins all
 
+  tldr --update
+
   config submodule update --recursive --remote --init
+
+  # Call `update-local-packages` if it is defined
+  if typeset -f update-local-packages > /dev/null; then
+    update-local-packages
+  fi
 }
 
-source "${THIS_DIR}/tmux.zsh"
-source "${THIS_DIR}/dev.zsh"
-source "${THIS_DIR}/git.zsh"
-source "${THIS_DIR}/kubernetes"
+source "${ZDOTDIR}/tmux.zsh"
+source "${ZDOTDIR}/dev.zsh"
+source "${ZDOTDIR}/git.zsh"
+source "${ZDOTDIR}/kubernetes"
 
 ### Secrets ###
 if [ -f "$HOME/.secrets.sh" ]; then

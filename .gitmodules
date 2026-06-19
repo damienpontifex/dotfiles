@@ -7,3 +7,6 @@
 [submodule ".config/zsh/plugins/zsh-autosuggestions"]
 	path = .config/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "/Users/dpontifex/.config/zsh/plugins/fzf-tab"]
+	path = /Users/dpontifex/.config/zsh/plugins/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab

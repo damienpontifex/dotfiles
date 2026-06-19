@@ -18,6 +18,7 @@ function add_plugin {
 add_plugin https://github.com/MichaelAquilina/zsh-you-should-use.git
 add_plugin https://github.com/zsh-users/zsh-syntax-highlighting.git
 add_plugin https://github.com/zsh-users/zsh-autosuggestions.git
+add_plugin https://github.com/Aloxaf/fzf-tab
 
 unset PLUGINS_DIR
 unfunction add_plugin

@@ -11,6 +11,10 @@ alias gwtls="git worktree list"
 alias gwtrm="git worktree remove"
 alias gswc="git switch -c"
 alias gss="git stash show --patch"
+alias gsl="git stash list"
+alias gd="git diff"
+alias nd="nvim +DiffviewOpen"
+alias gds="git diff --staged"
 
 function gl {
   if [[ "$(git rev-parse --is-bare-repository)" == "true" ]]; then
