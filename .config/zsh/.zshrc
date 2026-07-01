@@ -74,6 +74,8 @@ alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef dotfiles=git
 
+alias md="mkdir -p"
+
 source "$ZDOTDIR/plugins/plugins"
 
 eval "$(brew shellenv)"
@@ -266,7 +268,6 @@ function update-packages {
   dotnet tool update --global --all
   rustup update
   cargo update
-  cargo install --list | grep : | awk '{print $1}' | xargs -I {} cargo install {}
   nvim --headless -c "lua vim.pack.update(nil, { force = true })" -c "qa"
   ~/.tmux/plugins/tpm/bin/clean_plugins
   ~/.tmux/plugins/tpm/bin/install_plugins
@@ -286,6 +287,7 @@ source "${ZDOTDIR}/tmux.zsh"
 source "${ZDOTDIR}/dev.zsh"
 source "${ZDOTDIR}/git.zsh"
 source "${ZDOTDIR}/kubernetes"
+source "${ZDOTDIR}/docker"
 
 ### Secrets ###
 if [ -f "$HOME/.secrets.sh" ]; then

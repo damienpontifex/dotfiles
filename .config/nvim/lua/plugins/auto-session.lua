@@ -1,6 +1,9 @@
 vim.pack.add({ "https://github.com/rmagatti/auto-session" })
 
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+-- NOTE: 'localoptions' is intentionally omitted. It freezes buffer-local options
+-- (incl. indentexpr) into the session file and replays them on restore, which
+-- overrides filetype-derived settings (e.g. our treesitter indent autocmd).
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 
 require("auto-session").setup({
 	suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },

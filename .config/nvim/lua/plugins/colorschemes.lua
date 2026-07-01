@@ -1,5 +1,6 @@
 vim.pack.add({
-	"https://github.com/joshdick/onedark.vim",
+	-- "https://github.com/joshdick/onedark.vim",
+	"https://github.com/olimorris/onedarkpro.nvim",
 	"https://github.com/Mofiqul/vscode.nvim",
 	"https://github.com/folke/tokyonight.nvim",
 	"https://github.com/projekt0n/github-nvim-theme",

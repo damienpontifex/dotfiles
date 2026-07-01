@@ -54,14 +54,14 @@ vim.opt.autowrite = true
 vim.opt.autowriteall = true
 vim.opt.swapfile = false
 vim.opt.updatetime = 250 -- faster CursorHold events (affects diagnostics, git signs)
-vim.opt.sessionoptions = "buffers,tabpages,winsize"
-vim.opt.undodir = vim.fn.stdpath('data') .. '/undodir'
+-- vim.opt.sessionoptions = "buffers,tabpages,winsize" -- Setup in auto-session
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undofile = true
 
 -- ============================================================
 -- Completion & Navigation
 -- ============================================================
-vim.opt.completeopt:append({"menuone", "noselect",  "noinsert", "fuzzy"})
+vim.opt.completeopt:append({ "menuone", "noselect", "noinsert", "fuzzy" })
 -- Include omnifunc in nvim complete
 vim.opt.complete:append("o")
 vim.opt.path:append({ "**" }) -- recursive :find / :sfind / :tabfind

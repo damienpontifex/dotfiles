@@ -1,10 +1,12 @@
 vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter",
-  "https://github.com/nvim-treesitter/nvim-treesitter-context",
+	"https://github.com/nvim-treesitter/nvim-treesitter-context",
 })
 
 -- Sticky scroll/context locking
-require("treesitter-context").setup()
+require("treesitter-context").setup({
+	mode = "topline",
+})
 
 local nvim_treesitter = require("nvim-treesitter")
 -- Supported languages https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
@@ -59,8 +61,17 @@ vim.api.nvim_create_autocmd("FileType", {
 		-- Folds
 		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		vim.wo[0][0].foldmethod = "expr"
-		-- Indentation
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		-- Indentation: only use treesitter indent where an indents query exists,
+		-- otherwise fall back to autoindent so `o`/`O` don't drop to column 0.
+		local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+		if lang and vim.treesitter.query.get(lang, "indents") then
+			print("Using treesitter indentation")
+			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		else
+			print("Using nvim indentation")
+			vim.bo.indentexpr = ""
+			vim.bo.autoindent = true
+		end
 	end,
 })
 

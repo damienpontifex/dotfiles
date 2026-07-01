@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 		end
 
 		if client.name == "bicep" or client.name == "kotlin_lsp" then
-			vim.lsp.log.set_level(vim.lsp.log_levels.TRACE)
+			-- vim.lsp.log.set_level(vim.lsp.log_levels.TRACE)
 		end
 
 		-- TODO: refine
