@@ -61,6 +61,8 @@
   main-branch = !git rev-parse --abbrev-ref origin/HEAD | cut -d'/' -f2
   update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
   compare-branch = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
+  branch-diff = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
+  branch-files = "!f() { git diff --name-only origin/$(git main-branch)..HEAD; }; f"
 
 [push]
   autoSetupRemote = true
@@ -113,8 +115,6 @@
 
 [credential]
   helper = osxkeychain
-  helper =
-  helper = /usr/local/share/gcm-core/git-credential-manager
 
 [submodule]
   recurse = true
@@ -128,10 +128,6 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
-
-[credential "https://dev.azure.com"]
-  useHttpPath = true
-
 [credential "https://github.com"]
   username = damienpontifex
 

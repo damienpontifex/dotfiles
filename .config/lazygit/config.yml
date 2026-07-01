@@ -4,7 +4,7 @@ git:
   autoRefresh: true
   pagers:
     - colorArg: always
-      pager: delta --dark --paging=never --line-numbers
+      pager: delta --dark --paging=never --line-numbers # --side-by-side
 gui:
   showCommandLog: false
   theme:
@@ -28,5 +28,7 @@ gui:
   #--line-numbers --features=colibri --syntax-theme base16-256 -s
   timeFormat: "2006-01-02 15:04:05"
   shortTimeFormat: "15:04"
+  sidePanelWidth: 0.2
 quitOnTopLevelReturn: false
 disableStartupPopups: true
+

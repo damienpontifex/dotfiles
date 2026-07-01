@@ -1,9 +1,8 @@
-tap "azure/bicep"
-tap "azure/functions"
-tap "azure/kubelogin"
+tap "azure/bicep", trusted: true
+tap "azure/functions", trusted: true
 tap "codecrafters-io/tap"
-tap "jesseduffield/lazygit"
-tap "probe-rs/probe-rs"
+tap "jesseduffield/lazygit", trusted: true
+tap "probe-rs/probe-rs", trusted: true
 tap "sst/tap"
 
 brew "age"
@@ -38,10 +37,11 @@ brew "jsonnet"
 brew "jsonnet-bundler"
 brew "k3d"
 brew "kubectl"
+brew "kubeconform"
 brew "kustomize"
-brew "Azure/kubelogin/kubelogin"
+brew "Azure/kubelogin/kubelogin", trusted: true
 brew "krew"
-brew "derailed/k9s/k9s"
+brew "derailed/k9s/k9s", trusted: true
 brew "lazydocker"
 brew "lazygit"
 brew "llm"
@@ -82,6 +82,11 @@ cargo "espflash"
 go "honnef.co/go/tools/cmd/staticcheck"
 go "golang.org/x/tools/gopls"
 
+krew "edit-status"
+krew "revisions"
+krew "tree"
+krew "who-can"
+
 cask "drawio"
 cask "font-cascadia-mono-nf"
 cask "font-hack-nerd-font"
@@ -99,3 +104,4 @@ local_brewfile_path = File.join(brewfile_dir, "Brewfile.local")
 if File.exist?(local_brewfile_path)
   instance_eval(File.read(local_brewfile_path))
 end
+
