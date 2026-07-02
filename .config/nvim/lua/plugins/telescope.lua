@@ -9,9 +9,16 @@ vim.pack.add({
 local lga_actions = require("telescope-live-grep-args.actions")
 local builtin = require("telescope.builtin")
 
+local action_layout = require("telescope.actions.layout")
+local actions = require("telescope.actions")
 require("telescope").setup({
 	pickers = {
-		find_files = {},
+		find_files = {
+			preview = false,
+			layout_config = {
+				width = 0.5,
+			},
+		},
 	},
 	extensions = {
 		fzf = {},
@@ -27,7 +34,7 @@ require("telescope").setup({
 			preview_width = 0.5,
 		},
 		-- path_display = { "smart" },
-		path_display = { "filename_first", shorten = { len = 3, exclude = { 1, -1 } } },
+		path_display = { "filename_first" }, -- shorten = { len = 3, exclude = { 1, -1 } } },
 		mappings = {
 			i = {
 				["<CR>"] = function(prompt_bufnr)
@@ -36,12 +43,15 @@ require("telescope").setup({
 				end,
 				["<C-k>"] = lga_actions.quote_prompt(),
 				["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+				["<M-p>"] = action_layout.toggle_preview,
+				["<esc>"] = actions.close,
 			},
 			n = {
 				["<CR>"] = function(prompt_bufnr)
 					require("telescope.actions").select_default(prompt_bufnr)
 					vim.cmd("normal! zt")
 				end,
+				["<M-p>"] = action_layout.toggle_preview,
 			},
 		},
 	},
@@ -59,17 +69,22 @@ vim.keymap.set("n", "<Leader>ff", function()
 	builtin.find_files({ hidden = true, no_ignore = true })
 end, { desc = "Find files (all)" })
 
-vim.keymap.set("n", "<C-f>", require("telescope").extensions.live_grep_args.live_grep_args, { desc = "Grep" })
+vim.keymap.set(
+	"n",
+	"<C-f>",
+	require("telescope").extensions.live_grep_args.live_grep_args,
+	{ desc = "Telescope: Grep" }
+)
 vim.keymap.set("n", "<Leader>fg", builtin.live_grep, { desc = "Grep" })
-vim.keymap.set("n", "<Leader>gf", builtin.git_files, { desc = "[G]it [F]iles" })
-vim.keymap.set("n", "<Leader><space>", builtin.buffers, { desc = "Find buffers" })
-vim.keymap.set("n", "<Leader>fb", builtin.buffers, { desc = "Find buffers" })
-vim.keymap.set("n", "<Leader>fc", builtin.commands, { desc = "[F]ind [C]ommands" })
-vim.keymap.set("n", "<Leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
-vim.keymap.set("n", "<Leader>gs", builtin.git_status, { desc = "[G]it [S]tatus" })
-vim.keymap.set("n", "<Leader>gb", builtin.git_branches, { desc = "[G]it [B]ranches" })
-vim.keymap.set("n", "<Leader>km", builtin.filetypes, { desc = "Change file type" })
+vim.keymap.set("n", "<Leader>gf", builtin.git_files, { desc = "Telescope: [G]it [F]iles" })
+vim.keymap.set("n", "<Leader><space>", builtin.buffers, { desc = "Telescope: Find buffers" })
+vim.keymap.set("n", "<Leader>fb", builtin.buffers, { desc = "Telescope: Find buffers" })
+vim.keymap.set("n", "<Leader>fc", builtin.commands, { desc = "Telescope: [F]ind [C]ommands" })
+vim.keymap.set("n", "<Leader>fk", builtin.keymaps, { desc = "Telescope: [F]ind [K]eymaps" })
+vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope: [F]ind [H]elp" })
+vim.keymap.set("n", "<Leader>gs", builtin.git_status, { desc = "Telescope: [G]it [S]tatus" })
+vim.keymap.set("n", "<Leader>gb", builtin.git_branches, { desc = "Telescope: [G]it [B]ranches" })
+vim.keymap.set("n", "<Leader>km", builtin.filetypes, { desc = "Telescope: Change file type" })
 
 vim.api.nvim_create_autocmd("PackChanged", {
 	desc = "Handle telescope required setup",

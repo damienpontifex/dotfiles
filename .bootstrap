@@ -42,6 +42,7 @@ add_ext() {
   fi
 }
 
+# Install/update Tmux Plugin Manager
 add_ext https://github.com/tmux-plugins/tpm.git ~/.tmux/plugins/tpm
 
 # Turn off bouncing dock icons

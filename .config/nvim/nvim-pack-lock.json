@@ -61,6 +61,10 @@
       "rev": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03",
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
     },
+    "lazydev.nvim": {
+      "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
+      "src": "https://github.com/folke/lazydev.nvim"
+    },
     "lua-json5": {
       "rev": "713407f19e6155579a6594d56e6cfe616fddb39c",
       "src": "https://github.com/Joakker/lua-json5"
@@ -128,6 +132,10 @@
     "nvim-web-devicons": {
       "rev": "2795c26c916bb3c57dde308b82be51971fa92747",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "onedark.vim": {
+      "rev": "47bec7a6196a843dad195d2666c3ac84c6e80c78",
+      "src": "https://github.com/joshdick/onedark.vim"
     },
     "onedarkpro.nvim": {
       "rev": "f5fddfd5122fe00421e199151ae4fe8571a02898",
