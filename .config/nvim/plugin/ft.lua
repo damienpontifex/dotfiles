@@ -6,11 +6,16 @@ vim.filetype.add({
 		["*.envrc"] = "sh",
 		["*.env.*"] = "sh",
 		["kuberc"] = "yaml",
-    ["justfile"] = "make",
+		["justfile"] = "make",
 	},
 	pattern = {
 		[".*%.env%..*"] = "sh",
 		["Brewfile.*"] = "ruby",
+		[".*/templates/.*%.tpl"] = "helm",
+		[".*/templates/.*%.yaml"] = "helm",
+		[".*/templates/.*%.yml"] = "helm",
+		["helmfile.*%.yaml"] = "helm",
+		["helmfile.*%.yml"] = "helm",
 	},
 	extension = {
 		bicep = "bicep",
