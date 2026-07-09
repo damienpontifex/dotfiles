@@ -1,0 +1,15 @@
+views:
+  v1/pods:
+    columns:
+      - OWNERKIND:.metadata.ownerReferences[0].kind
+  v1/nodes:
+    sortColumn: AGE:asc
+    columns:
+      - ROLE:.metadata.labels.role
+      - TYPE:.metadata.labels.beta\.kubernetes\.io/instance-type
+      - POOL:.metadata.labels.karpenter\.sh/nodepool
+      - ARCH:.metadata.labels.kubernetes\.io/arch
+      - ZONE:.metadata.labels.topology\.kubernetes\.io/zone
+  events.k8s.io/v1/events:
+    sortColumn: "LAST SEEN:asc"
+    columns: []
