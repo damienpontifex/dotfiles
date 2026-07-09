@@ -1,0 +1,51 @@
+k9s:
+  liveViewAutoRefresh: true
+  gpuVendors: {}
+  screenDumpDir: /Users/dpontifex/Library/Application Support/k9s/screen-dumps
+  refreshRate: 2
+  apiServerTimeout: 2m0s
+  maxConnRetry: 5
+  readOnly: false
+  # Use :q(quit) to exit
+  noExitOnCtrlC: true
+  portForwardAddress: localhost
+  ui:
+    enableMouse: true
+    headless: true
+    logoless: false
+    crumbsless: false
+    splashless: true
+    # Toggles reactive UI. This option provide for watching on disk artifacts changes and update the UI live Defaults to false.
+    reactive: true
+    noIcons: false
+    defaultsToFullScreen: true
+    useFullGVRTitle: false
+    skin: one-dark
+  skipLatestRevCheck: true
+  disablePodCounting: false
+  shellPod:
+    image: busybox:1.35.0
+    namespace: default
+    limits:
+      cpu: 100m
+      memory: 100Mi
+  imageScans:
+    enable: false
+    exclusions:
+      namespaces: []
+      labels: {}
+  logger:
+    tail: 100
+    buffer: 5000
+    sinceSeconds: -1
+    textWrap: false
+    disableAutoscroll: false
+    showTime: false
+  thresholds:
+    cpu:
+      critical: 90
+      warn: 70
+    memory:
+      critical: 90
+      warn: 70
+  defaultView: ""
