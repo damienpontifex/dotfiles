@@ -16,7 +16,9 @@ require("telescope").setup({
 		find_files = {
 			preview = false,
 			layout_config = {
-				width = 0.5,
+				width = function(_, max_columns, _)
+					return math.min(math.max(100, math.floor(max_columns * 0.5)), max_columns - 4)
+				end,
 			},
 		},
 	},
