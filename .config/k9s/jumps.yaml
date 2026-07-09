@@ -1,0 +1,7 @@
+jumps:
+  "karpenter.sh/v1/nodepools":
+    targetGVR: "v1/nodes"
+    labelSelector: "karpenter.sh/nodepool={{.metadata.name}}"
+  "karpenter.sh/v1/nodeclaims":
+    targetGVR: "v1/nodes"
+    fieldSelector: "metadata.name={{.status.nodeName}}"
