@@ -24,6 +24,7 @@
   preloadindex = true # preload index for faster status
   excludesfile = ~/.config/git/ignore
   editor = nvim
+	pager = hunk pager
 
 [blame]
   coloring = highlightRecent

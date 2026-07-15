@@ -39,6 +39,8 @@ function gl {
 # branch is deleted too (skipped if the worktree was dirty and thus kept).
 # Pass -n/--dry-run to preview without removing.
 function gwt-clean {
+  # trap 'set +x' EXIT
+  # set -x;
   if ! git rev-parse --git-dir >/dev/null 2>&1; then
     echo "Not inside a git repository" >&2
     return 1
@@ -52,19 +54,19 @@ function gwt-clean {
   # with a space/tab IFS, zsh collapses empty fields, so a live branch's empty
   # upstream:track would shift the columns. '|' preserves empty fields (and git
   # keeps it well away from these path/branch values in practice).
-  local track path branch
-  while IFS='|' read -r track path branch; do
+  local track wtpath branch
+  while IFS='|' read -r track wtpath branch; do
     # Only branches whose upstream is gone AND that have a worktree checked out.
-    [[ "$track" == "[gone]" && -n "$path" ]] || continue
+    [[ "$track" == "[gone]" && -n "$wtpath" ]] || continue
     if (( dry_run )); then
-      echo "[dry-run] would remove: $path (branch: $branch, upstream gone)"
+      echo "[dry-run] would remove: $wtpath (branch: $branch, upstream gone)"
     else
-      echo "Removing worktree: $path (branch: $branch, upstream gone)"
+      echo "Removing worktree: $wtpath (branch: $branch, upstream gone)"
       # Delete the local branch only if the worktree was actually removed
       # (remove refuses on a dirty worktree, in which case keep the branch).
-      git worktree remove "$path" && git branch -D "$branch"
+      git worktree remove "$wtpath" && git branch -D "$branch"
     fi
-  done < <(git for-each-ref --format='%(upstream:track)|%(worktreepath)|%(refname:short)' refs/heads)
+  done < <(git for-each-ref --format='%(upstream:track)|%(worktreepath)|%(refname:short)' refs/heads/$USER)
 }
 
 function git_main_branch {
@@ -80,6 +82,72 @@ function gwt_path {
   # Empty output if the branch isn't checked out in any worktree.
   git for-each-ref --format='%(worktreepath)' "refs/heads/${branch_name}"
 }
+
+# Overview of local branches: current marker, branch, upstream tracking state,
+# worktree (if checked out), last-commit age, sha and subject. Read-only.
+# Sorted most-recently-committed first. Scoped to refs/heads/$USER by default
+# (matching gwta's namespacing); pass a sub-path to narrow, or '' for all:
+#   gwt-status            -> refs/heads/$USER
+#   gwt-status feature    -> refs/heads/feature
+#   gwt-status ''         -> refs/heads (every local branch)
+function gwt-status {
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "Not inside a git repository" >&2
+    return 1
+  fi
+
+  local pattern="refs/heads/${1-$USER}"
+  local color=0; [[ -t 1 ]] && color=1   # only colorize for a terminal
+
+  git for-each-ref --sort=-committerdate \
+    --format='%(HEAD)%09%(refname:short)%09%(upstream:short)%09%(upstream:track,nobracket)%09%(worktreepath)%09%(objectname:short)%09%(committerdate:relative)%09%(contents:subject)' \
+    "$pattern" |
+  awk -F'\t' -v color="$color" '
+    BEGIN {
+      if (color) {
+        reset="\033[0m"; red="\033[31m"; grn="\033[32m"; yel="\033[33m";
+        dim="\033[2m"; cyan="\033[36m"; bold="\033[1m";
+      }
+      wb=6; ws=6; ww=8; wd=7;   # min widths: BRANCH STATUS WORKTREE UPDATED
+    }
+    {
+      head=$1; branch=$2; up=$3; track=$4; wt=$5; sha=$6; date=$7; subj=$8;
+
+      if      (track=="gone") { st="gone";  sc=red }   # upstream deleted
+      else if (track!="")     { st=track;   sc=yel }   # ahead/behind
+      else if (up!="")        { st="ok";    sc=grn }   # tracks upstream, in sync
+      else                    { st="local"; sc=dim }   # no upstream
+
+      if (wt!="") { n=split(wt,a,"/"); w=a[n] } else { w="-" }
+      if (length(subj)>50) subj=substr(subj,1,49) "\342\200\246";  # ellipsis
+
+      H[NR]=(head=="*")?"*":" "; B[NR]=branch; ST[NR]=st; SC[NR]=sc;
+      W[NR]=w; D[NR]=date; SH[NR]=sha; SU[NR]=subj;
+
+      if (length(branch)>wb) wb=length(branch);
+      if (length(st)>ws)     ws=length(st);
+      if (length(w)>ww)      ww=length(w);
+      if (length(date)>wd)   wd=length(date);
+      rows=NR;
+    }
+    END {
+      if (rows==0) { print "No matching local branches"; exit }
+      printf "%s  %-*s  %-*s  %-*s  %-*s  %-7s  %s%s\n",
+        dim, wb,"BRANCH", ws,"STATUS", ww,"WORKTREE", wd,"UPDATED", "SHA", "MESSAGE", reset;
+      for (i=1;i<=rows;i++) {
+        hc=(H[i]=="*")?grn bold:"";
+        printf "%s%s %-*s%s  %s%-*s%s  %s%-*s%s  %-*s  %s%-7s%s  %s\n",
+          hc, H[i], wb, B[i], reset,
+          SC[i], ws, ST[i], reset,
+          cyan, ww, W[i], reset,
+          wd, D[i],
+          dim, SH[i], reset,
+          SU[i];
+      }
+    }
+  '
+}
+alias gwts="gwt-status"
 
 # Ensure our origin and main worktree is up to date. Cleanup any stale worktrees. Usage: `gmain`
 function gmain {
