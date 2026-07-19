@@ -12,9 +12,14 @@ kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
 
 # source <(kubectl completion zsh)
 
-alias k=kubectl
+alias kubectl='kubecolor'
+alias k='kubectl'
 alias kgp='kubectl get pods'
+alias kdp='kubectl describe pods'
 alias kgd='kubectl get deployment'
+alias kdd='kubectl describe deployment'
+alias kgsts='kubectl get statefulset'
+alias kdsts='kubectl describe statefulset'
 alias kgcm='kubectl get configmaps'
 alias kgsec='kubectl get secret'
 alias kgns='kubectl get namespace'

@@ -38,6 +38,7 @@ brew "jsonnet"
 brew "jsonnet-bundler"
 brew "k3d"
 brew "kubectl"
+brew "kubecolor"
 brew "kubeconform"
 brew "kustomize"
 brew "Azure/kubelogin/kubelogin", trusted: true
