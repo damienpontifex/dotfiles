@@ -1,169 +1,142 @@
+[alias]
+	c = commit
+	s = status
+	last = log -1 HEAD
+	# https://stackoverflow.com/a/11688523/472927
+	s = "!f() { git stash show stash^{/$*} -p; }; f"
+	a = "!f() { git stash apply stash^{/$*}; }; f"
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
+	graph-log = log --oneline --decorate --graph --all
+	# main is normally the common parent, so squash back until common ancestor
+	squash = "!f() { git fetch origin && git rebase --interactive $(git merge-base HEAD ${1:-origin/$(git main-branch)}); }; f"
+	# Rebase branch back onto main off of original base $1
+	rb-onto = "!f() { git rebase --onto ${2:-origin/$(git main-branch)} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
+	# Delete any branches where the tracking remote has been deleted
+	clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
+	root = rev-parse --show-toplevel
+	browser-url = "!f() { git remote get-url origin | sed -E 's|^git@([^:]+):|https://\\1/|' | sed -E 's|\\.git$||'; }; f"
+	open = "!f() { open $(git browser-url); }; f"
+	pr = "!f() { url=$(git browser-url); \
+		[[ "$url" == "*github*" ]] && open "$url/pulls/compare/$(git main-branch)...$(git branch --show-current)"; \
+		[[ "$url" == "*bitbucket*" ]] && open "$url/pull-requests/new?source=$(git branch --show-current)"; \
+	}; f"
+	main-branch = !git rev-parse --abbrev-ref origin/HEAD | cut -d'/' -f2
+	update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
+	compare-branch = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
+	branch-diff = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
+	branch-files = "!f() { git diff --name-only origin/$(git main-branch)..HEAD; }; f"
+
 [user]
-  name = Damien Pontifex
-  email = damien.pontifex@gmail.com
-  # ssh-keygen -C "damien.pontifex@gmail.com" -f ~/.ssh/id_ed25519_git_signing_personal
-  # gh ssh-key add --title "MBP Personal Signing Key" --type signing ~/.ssh/id_ed25519_git_signing_personal.pub
-  signingKey = ~/.ssh/id_ed25519_git_signing_personal.pub
+	name = Damien Pontifex
+	email = damien.pontifex@gmail.com
+	# ssh-keygen -C "damien.pontifex@gmail.com" -f ~/.ssh/id_ed25519_git_signing_personal
+	# gh ssh-key add --title "MBP Personal Signing Key" --type signing ~/.ssh/id_ed25519_git_signing_personal.pub
+	signingKey = ~/.ssh/id_ed25519_git_signing_personal.pub
 
 [commit]
-  gpgsign = true
-  verbose = true # add more content to commit messages
-  template = ~/.config/git/template
+	gpgsign = true
+	template = ~/.config/git/template
 
 [tag]
-  gpgSign = true
-  sort = -taggerdate
+	gpgSign = true
+	sort = -taggerdate
 
 [gpg]
-  format = ssh
+	format = ssh
 
 [core]
-  autocrlf = input # keep newlines as in input
-  compression = 9 # trade cpu for network
-  whitespace = error # treat incorrect whitespace as an error
-  preloadindex = true # preload index for faster status
-  excludesfile = ~/.config/git/ignore
-  editor = nvim
 	pager = hunk pager
+	autocrlf = input # keep newlines as in input
+	compression = 9 # trade cpu for network
+	whitespace = error # treat incorrect whitespace as an error
+	preloadindex = true # preload index for faster status
+	excludesfile = ~/.config/git/ignore
+	editor = nvim
 
 [blame]
-  coloring = highlightRecent
-  date = relative
+	coloring = highlightRecent
+	date = relative
 
 [log]
-  abbrevCommit = true
-  graphColors = blue,yellow,cyan,magenta,green,red
+	abbrevCommit = true
+	graphColors = blue,yellow,cyan,magenta,green,red
 
 [status]
-  branch = true
-  short = false
-  showStash = true
-  showUntrackedFiles = all
+	branch = true
+	short = false
+	showStash = true
+	showUntrackedFiles = all
 
 [includeIf "gitdir:~/atlassian/"]
-  path = ~/atlassian/.gitconfig
-
-[alias]
-  graph-log = log --oneline --decorate --graph --all
-  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
-  # main is normally the common parent, so squash back until common ancestor
-  squash = "!f() { git fetch origin && git rebase --interactive $(git merge-base HEAD ${1:-origin/$(git main-branch)}); }; f"
-  # Rebase branch back onto main off of original base $1
-  rb-onto = "!f() { git rebase --onto ${2:-origin/$(git main-branch)} $(git merge-base --fork-point $1 HEAD) HEAD }; f"
-  # Delete any branches where the tracking remote has been deleted
-  clean-gone = "!f() { for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
-  root = rev-parse --show-toplevel
-  browser-url = "!f() { git remote get-url origin | sed -E 's|^git@([^:]+):|https://\\1/|' | sed -E 's|\\.git$||'; }; f"
-  open = "!f() { open $(git browser-url); }; f"
-  pr = "!f() { url=$(git browser-url); \
-    [[ "$url" == "*github*" ]] && open "$url/pulls/compare/$(git main-branch)...$(git branch --show-current)"; \
-    [[ "$url" == "*bitbucket*" ]] && open "$url/pull-requests/new?source=$(git branch --show-current)"; \
-  }; f"
-  main-branch = !git rev-parse --abbrev-ref origin/HEAD | cut -d'/' -f2
-  update-branch = "!git fetch origin && git rebase origin/$(git main-branch)"
-  compare-branch = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
-  branch-diff = "!f() { git diff origin/$(git main-branch)..HEAD; }; f"
-  branch-files = "!f() { git diff --name-only origin/$(git main-branch)..HEAD; }; f"
+	path = ~/atlassian/.gitconfig
 
 [push]
-  autoSetupRemote = true
-  default = current
-  followTags = true # push tags when pushing branches
-  gpgSign = false
+	autoSetupRemote = true
+	default = current
+	followTags = true # push tags when pushing branches
+	gpgSign = false
 
 [fetch]
-  prune = true
+	prune = true
 
 [pull]
-  rebase = true
-  default = current
-  autoStash = true
+	rebase = true
+	default = current
+	autoStash = true
 
 [merge]
-  autoStash = true
+	autoStash = true
 
 [rebase]
-  autostash = true
-  missingCommitsCheck = warn # warn if rebasing onto a branch with commits not in the current branch
+	autostash = true
+	missingCommitsCheck = warn # warn if rebasing onto a branch with commits not in the current branch
 
 [init]
-  defaultBranch = main
+	defaultBranch = main
 
 [branch]
-  sort = -committerdate # sort branches by last commit date
+	sort = -committerdate # sort branches by last commit date
 
 [mergetool]
-  prompt = false
-  keepBackup = false
+	prompt = false
+	keepBackup = false
 
 [difftool]
-  prompt = false
+	prompt = false
 
 [difftool "nvim_difftool"]
-  cmd = nvim -c \"packadd nvim.difftool\" -d \"$LOCAL\" \"$REMOTE\"
+	cmd = nvim -c \"packadd nvim.difftool\" -d \"$LOCAL\" \"$REMOTE\"
 
 # Use NeoVim diff as diff tool
 [merge]
-  # See available tools with `git mergetool --tool-help`
-  # tool = nvimdiff3
-  tool = nvim_difftool
+	# See available tools with `git mergetool --tool-help`
+	# tool = nvimdiff3
+	tool = nvim_difftool
 
 [rerere]
-  enabled = true
+	enabled = true
 
 [pager]
-  branch = false
+	branch = false
 
 [credential]
-  helper = osxkeychain
+	helper = /usr/local/share/gcm-core/git-credential-manager
 
 [submodule]
-  recurse = true
-  fetchJobs = 16
-
-[http]
-  cookiefile = /Users/ponti/.gitcookies
+	recurse = true
+	fetchJobs = 16
 
 [filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
-[credential "https://github.com"]
-  username = damienpontifex
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 
 # URL shortcuts
 [url "https://github.com/"]
-  insteadOf = "gh:"
+	insteadOf = "gh:"
 
-[url "https://github.com/damienpontifex/"]
-  insteadOf = "dp:"
-
-# Colors
-[color "blame"]
-    highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
-
-[color "branch"]
-    current  = magenta
-    local    = default
-    remote   = yellow
-    upstream = green
-    plain    = blue
-
-[color "diff"]
-    meta       = black bold
-    frag       = magenta
-    context    = white
-    whitespace = yellow reverse
-    old        = red
-
-[color.decorate]
-    HEAD = red
-    branch = blue
-    tag = yellow
-    remoteBranch = magenta
-[trace2]
-	eventTarget = af_unix:/Users/dpontifex/.gittrace/trace.sock
-	eventBrief = true
-	eventNesting = 1
-	configparams = custom.metacommands
+[hook "custom-commit-message"]
+	enabled = false
+	event = prepare-commit-msg
+	command = ~/.config/git/hooks/prepare-commit-message

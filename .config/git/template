@@ -1,0 +1,10 @@
+
+# feat|fix|chore|ci|docs|perf|refactor|revert|style|test(<scope>): summary (max 50 chars) [(no)issue-ref]
+
+# Why is this change required? What does it solve?
+# What side effects
+
+# Context, issue tracker IDS or related PRs:
+# Resolves: #123
+# See also: #456
+# Co-Authored-By: Name <email@example.com>
