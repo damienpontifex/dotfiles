@@ -8,7 +8,34 @@
 # exec 3>&2 2> startlog.$$
 # setopt xtrace prompt_subst
 
-# Load completions
+# ==============================================
+# History
+# ==============================================
+HISTFILE="$XDG_CACHE_HOME/zsh_history"
+HISTZIE=100000000
+SAVEHIST=100000000
+
+setopt append_history 
+setopt hist_find_no_dups 
+setopt hist_ignore_all_dups 
+setopt hist_ignore_dups 
+setopt hist_ignore_space 
+setopt hist_save_no_dups
+setopt inc_append_history 
+setopt share_history
+
+# ==============================================
+# Shell behaviour
+# ==============================================
+setopt auto_param_slash
+setopt auto_pushd 
+setopt autocd
+setopt nobeep
+setopt numeric_glob_sort
+
+# ==============================================
+# Completions
+# ==============================================
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
@@ -28,9 +55,6 @@ zstyle ':completion:*' completer _expand_alias _complete _ignored
 # `man zshoptions`
 # View all options and set values `set -o`
 setopt alwaystoend
-setopt append_history inc_append_history share_history
-setopt hist_find_no_dups hist_ignore_all_dups hist_ignore_dups hist_ignore_space hist_save_no_dups
-setopt auto_cd auto_pushd auto_param_slash
 setopt auto_menu menu_complete
 setopt complete_in_word no_case_glob no_case_match
 setopt globdots extended_glob
@@ -44,7 +68,9 @@ autoload -Uz run-help
 unalias run-help 2>/dev/null
 alias help=run-help
 
+# ==============================================
 # XDG Base Directories
+# ==============================================
 # https://wiki.archlinux.org/title/XDG_Base_Directory
 # Applications that use this https://wiki.archlinux.org/title/XDG_Base_Directory#Support
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -75,6 +101,9 @@ alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 compdef dotfiles=git
 
 alias md="mkdir -p"
+
+# Named directories, use with ~<name>
+hash -d obsidian=~/Library/Mobile\ Documents/iCloud\~md\~obsidian/Documents
 
 source "$ZDOTDIR/plugins/plugins"
 
@@ -226,7 +255,6 @@ alias lS='eza -1'                                                      # one col
 alias lt='eza --tree --level=2'                                        # tree
 
 export EDITOR=nvim
-
 
 # Get password value from keychain
 # Example usage export MY_PASSWORD="$(get-pw MY_PASSWORD)"

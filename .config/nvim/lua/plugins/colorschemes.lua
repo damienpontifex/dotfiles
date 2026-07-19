@@ -9,6 +9,9 @@ vim.pack.add({
 
 vim.cmd.colorscheme("onedark")
 
+-- Use `:highlight` to see current values
+-- `:highlight <group-name>` to view a single group
+
 -- Make comments stand out
 -- see |highlight-groups| or |lsp-highlight|
 vim.api.nvim_set_hl(0, "Comment", { fg = "#e5c07b", italic = true })

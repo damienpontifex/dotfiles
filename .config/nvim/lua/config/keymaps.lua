@@ -82,7 +82,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- <leader>q to delete buffer without closing window
 -- vim.keymap.set("n", "<leader>q", ":bp<CR>:bd#<CR>")
-vim.keymap.set("n", "<leader>q", function()
+vim.keymap.set("n", "<leader>w", function()
 	local listed_buffers = vim.tbl_filter(function(buf)
 		return vim.fn.buflisted(buf) == 1
 	end, vim.api.nvim_list_bufs())
@@ -94,6 +94,8 @@ vim.keymap.set("n", "<leader>q", function()
 		vim.cmd("enew")
 	end
 end, { desc = "Smart buffer close & cycle" })
+vim.keymap.set("n", "<leader>qq", "<cmd>%bd<CR>", { silent = true, desc = "Delete all buffers" })
+vim.keymap.set("n", "<leader>qo", "<cmd>%bd|e#<CR>", { silent = true, desc = "Delete all buffers except this one" })
 
 vim.keymap.set("n", "<space><space>x", "<cmd> source %<CR>", { desc = "Run current lua file" })
 vim.keymap.set("n", "<leader>x", ":.lua<CR>", { desc = "Run current lua line" })

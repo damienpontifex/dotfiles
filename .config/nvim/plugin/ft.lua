@@ -25,3 +25,10 @@ vim.filetype.add({
 		tmpl = "django",
 	},
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "gitconfig" },
+	callback = function()
+		vim.bo.expandtab = false
+	end,
+})
