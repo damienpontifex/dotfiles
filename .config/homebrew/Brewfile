@@ -5,6 +5,7 @@ tap "jesseduffield/lazygit", trusted: true
 tap "probe-rs/probe-rs", trusted: true
 tap "sst/tap"
 
+cask "nikitabobko/tap/aerospace", trusted: true
 brew "age"
 brew "argocd"
 brew "azcopy"
@@ -12,10 +13,12 @@ brew "azure-cli"
 brew "azure-functions-core-tools@4"
 brew "bat"
 brew "bicep"
+brew "felixkratz/formulae/borders", trusted: true
 brew "cloudflared"
 brew "cmatrix"
 brew "container", restart_service: true
 brew "coreutils"
+brew "crane"
 brew "eza"
 brew "fd"
 brew "ffmpeg"
