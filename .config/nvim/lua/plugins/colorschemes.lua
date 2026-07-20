@@ -12,6 +12,11 @@ vim.cmd.colorscheme("onedark")
 -- Use `:highlight` to see current values
 -- `:highlight <group-name>` to view a single group
 
+-- TODO: Source these colours so they match tmux ones I'm using
+-- NOTE: asdf
+-- FIXME: asdf
+vim.api.nvim_set_hl(0, "Normal", { bg = "#21252b" })
+
 -- Make comments stand out
 -- see |highlight-groups| or |lsp-highlight|
 vim.api.nvim_set_hl(0, "Comment", { fg = "#e5c07b", italic = true })
@@ -21,11 +26,24 @@ vim.api.nvim_set_hl(0, "LspCodeLensSeparator", { link = "LspInlayHint" })
 -- For lsp inline completion hint
 vim.api.nvim_set_hl(0, "ComplHint", { link = "LspInlayHint" })
 
-vim.api.nvim_set_hl(0, "TodoComment", { bg = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" }).fg })
-vim.api.nvim_set_hl(0, "FixmeComment", { link = "DiagnosticError" })
-vim.api.nvim_set_hl(0, "NoteComment", { link = "DiagnosticHint" })
+vim.api.nvim_set_hl(
+	0,
+	"TodoComment",
+	{ bg = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" }).fg, fg = "white", bold = true }
+)
+vim.api.nvim_set_hl(
+	0,
+	"FixmeComment",
+	{ bg = vim.api.nvim_get_hl(0, { name = "DiagnosticError" }).fg, fg = "white", bold = true }
+)
+vim.api.nvim_set_hl(
+	0,
+	"NoteComment",
+	{ bg = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" }).fg, fg = "white", bold = true }
+)
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = vim.api.nvim_create_augroup("damienpontifex/colours", { clear = true }),
 	pattern = "*",
 	callback = function()
 		vim.fn.matchadd("TodoComment", "TODO:")

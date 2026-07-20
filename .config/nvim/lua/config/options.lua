@@ -54,7 +54,6 @@ vim.opt.autowrite = true
 vim.opt.autowriteall = true
 vim.opt.swapfile = false
 vim.opt.updatetime = 250 -- faster CursorHold events (affects diagnostics, git signs)
--- vim.opt.sessionoptions = "buffers,tabpages,winsize" -- Setup in auto-session
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undofile = true
 

@@ -37,7 +37,7 @@ require("lualine").setup({
 	sections = {
 		-- lualine_a = {},
 		lualine_b = { "branch", "diff", "diagnostics" },
-		lualine_c = {},
+		lualine_c = { { "filename", path = 1 } },
 	},
 	inactive_sections = {
 		lualine_c = {},
