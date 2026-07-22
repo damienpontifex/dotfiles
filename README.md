@@ -2,6 +2,20 @@
 
 Following guide at https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 
+## Local changes not wanting to be tracked
+i.e. ignore file from git
+```bash
+config update-index --skip-worktree <file>
+```
+
+If wanting to add new additions
+```bash
+# Interactively stage specific lines/hunk
+git add -p <file>
+# Re-apply the ignore flag
+git update-index --skip-worktree <file>
+```
+
 ## New machine
 
 [![CI](https://github.com/damienpontifex/dotfiles/workflows/CI/badge.svg)](https://github.com/damienpontifex/dotfiles/actions/workflows/ci.yml)

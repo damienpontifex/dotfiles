@@ -1,10 +1,32 @@
 [alias]
 	c = commit
 	s = status
-	last = log -1 HEAD
+	co = checkout
+	cob = checkout -b
+	del = branch -D
+	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+	sw = switch
+	swc = switch -c
+	# last = log -1 HEAD
+	last = switch - # Jump to previous branch
+	wip = "!git add -A && git commit -m WIP --no-verify"
+	unwip = reset --soft HEAD~1 # Undo WIP, keep changes staged
+	undo = reset --mixed HEAD~1
+	uncommit = reset --soft HEAD~1
+	wipe = reset --hard HEAD~1
+	amend = commit --amend --no-edit
+	fixup = commit --fixup
+	# Stash
+	sl = stash list
+	ss = stash show -p
+	sp = stash push -m
+	spu = stash push -u -m
+	spp = stash push -p -m
+	spop = stash pop
+	sbr = stash branch
 	# https://stackoverflow.com/a/11688523/472927
-	s = "!f() { git stash show stash^{/$*} -p; }; f"
-	a = "!f() { git stash apply stash^{/$*}; }; f"
+	# s = "!f() { git stash show stash^{/$*} -p; }; f"
+	# a = "!f() { git stash apply stash^{/$*}; }; f"
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(green)<%an>%Creset' --abbrev-commit --all --decorate
 	graph-log = log --oneline --decorate --graph --all
 	# main is normally the common parent, so squash back until common ancestor

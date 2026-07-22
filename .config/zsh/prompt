@@ -10,7 +10,7 @@ precmd() {
     local stash_count
     stash_count=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
     if (( stash_count > 0 )); then
-      stash_info="%F{yellow} ✦${stash_count}%f"
+      stash_info="%F{yellow} ✦${stash_count} stash entries%f"
     fi
   fi
   # Left: path+branch+stash
