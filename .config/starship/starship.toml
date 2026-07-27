@@ -1,7 +1,7 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
-format = """$directory$git_branch$git_status$git_state$character$fill $all"""
+format = """$directory$git_branch$git_status$git_state$git_metrics$character$fill $all"""
 # palette = ""
 right_format = """"""
 
@@ -58,14 +58,17 @@ disabled = true
 symbol = " "
 
 [git_commit]
-tag_symbol = '  '
+tag_symbol = "  "
+
+[git_metrics]
+disabled = false
 
 [golang]
 symbol = " "
 
 [gradle]
 symbol = " "
-format = '[$symbol($version )]($style)'
+format = "[$symbol($version )]($style)"
 
 [helm]
 symbol = " "
@@ -75,16 +78,16 @@ ssh_symbol = " "
 
 [java]
 symbol = " "
-format = '[${symbol}(${version} )]($style)'
+format = "[${symbol}(${version} )]($style)"
 
 [kotlin]
 symbol = " "
-format = '[$symbol($version )]($style)'
+format = "[$symbol($version )]($style)"
 
 [kubernetes]
 symbol = "󱃾 "
 disabled = false
-style = '#326ce5'
+style = "#326ce5"
 format = '[$symbol $context \($namespace\)]($style) '
 # contexts = [
 #   { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
