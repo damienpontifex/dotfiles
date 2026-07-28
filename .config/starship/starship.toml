@@ -67,6 +67,7 @@ disabled = false
 symbol = " "
 
 [gradle]
+disabled = true
 symbol = " "
 format = "[$symbol($version )]($style)"
 

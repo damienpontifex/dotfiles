@@ -27,11 +27,6 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME '
 config submodule update --init --recursive
 config config --local status.showUntrackedFiles no
 
-# Install oh-my-zsh
-if [ ! -d "${HOME}/.oh-my-zsh" ]; then
-  git clone https://github.com/ohmyzsh/ohmyzsh.git $HOME/.oh-my-zsh 
-fi
-
 # source $HOME/.zshrc
 
 add_ext() {
@@ -56,10 +51,13 @@ if [ ! -x $(command -v brew) ]; then
   export PATH="/opt/homebrew/bin:${PATH}"
 fi
 
-brew bundle install --upgrade --global --cleanup --verbose
-# nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+# Install rustup
+if [ ! -x $(command -v rustup) ]; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
 
-$(brew --prefix fzf)/install --all
+brew bundle install --upgrade --global --verbose
+# nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 # brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
 # sh -c "$(curl -fsSL https://aka.ms/install-artifacts-credprovider.sh)"
@@ -70,5 +68,3 @@ defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
 echo "Setup caps lock as escape as shown at https://stackoverflow.com/a/40254864/1602729"
 
-[ -f $HOME/.git-completion.zsh ] || \
-  curl -L -o $HOME/.git-completion.zsh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh 
