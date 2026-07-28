@@ -33,6 +33,9 @@ setopt autocd
 setopt nobeep
 setopt numeric_glob_sort
 
+# Use neovim for man pages
+export MANPAGER='nvim +Man!'
+
 # ==============================================
 # Completions
 # ==============================================
@@ -291,7 +294,7 @@ function no-history {
 
 function update-packages {
   brew update
-  brew bundle install --upgrade --cleanup --file ~/.config/homebrew/Brewfile # --verbose
+  brew bundle install --upgrade --file ~/.config/homebrew/Brewfile # --verbose
   npm update --global
   dotnet tool update --global --all
   rustup update
