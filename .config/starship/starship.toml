@@ -77,10 +77,12 @@ symbol = " "
 ssh_symbol = " "
 
 [java]
+disabled = true
 symbol = " "
 format = "[${symbol}(${version} )]($style)"
 
 [kotlin]
+disabled = true
 symbol = " "
 format = "[$symbol($version )]($style)"
 

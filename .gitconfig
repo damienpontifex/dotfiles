@@ -7,6 +7,8 @@
 	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
 	sw = switch
 	swc = switch -c
+	swt = switch -t
+	swm = "!f{} { git switch $(git main-branch) }; f"
 	# last = log -1 HEAD
 	last = switch - # Jump to previous branch
 	wip = "!git add -A && git commit -m WIP --no-verify"

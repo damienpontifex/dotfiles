@@ -5,7 +5,13 @@ return {
 			hierarchicalDocumentSymbolSupport = true,
 			schemaStore = { enable = false, url = "" },
 			schemas = vim.tbl_deep_extend("force", require("schemastore").yaml.schemas(), {
-				["kubernetes"] = "*.yaml",
+				["kubernetes"] = {
+					"*.k8s.yaml",
+					"k8s/**/*.yaml",
+					"kube/**/*.yaml",
+					"kubernetes/**/*.yaml",
+					"manifests/**/*.yaml",
+				},
 			}),
 			kubernetesCRDStore = { enable = true },
 			format = {

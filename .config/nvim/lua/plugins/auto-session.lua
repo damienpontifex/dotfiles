@@ -49,3 +49,16 @@ require("auto-session").setup({
 		end
 	end,
 })
+
+-- auto-session omits localoptions, so restored buffers miss EditorConfig's
+-- BufReadPost pass and fall back to global indent defaults. Re-apply it.
+vim.api.nvim_create_autocmd("SessionLoadPost", {
+	group = vim.api.nvim_create_augroup("editorconfig_reload", { clear = true }),
+	callback = function()
+		for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
+				require("editorconfig").config(buf)
+			end
+		end
+	end,
+})
