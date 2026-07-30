@@ -10,8 +10,6 @@ fi
 
 kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
 
-# source <(kubectl completion zsh)
-
 alias kubectl='kubecolor'
 alias k='kubectl'
 alias kgp='kubectl get pods'
@@ -25,11 +23,16 @@ alias kgsec='kubectl get secret'
 alias kgns='kubectl get namespace'
 alias kcn='kubectl config set-context --current --namespace'
 
+# Trailing space expands the following alias (e.g. `watch kgp`); keep it.
+alias watch='KUBECOLOR_FORCE_COLORS=true watch --color '
+
+compdef k=kubectl
+compdef kubecolor=kubectl
+
 # k8s
 export KUBE_EDITOR=nvim
 # Use ~/.kube/kuberc for kubectl config
 export KUBECTL_KUBERC=true
-source <(kubectl completion zsh)
 
 # kubectl krew for kubectl plugin management
 [[ -d "${HOME}/.krew/bin" ]] && export PATH="${HOME}/.krew/bin:${PATH}"

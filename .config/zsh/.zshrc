@@ -294,7 +294,7 @@ function no-history {
 
 function update-packages {
   brew update
-  brew bundle install --upgrade --file ~/.config/homebrew/Brewfile # --verbose
+  brew bundle install --upgrade --global # --verbose
   npm update --global
   dotnet tool update --global --all
   rustup update
