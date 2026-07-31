@@ -42,6 +42,8 @@ cursor-style = block
 cursor-style-blink = false
 mouse-hide-while-typing = true
 
+keybind = shift+enter=text:\n
+
 # Example Split Navigation
 # keybind = ctrl+alt+left=goto_split:left
 # keybind = ctrl+alt+right=goto_split:right
