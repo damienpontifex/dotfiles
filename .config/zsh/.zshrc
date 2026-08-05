@@ -8,13 +8,6 @@
 # exec 3>&2 2> startlog.$$
 # setopt xtrace prompt_subst
 
-# ==============================================
-# History
-# ==============================================
-HISTFILE="$XDG_CACHE_HOME/zsh_history"
-HISTZIE=100000000
-SAVEHIST=100000000
-
 setopt append_history 
 setopt hist_find_no_dups 
 setopt hist_ignore_all_dups 
@@ -46,12 +39,11 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select # tab opens cmp menu
-zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
-zstyle ':completion:*' sqeeze-slashes flase # explicit disable to allow /*/ expansion
+zstyle ':completion:*' special-dirs false # don't show . and .. in cmp menu
+zstyle ':completion:*' squeeze-slashes flase # explicit disable to allow /*/ expansion
 
 # https://github.com/aloxaf/fzf-tab#configure
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Expand alias with tab
 zstyle ':completion:*' completer _expand_alias _complete _ignored
 
@@ -85,10 +77,12 @@ export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
 fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
-# History opts
-HISTZIE=100000000
-SAVEHIST=100000000
+# ==============================================
+# History
+# ==============================================
 HISTFILE="$XDG_CACHE_HOME/zsh_history"
+HISTSIZE=100000000
+SAVEHIST=100000000
 
 source "$ZDOTDIR/prompt"
 
@@ -101,17 +95,14 @@ alias -g ......='../../../../..'
 alias config='/usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
 # Enable completion for the function by telling Zsh to treat it like `git`
-compdef dotfiles=git
+compdef config=git
 
 alias md="mkdir -p"
 
 # Named directories, use with ~<name>
 hash -d obsidian=~/Library/Mobile\ Documents/iCloud\~md\~obsidian/Documents
 
-source "$ZDOTDIR/plugins/plugins"
-
 eval "$(brew shellenv)"
-export PATH="/opt/homebrew/bin:$PATH"
 
 # Ensure postgresql tools are in path
 export PATH="$PATH:${HOMEBREW_PREFIX}/opt/postgresql@16/bin"
@@ -223,13 +214,13 @@ alias -s json=jq
 # Hooks on changing directory
 autoload -Uz add-zsh-hook # Allow multiple hooks
 function auto_nvm() {
-  [[ -f .nvmrc ]] && nvm use
+  [[ -f .nvmrc ]] && [[ -x "$(command -v nvm)" ]] && nvm use
 }
 add-zsh-hook chpwd auto_nvm
-function ls_on_cd {
-  # eza --icons --long --group-directories-first    
-}
-add-zsh-hook chpwd ls_on_cd
+# function ls_on_cd {
+#   eza --icons --long --group-directories-first
+# }
+# add-zsh-hook chpwd ls_on_cd
 
 # Disable AWS CLI pager
 export AWS_PAGER=""
@@ -249,7 +240,6 @@ alias ls='eza --icons --long --group-directories-first'                         
 alias l='eza -lbF --git'                                               # list, size, type, git
 alias ll='eza -lbGF --git'                                             # long list
 alias llm='eza -lbGF --git --sort=modified'                            # long list, modified date sort
-alias lt='eza --long --tree --level=3'
 alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list
 alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
 
@@ -340,13 +330,6 @@ alias azswitch='az account list --output tsv --query "[].name" --only-show-error
 [ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-
-export OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
-export OPENSSL_LIBRARIES="${OPENSSL_ROOT_DIR}"
-export LIBRARY_PATH="$LIBRARY_PATH:${OPENSSL_ROOT_DIR}/lib"
-
-# Use Moby BuildKit modern docker build engine
-export DOCKER_BUILDKIT=1
 
 # TODO: Refine these
 # function cd_with_fzf {

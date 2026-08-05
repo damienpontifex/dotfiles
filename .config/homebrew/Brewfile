@@ -76,8 +76,14 @@ brew "watchexec"
 brew "witr"
 brew "yazi"
 brew "yq"
+brew "stow"
+
+# zsh plugins
 brew "zsh-autosuggestions"
 brew "zsh-completions"
+brew "zsh-you-should-use"
+brew "zsh-syntax-highlighting"
+brew "fzf-tab"
 
 brew "cargo-msrv"
 brew "cargo-outdated"
