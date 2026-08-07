@@ -1,42 +1,7 @@
 # dotfiles
 
-Following guide at https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
-
-## Local changes not wanting to be tracked
-i.e. ignore file from git
 ```bash
-config update-index --skip-worktree <file>
-```
-
-If wanting to add new additions
-```bash
-# Interactively stage specific lines/hunk
-git add -p <file>
-# Re-apply the ignore flag
-git update-index --skip-worktree <file>
-```
-
-## New machine
-
-[![CI](https://github.com/damienpontifex/dotfiles/workflows/CI/badge.svg)](https://github.com/damienpontifex/dotfiles/actions/workflows/ci.yml)
-
-The script requires curl and git to get started:
-
-```bash
-apt update && apt install -y curl git zsh software-properties-common
-```
-
-Run with a gist install script by:
-
-```bash
-curl -sL https://raw.githubusercontent.com/damienpontifex/dotfiles/master/.bootstrap | zsh
-```
-
-Or by cloning the repo as
-
-```bash
-git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
-git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout
-source $HOME/.zshrc
-config config --local status.showUntrackedFiles no
+git clone https://github.com/damienpontifex/dotfiles.git $HOME/dotfiles
+cd $HOME/dotfiles
+stow .
 ```
