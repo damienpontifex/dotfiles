@@ -3,6 +3,10 @@ vim.keymap.set("n", "<leader>re", function()
 	vim.cmd("restart AutoSession restore")
 end, { desc = "Save session, restart neovim, and reload session" })
 
+-- Automatically switches forward and backward search to "Very Magic" mode i.e. +, ?, {, (, and | are not treated as literals
+vim.keymap.set({ "n", "v" }, "/", "/\\v")
+vim.keymap.set({ "n", "v" }, "?", "?\\v")
+
 vim.keymap.set("x", "p", '"_dP')
 
 -- Center screen when jumping

@@ -1,3 +1,4 @@
+# https://wiki.archlinux.org/title/Zsh
 # Can use `reset` to reload
 
 # zmodload zsh/zprof
@@ -8,42 +9,41 @@
 # exec 3>&2 2> startlog.$$
 # setopt xtrace prompt_subst
 
-setopt append_history 
-setopt hist_find_no_dups 
-setopt hist_ignore_all_dups 
-setopt hist_ignore_dups 
-setopt hist_ignore_space 
-setopt hist_save_no_dups
-setopt inc_append_history 
-setopt share_history
+source "$ZDOTDIR/history"
 
 # ==============================================
 # Shell behaviour
 # ==============================================
 setopt auto_param_slash
-setopt auto_pushd 
+setopt auto_pushd
 setopt autocd
 setopt nobeep
 setopt numeric_glob_sort
 
-# Use neovim for man pages
-export MANPAGER='nvim +Man!'
-
 # ==============================================
 # Completions
 # ==============================================
-autoload bashcompinit && bashcompinit
-autoload -Uz compinit && compinit
+export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
+mkdir -p "$ZSH_CACHE_DIR/completions"
+fpath=("$ZSH_CACHE_DIR/completions" $fpath)
+
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
+
+# `man zshcompsys`
+autoload -Uz compinit
+compinit -C -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+autoload -U +X bashcompinit && bashcompinit
 
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select # tab opens cmp menu
-zstyle ':completion:*' special-dirs false # don't show . and .. in cmp menu
-zstyle ':completion:*' squeeze-slashes flase # explicit disable to allow /*/ expansion
+zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
+zstyle ':completion:*' sqeeze-slashes flase # explicit disable to allow /*/ expansion
 
 # https://github.com/aloxaf/fzf-tab#configure
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Expand alias with tab
 zstyle ':completion:*' completer _expand_alias _complete _ignored
 
@@ -58,42 +58,24 @@ setopt interactive_comments
 unsetopt menu_complete
 unsetopt flowcontrol
 
-# make `help` available similar to bash for builtins
+# make `help` available similar to bash for builtins https://wiki.archlinux.org/title/Zsh#Help_command
 autoload -Uz run-help
-unalias run-help 2>/dev/null
+(( ${+aliases[run-help]} )) && unalias run-help
 alias help=run-help
 
-# ==============================================
-# XDG Base Directories
-# ==============================================
-# https://wiki.archlinux.org/title/XDG_Base_Directory
-# Applications that use this https://wiki.archlinux.org/title/XDG_Base_Directory#Support
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
-export PATH="$HOME/.local/bin:$PATH"
-export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
-[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
-fpath=("$ZSH_CACHE_DIR/completions" $fpath)
-
-# ==============================================
-# History
-# ==============================================
-HISTFILE="$XDG_CACHE_HOME/zsh_history"
-HISTSIZE=100000000
-SAVEHIST=100000000
-
 source "$ZDOTDIR/prompt"
+source "$ZDOTDIR/plugins"
 
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
+alias watch='watch --color '
+
 ### dotfiles ###
-alias config='/usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
-alias lazyconfig='lazygit --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
+alias config='/usr/bin/git --git-dir="$HOME/dotfiles"'
+alias lazyconfig='lazygit --git-dir="$HOME/dotfiles"'
 # Enable completion for the function by telling Zsh to treat it like `git`
 compdef config=git
 
@@ -102,49 +84,13 @@ alias md="mkdir -p"
 # Named directories, use with ~<name>
 hash -d obsidian=~/Library/Mobile\ Documents/iCloud\~md\~obsidian/Documents
 
-eval "$(brew shellenv)"
-
 # Ensure postgresql tools are in path
 export PATH="$PATH:${HOMEBREW_PREFIX}/opt/postgresql@16/bin"
 
 # Ensure `code` command is available
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
-if [[ -z "$NVIM" ]]; then
-  # Don't enable vi-mode plugin when running terminal already inside neovim
-  export VI_MODE_SET_CURSOR=true
-  # Set Zsh Line Editor (ZLE) to Vi emulation mode
-  bindkey -v
-  set -o vi
-  # Allow backspace to delete past the start of the current insert session
-  bindkey -M viins '^?' backward-delete-char
-  bindkey -M viins '^H' backward-delete-char
-
-  # Function to change cursor shape
-  # 2 = steady block, 6 = steady bar (use 1 and 5 for blinking versions)
-  function zle-keymap-select {
-    if [[ ${KEYMAP} == vicmd ]]; then
-      echo -ne '\e[2 q'
-    else
-      echo -ne '\e[5 q'
-    fi
-  }
-  zle -N zle-keymap-select
-
-  # Ensure the cursor starts as a bar when the prompt first appears
-  zle-line-init() {
-      zle -K viins
-      echo -ne '\e[5 q'
-  }
-  zle -N zle-line-init
-
-  # Fix cursor shape when a command finishes
-  export KEYTIMEOUT=1
-  _fix_cursor() {
-     echo -ne '\e[5 q'
-  }
-  precmd_functions+=(_fix_cursor)
-fi
+source "$ZDOTDIR/vi-mode"
 
 # Keybindings
 # https://zsh.sourceforge.io/Doc/Release/Editor-Functions-Index.html
@@ -213,21 +159,10 @@ alias -s json=jq
 
 # Hooks on changing directory
 autoload -Uz add-zsh-hook # Allow multiple hooks
-function auto_nvm() {
-  [[ -f .nvmrc ]] && [[ -x "$(command -v nvm)" ]] && nvm use
+function ls_on_cd {
+  # eza --icons --long --group-directories-first    
 }
-add-zsh-hook chpwd auto_nvm
-# function ls_on_cd {
-#   eza --icons --long --group-directories-first
-# }
-# add-zsh-hook chpwd ls_on_cd
-
-# Disable AWS CLI pager
-export AWS_PAGER=""
-if [[ -x "$(command -v aws)" ]] && [[ -x "$(command -v aws_completer)" ]]; then
-  complete -C "$(command -v aws_completer)" aws
-fi
-
+add-zsh-hook chpwd ls_on_cd
 
 alias stat='stat -x'
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" |  pbcopy && echo "Copied guid to clipboard"'
@@ -240,14 +175,13 @@ alias ls='eza --icons --long --group-directories-first'                         
 alias l='eza -lbF --git'                                               # list, size, type, git
 alias ll='eza -lbGF --git'                                             # long list
 alias llm='eza -lbGF --git --sort=modified'                            # long list, modified date sort
+alias lt='eza --long --tree --level=3'
 alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list
 alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
 
 # speciality views
 alias lS='eza -1'                                                      # one column, just names
 alias lt='eza --tree --level=2'                                        # tree
-
-export EDITOR=nvim
 
 # Get password value from keychain
 # Example usage export MY_PASSWORD="$(get-pw MY_PASSWORD)"
@@ -257,16 +191,6 @@ alias set-pw="security add-generic-password -a "$USER" -s"
 
 alias nvim-config='(cd ~/.config/nvim; nvim init.lua)'
 alias tmux-config='(cd ~/.config/tmux; nvim tmux.conf)'
-
-function dotenv {
-  local dotenv_file
-  dotenv_file=${1:-.env}
-  if [ ! -f "$dotenv_file" ]; then
-    >&2 echo "File $dotenv_file does not exist."
-    return 1
-  fi
-  set -a; source "./$dotenv_file"; set +a
-}
 
 # --- Yazi Setup ---
 function y {
@@ -322,14 +246,6 @@ alias getmyip='dig +short myip.opendns.com @resolver1.opendns.com'
 ### Static HTTP Server ###
 alias http-server="python3 -m http.server"
 [ -d "${HOMEBREW_PREFIX}/opt/python3" ] && export PATH="${HOMEBREW_PREFIX}/opt/python3/libexec/bin:$PATH"
-
-
-
-# az cli
-alias azswitch='az account list --output tsv --query "[].name" --only-show-errors | fzf | xargs -r -I {} az account set --subscription "{}"'
-[ -f /usr/local/etc/bash_completion.d/az ] && source /usr/local/etc/bash_completion.d/az
-
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
 # TODO: Refine these
 # function cd_with_fzf {

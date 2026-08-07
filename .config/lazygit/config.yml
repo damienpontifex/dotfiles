@@ -2,9 +2,9 @@
 git:
   autoFetch: false
   autoRefresh: true
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: hunk pager
+      command: hunk pager
 gui:
   showCommandLog: false
   theme:
@@ -31,4 +31,3 @@ gui:
   sidePanelWidth: 0.2
 quitOnTopLevelReturn: false
 disableStartupPopups: true
-

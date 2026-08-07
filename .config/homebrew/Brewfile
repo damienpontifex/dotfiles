@@ -1,89 +1,102 @@
-tap "azure/bicep", trusted: true
-tap "azure/functions", trusted: true
 tap "codecrafters-io/tap"
-tap "jesseduffield/lazygit", trusted: true
-tap "probe-rs/probe-rs", trusted: true
 tap "sst/tap"
 
-cask "nikitabobko/tap/aerospace", trusted: true
 brew "age"
-brew "argocd"
-brew "azcopy"
-brew "azure-cli"
-brew "azure-functions-core-tools@4"
 brew "bat"
-brew "bicep"
-brew "felixkratz/formulae/borders", trusted: true
-brew "cloudflared"
 brew "cmatrix"
 brew "container", restart_service: true
 brew "coreutils"
-brew "crane"
 brew "eza"
 brew "fd"
 brew "ffmpeg"
 brew "fnm" # Node version manager
 brew "fzf", postinstall: "${HOMEBREW_PREFIX}/opt/fzf/install --all"
-brew "gh"
-brew "git"
-brew "git-delta"
-brew "git-filter-repo"
-brew "git-lfs"
-brew "go"
 brew "gpg"
 brew "grafanactl"
-brew "helm"
 brew "hugo"
 brew "hunk"
 brew "jqp"
 brew "just"
 brew "jsonnet"
 brew "jsonnet-bundler"
-brew "k3d"
-brew "kubectl"
-brew "kubecolor"
-brew "kubeconform"
-brew "kustomize"
-brew "Azure/kubelogin/kubelogin", trusted: true
-brew "krew"
-brew "derailed/k9s/k9s", trusted: true
 brew "lazydocker"
-brew "lazygit"
 brew "llm"
 brew "mlx-lm"
 brew "neofetch"
-brew "neovim"
-brew "opencode"
 brew "pinentry-mac"
 brew "podman"
 brew "poetry"
 brew "postgresql@16"
 brew "pre-commit"
-brew "probe-rs"
+brew "probe-rs/probe-rs/probe-rs", trusted: true
 brew "pyenv"
 brew "ripgrep"
 brew "shellcheck"
 brew "sops"
 brew "starship"
-brew "talosctl"
 brew "tlrc"
 brew "tmux"
 brew "tree-sitter-cli"
+brew "witr"
+brew "yazi"
+brew "zsh-autosuggestions"
+brew "zsh-completions"
+
+# dev
+cask "font-cascadia-mono-nf"
+cask "font-hack-nerd-font"
+cask "font-jetbrains-mono-nerd-font"
+cask "git-credential-manager"
+cask "secretive"
+cask "wireshark-app"
+go "honnef.co/go/tools/cmd/staticcheck"
+go "golang.org/x/tools/gopls"
+brew "yq"
+brew "rustup"
 brew "trivy"
 brew "uv"
 brew "watch"
 brew "watchexec"
-brew "witr"
-brew "yazi"
-brew "yq"
-brew "stow"
+brew "neovim"
+brew "opencode"
+brew "go"
+cask "ghostty"
+brew "go-task/tap/go-task", trusted: true
 
-# zsh plugins
-brew "zsh-autosuggestions"
-brew "zsh-completions"
-brew "zsh-you-should-use"
-brew "zsh-syntax-highlighting"
-brew "fzf-tab"
+# Azure
+brew "azcopy"
+brew "azure-cli"
+brew "azure/functions/azure-functions-core-tools@4", trusted: true
+brew "azure/bicep/bicep", trusted: true
+
+# git
+brew "gh"
+brew "git"
+brew "git-delta"
+brew "git-filter-repo"
+brew "git-lfs"
+brew "jesseduffield/lazygit/lazygit", trusted: true
+
+# Kubernetes
+brew "Azure/kubelogin/kubelogin", trusted: true
+brew "argocd"
+brew "derailed/k9s/k9s", trusted: true
+brew "helm"
+brew "k3d"
+brew "krew"
+brew "kubecolor"
+brew "kubeconform"
+brew "kubectl"
+brew "kustomize"
+brew "kwok"
+brew "talosctl"
+brew "crane"
+go "sigs.k8s.io/kubectl-validate"
+
+krew "edit-status"
+krew "revisions"
+krew "tree"
+krew "who-can"
 
 brew "cargo-msrv"
 brew "cargo-outdated"
@@ -106,7 +119,6 @@ cask "font-cascadia-mono-nf"
 cask "font-hack-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "rectangle"
-cask "secretive"
 
 # Include a local Brewfile if present (supports both global and project contexts)
 brewfile_dir = File.expand_path(File.dirname(__FILE__))

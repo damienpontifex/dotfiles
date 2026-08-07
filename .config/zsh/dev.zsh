@@ -8,6 +8,10 @@ export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin:$PATH"
 if [[ -x $(command -v fnm) ]]; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 fi
+function auto_nvm() {
+  [[ -f .nvmrc ]] && nvm use
+}
+add-zsh-hook chpwd auto_nvm
 
 # golang
 if [[ -x $(command -v go) ]]; then
@@ -34,3 +38,22 @@ function make {
   echo "No Makefile found in current or parent directories." >&2
   return 1
 }
+
+# Disable AWS CLI pager
+export AWS_PAGER=""
+if [[ -x "$(command -v aws)" ]] && [[ -x "$(command -v aws_completer)" ]]; then
+  complete -C "$(command -v aws_completer)" aws
+fi
+
+function dotenv {
+  local dotenv_file
+  dotenv_file=${1:-.env}
+  if [ ! -f "$dotenv_file" ]; then
+    >&2 echo "File $dotenv_file does not exist."
+    return 1
+  fi
+  set -a; source "./$dotenv_file"; set +a
+}
+
+# az cli
+alias azswitch='az account list --output tsv --query "[].name" --only-show-errors | fzf | xargs -r -I {} az account set --subscription "{}"'

@@ -1,17 +1,9 @@
 # vim:ft=zsh
 
-# If the completion file doesn't exist yet, we need to autoload it and
-# bind it to `kubectl`. Otherwise, compinit will have already done that.
-if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
-  typeset -g -A _comps
-  autoload -Uz _kubectl
-  _comps[kubectl]=_kubectl
-fi
+compdef k=kubectl
+compdef kubecolor=kubectl
 
-kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
-
-alias kubectl='kubecolor'
-alias k='kubectl'
+alias k='kubecolor --force-colors'
 alias kgp='kubectl get pods'
 alias kdp='kubectl describe pods'
 alias kgd='kubectl get deployment'
@@ -22,12 +14,10 @@ alias kgcm='kubectl get configmaps'
 alias kgsec='kubectl get secret'
 alias kgns='kubectl get namespace'
 alias kcn='kubectl config set-context --current --namespace'
+alias kcu='kubectl config get-contexts --output name | fzf | xargs -r -I {} kubectl config use-context {}'
 
 # Trailing space expands the following alias (e.g. `watch kgp`); keep it.
 alias watch='KUBECOLOR_FORCE_COLORS=true watch --color '
-
-compdef k=kubectl
-compdef kubecolor=kubectl
 
 # k8s
 export KUBE_EDITOR=nvim

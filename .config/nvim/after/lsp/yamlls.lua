@@ -6,11 +6,8 @@ return {
 			schemaStore = { enable = false, url = "" },
 			schemas = vim.tbl_deep_extend("force", require("schemastore").yaml.schemas(), {
 				["kubernetes"] = {
-					"*.k8s.yaml",
-					"k8s/**/*.yaml",
-					"kube/**/*.yaml",
-					"kubernetes/**/*.yaml",
-					"manifests/**/*.yaml",
+					"*.yaml",
+					"*.yml",
 				},
 			}),
 			kubernetesCRDStore = { enable = true },

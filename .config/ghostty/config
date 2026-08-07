@@ -20,7 +20,7 @@
 #
 theme = nord
 
-command = "/bin/zsh -lc 'tmux attach || tmux new-session -s pontifex'"
+command = "/bin/zsh -lc '/opt/homebrew/bin/tmux attach || /opt/homebrew/bin/tmux new-session -s pontifex'"
 
 macos-option-as-alt = true
 copy-on-select = clipboard

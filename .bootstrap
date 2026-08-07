@@ -16,18 +16,22 @@ if [ ! -x $(command -v git) ]; then
   xcode-select --install
 fi
 
-if [ ! -d "${HOME}/.dotfiles" ]; then
+if [ ! -d "${HOME}/dotfiles" ]; then
   echo "Cloning dotrfiles for initial setup"
-  git clone --bare https://github.com/damienpontifex/dotfiles.git $HOME/.dotfiles
+  git clone https://github.com/damienpontifex/dotfiles.git
 fi
 
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME '
+if [ ! -x $(command -v brew) ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  export PATH="/opt/homebrew/bin:${PATH}"
+fi
 
-# config checkout --force
-config submodule update --init --recursive
-config config --local status.showUntrackedFiles no
+brew bundle install --upgrade --global --verbose
 
-# source $HOME/.zshrc
+cd ~/dotfiles
+stow .
+
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles'
 
 add_ext() {
   if [[ -d "$2" ]]; then
@@ -46,17 +50,11 @@ defaults write com.apple.dock no-bouncing -bool TRUE
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 killall Finder
 
-if [ ! -x $(command -v brew) ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  export PATH="/opt/homebrew/bin:${PATH}"
-fi
-
 # Install rustup
 if [ ! -x $(command -v rustup) ]; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
-brew bundle install --upgrade --global --verbose
 # nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 # brew reinstall Azure/kubelogin/kubelogin kubectl terraform terraform-ls
