@@ -42,6 +42,7 @@ brew "yazi"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
+brew "pam-reattach"
 
 # dev
 cask "font-cascadia-mono-nf"
