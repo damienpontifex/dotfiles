@@ -4,7 +4,9 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export MANPAGER='nvim +Man!'
+# export MANPAGER='nvim +Man!'
+# export MANPAGER="bat -plman"
+export MANPAGER="col -b | bat --language man --style plain"
 export EDITOR=nvim
 
 export PATH="$HOMEBREW_PREFIX/bin:$PATH"
