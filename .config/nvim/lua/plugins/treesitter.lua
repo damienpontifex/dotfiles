@@ -67,10 +67,8 @@ vim.api.nvim_create_autocmd("FileType", {
 		-- otherwise fall back to autoindent so `o`/`O` don't drop to column 0.
 		local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
 		if lang and vim.treesitter.query.get(lang, "indents") then
-			print("Using treesitter indentation")
 			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 		else
-			print("Using nvim indentation")
 			vim.bo.indentexpr = ""
 			vim.bo.autoindent = true
 		end

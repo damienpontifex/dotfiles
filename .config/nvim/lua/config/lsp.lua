@@ -1,30 +1,9 @@
-vim.diagnostic.config({
-	virtual_text = false,
-	virtual_lines = false,
-	severity_sort = true,
-	float = {
-		border = "rounded",
-		source = true,
-	},
-})
-
 -- ufo: Neovim hasn't added foldingRange to default capabilities, users must add it manually
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
 	dynamicRegistration = false,
 	lineFoldingOnly = true,
 }
-
--- Toggle diagnostic text
-vim.keymap.set("n", "<leader>td", function()
-	local current = vim.diagnostic.config().virtual_text
-	vim.diagnostic.config({ virtual_text = not current })
-	if not current then
-		vim.notify("Diagnostics enabled", vim.log.levels.INFO, { title = "LSP" })
-	else
-		vim.notify("Diagnostics disabled", vim.log.levels.INFO, { title = "LSP" })
-	end
-end, { desc = "Toggle diagnostics" })
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
 	group = vim.api.nvim_create_augroup("damienpontifex/lsp", { clear = true }),
