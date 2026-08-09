@@ -92,7 +92,7 @@ end, { desc = "Find files (all)" })
 -- 	{ desc = "Telescope: Grep" }
 -- )
 
--- So that `:grep` automatically expands to `silent grep!`
+-- So that `:grep` automatically expands to `silent grep!` on space
 vim.cmd("cabbrev grep silent grep!")
 
 -- `:Grep` for hiding grep external command output
