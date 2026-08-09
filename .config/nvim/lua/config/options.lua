@@ -60,11 +60,22 @@ vim.opt.undofile = true
 -- ============================================================
 -- Completion & Navigation
 -- ============================================================
-vim.opt.completeopt:append({ "menuone", "noselect", "noinsert", "fuzzy" })
+vim.opt.completeopt = { "menu", "popup", "menuone", "noselect", "noinsert", "fuzzy" }
 -- Include omnifunc in nvim complete
 vim.opt.complete:append("o")
-vim.opt.path:append({ "**" }) -- recursive :find / :sfind / :tabfind
-vim.opt.wildignore:append({ "*/node_modules/*", "*/bin/*", "*/obj/*" })
+vim.opt.path:append({ "**", "./**" }) -- recursive :find / :sfind / :tabfind
+vim.opt.wildignore:append({ "*.git/*", "*/node_modules/*", "*/bin/*", "*/obj/*" })
+vim.opt.wildmode = "list:longest,list:full"
+local function my_find(cmdarg, cmdcomplete)
+	local files = vim.split(vim.fn.system("fd -H -E .git"), "\n", { trimempty = true })
+	if cmdarg == "" then
+		return files
+	else
+		return vim.fn.matchfuzzy(files, cmdarg)
+	end
+end
+_G.my_find = my_find
+vim.opt.findfunc = "v:lua.my_find"
 
 -- ============================================================
 -- Misc

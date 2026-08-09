@@ -41,6 +41,7 @@ brew "witr"
 brew "yazi"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
+brew "zsh-syntax-highlighting"
 
 # dev
 cask "font-cascadia-mono-nf"

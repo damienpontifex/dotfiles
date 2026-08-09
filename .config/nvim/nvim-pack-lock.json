@@ -54,7 +54,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "hardtime.nvim": {
-      "rev": "b4e431934af1fe224a3a801f632c008278cb7628",
+      "rev": "244753782b945def87472d8f4e9e6a9d4ec18689",
       "src": "https://github.com/m4xshen/hardtime.nvim"
     },
     "indent-blankline.nvim": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mason-lspconfig.nvim": {
-      "rev": "47059d71b42d74b0a1e9f61c1d99d301039c3b5b",
+      "rev": "7adc933dabcc7c86ae6b07aff7ee68eac398491f",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
     },
     "mason.nvim": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "db41c4076105a63caec12612d11228348f55a109",
+      "rev": "a35f08f63b73f0ffac045cd175fb2a22e167c39c",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neo-tree.nvim": {
@@ -127,7 +127,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic"
     },
     "nvim-treesitter": {
-      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "rev": "7248feaca45e4d944591497964bc19afa89ad1c6",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -155,7 +155,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "schemastore.nvim": {
-      "rev": "e954496f8ef22904e8a84f5078f4a110fdc7a0d3",
+      "rev": "1f8835ba58a2ad341c9c1515316a3183596dbb60",
       "src": "https://github.com/b0o/schemastore.nvim"
     },
     "tabout.nvim": {

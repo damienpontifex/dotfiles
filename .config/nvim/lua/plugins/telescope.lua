@@ -59,13 +59,14 @@ require("telescope").setup({
 	},
 })
 
-vim.keymap.set("n", "<C-p>", function()
-	builtin.find_files({
-		hidden = true,
-		no_ignore = false,
-		file_ignore_patterns = { ".git" },
-	})
-end, { desc = "Find files" })
+vim.keymap.set("n", "<C-p>", ":find ", { remap = true })
+-- vim.keymap.set("n", "<C-p>", function()
+-- 	builtin.find_files({
+-- 		hidden = true,
+-- 		no_ignore = false,
+-- 		file_ignore_patterns = { ".git" },
+-- 	})
+-- end, { desc = "Find files" })
 
 vim.keymap.set("n", "<Leader>ff", function()
 	builtin.find_files({ hidden = true, no_ignore = true })
