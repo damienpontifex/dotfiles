@@ -67,7 +67,7 @@ vim.opt.path:append({ "**", "./**" }) -- recursive :find / :sfind / :tabfind
 vim.opt.wildignore:append({ "*.git/*", "*/node_modules/*", "*/bin/*", "*/obj/*" })
 vim.opt.wildmode = "list:longest,list:full"
 local function my_find(cmdarg, cmdcomplete)
-	local files = vim.split(vim.fn.system("fd -H -E .git"), "\n", { trimempty = true })
+	local files = vim.split(vim.fn.system("fd --hidden --exclude .git --type file"), "\n", { trimempty = true })
 	if cmdarg == "" then
 		return files
 	else
@@ -76,6 +76,8 @@ local function my_find(cmdarg, cmdcomplete)
 end
 _G.my_find = my_find
 vim.opt.findfunc = "v:lua.my_find"
+
+vim.opt.grepprg = "noglob rg --vimgrep --smart-case --hidden --glob '!.git/' $*"
 
 -- ============================================================
 -- Misc

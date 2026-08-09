@@ -1,3 +1,7 @@
+-- TODO: Adopt dir plugin
+-- https://neovim.io/doc/user/plugins/#dir
+-- see `:help plugins` for availability likely 0.13
+
 vim.pack.add({
 	{
 		src = "https://github.com/nvim-neo-tree/neo-tree.nvim",

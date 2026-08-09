@@ -60,6 +60,19 @@ require("telescope").setup({
 })
 
 vim.keymap.set("n", "<C-p>", ":find ", { remap = true })
+
+-- Allow ctrl+s in command line with `:find` open the file in split
+vim.keymap.set("c", "<C-s>", function()
+	local cmd = vim.fn.getcmdline()
+	-- If the command starts with 'find ', swap it to 'sfind '
+	if cmd:match("^find%s") then
+		vim.fn.setcmdline("vert sfind " .. cmd:sub(6))
+		return "<CR>" -- Automatically execute the command
+	else
+		return "<CR>" -- Behave like a normal Enter key for other commands
+	end
+end, { expr = true, desc = "Open :find in horizontal split" })
+
 -- vim.keymap.set("n", "<C-p>", function()
 -- 	builtin.find_files({
 -- 		hidden = true,
@@ -72,12 +85,40 @@ vim.keymap.set("n", "<Leader>ff", function()
 	builtin.find_files({ hidden = true, no_ignore = true })
 end, { desc = "Find files (all)" })
 
-vim.keymap.set(
-	"n",
-	"<C-f>",
-	require("telescope").extensions.live_grep_args.live_grep_args,
-	{ desc = "Telescope: Grep" }
-)
+-- vim.keymap.set(
+-- 	"n",
+-- 	"<C-f>",
+-- 	require("telescope").extensions.live_grep_args.live_grep_args,
+-- 	{ desc = "Telescope: Grep" }
+-- )
+
+-- So that `:grep` automatically expands to `silent grep!`
+vim.cmd("cabbrev grep silent grep!")
+
+-- `:Grep` for hiding grep external command output
+-- Alternatively just use `:grep` as have cabbrev above
+vim.api.nvim_create_user_command("Grep", function(opts)
+	vim.cmd("silent! grep! " .. opts.args)
+	vim.cmd("copen")
+	vim.cmd("redraw!")
+end, { nargs = "+" })
+
+vim.keymap.set("n", "<C-f>", function()
+	vim.ui.input({ prompt = "Grep (pattern -- flags): " }, function(input)
+		if not input or input == "" then
+			return
+		end
+
+		-- Build and execute the grep command
+		local full_cmd = "silent grep! " .. input
+		-- Also add it to the history for persistence or re-run
+		vim.fn.histadd("cmd", full_cmd)
+		vim.cmd(full_cmd)
+		vim.cmd("copen")
+		vim.cmd("redraw!")
+	end)
+end, { desc = "Grep with optional rg arguments" })
+
 vim.keymap.set("n", "<Leader>fg", builtin.live_grep, { desc = "Grep" })
 vim.keymap.set("n", "<Leader>gf", builtin.git_files, { desc = "Telescope: [G]it [F]iles" })
 vim.keymap.set("n", "<Leader><space>", builtin.buffers, { desc = "Telescope: Find buffers" })
