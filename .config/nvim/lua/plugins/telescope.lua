@@ -85,9 +85,10 @@ vim.keymap.set("n", "<Leader>fb", builtin.buffers, { desc = "Telescope: Find buf
 vim.keymap.set("n", "<Leader>fc", builtin.commands, { desc = "Telescope: [F]ind [C]ommands" })
 vim.keymap.set("n", "<Leader>fk", builtin.keymaps, { desc = "Telescope: [F]ind [K]eymaps" })
 vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope: [F]ind [H]elp" })
-vim.keymap.set("n", "<Leader>gs", builtin.git_status, { desc = "Telescope: [G]it [S]tatus" })
-vim.keymap.set("n", "<Leader>gb", builtin.git_branches, { desc = "Telescope: [G]it [B]ranches" })
-vim.keymap.set("n", "<Leader>km", builtin.filetypes, { desc = "Telescope: Change file type" })
+-- vim.keymap.set("n", "<Leader>km", builtin.filetypes, { desc = "Telescope: Change file type" })
+vim.keymap.set("n", "<Leader>km", function()
+	vim.api.nvim_feedkeys(vim.keycode(":set filetype=<C-Space>"), "m", false)
+end, { desc = "Change file type" })
 
 vim.api.nvim_create_autocmd("PackChanged", {
 	desc = "Handle telescope required setup",

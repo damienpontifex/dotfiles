@@ -43,6 +43,34 @@ vim.keymap.set("v", ">", ">gv", { desc = "Shift right and keep selection" })
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Use escape to go to normal mode in terminal" })
 vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-w>k]], { desc = "Move focus to the window above from terminal mode" })
 vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-w>h]], { desc = "Move focus to the left window from terminal mode" })
+local function toggle_terminal()
+	local term_buf = vim.iter(vim.api.nvim_list_bufs()):find(function(buf)
+		return vim.bo[buf].buftype == "terminal"
+	end)
+
+	local one_third_height = math.floor(vim.o.lines / 3)
+	if term_buf then
+		local term_win = vim.iter(vim.api.nvim_list_wins()):find(function(win)
+			return vim.api.nvim_win_get_buf(win) == term_buf
+		end)
+
+		if term_win then
+			-- If already visible on screen, just jump your cursor to that window
+			vim.api.nvim_set_current_win(term_win)
+		else
+			-- If the buffer exists but is hidden, open a new split for it
+			vim.cmd("horizontal split")
+			vim.api.nvim_win_set_buf(0, term_buf)
+			vim.api.nvim_win_set_height(0, one_third_height)
+		end
+	else
+		vim.cmd("horizontal terminal")
+		vim.api.nvim_win_set_height(0, one_third_height)
+	end
+	vim.cmd("startinsert")
+end
+vim.keymap.set("n", "<M-`>", toggle_terminal, { desc = "Open terminal in horizontal split" })
+vim.keymap.set("t", "<M-`>", [[<C-\><C-n>:hide<CR>]], { desc = "Hide terminal when inside the terminal" })
 
 vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Move focus to the window below" })
 vim.keymap.set("n", "<C-K>", "<C-W><C-K>", { desc = "Move focus to the window above" })
