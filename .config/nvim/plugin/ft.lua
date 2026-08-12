@@ -5,6 +5,7 @@ vim.filetype.add({
 		["*.env"] = "sh",
 		["*.envrc"] = "sh",
 		["*.env.*"] = "sh",
+		["*.plist"] = "xml",
 		["kuberc"] = "yaml",
 		["justfile"] = "make",
 	},
