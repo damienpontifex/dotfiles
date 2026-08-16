@@ -42,6 +42,7 @@ require("conform").setup({
 		rust = { "rustfmt" },
 		typescript = { "prettierd", "prettier", "eslint", stop_after_first = true },
 		xml = { "xmlformatter" },
+		yaml = { "yamlfmt" },
 	},
 })
 
