@@ -210,7 +210,7 @@ function update-packages {
   brew update
   brew bundle install --upgrade --global --jobs auto # --verbose
   npm update --global
-  dotnet tool update --global --all
+  [[ -x $(command -v dotnet) ]] && dotnet tool update --global --all
   rustup update
   cargo update
   nvim --headless -c "lua vim.pack.update(nil, { force = true })" -c "qa"

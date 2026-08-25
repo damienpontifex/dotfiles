@@ -63,7 +63,7 @@ brew "neovim"
 brew "opencode"
 brew "go"
 cask "ghostty"
-brew "go-task/tap/go-task", trusted: true
+cask "go-task/tap/go-task", trusted: true
 
 # Azure
 brew "azcopy"

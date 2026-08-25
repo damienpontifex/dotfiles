@@ -22,7 +22,7 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
 
-export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+# export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
 
 export K9SCONFIG="$XDG_CONFIG_HOME"/k9s
 
