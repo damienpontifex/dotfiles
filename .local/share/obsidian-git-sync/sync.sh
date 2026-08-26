@@ -14,6 +14,6 @@ git pull origin "$branch" --rebase
 
 if [[ -n $(git status --porcelain) ]]; then
   git add .
-  git commit -m "Automated vault sync: $(date +'%Y-%m-%d %H:%M:%S')"
+  git commit -m "Automated vault sync: $(date +'%Y-%m-%d %H:%M:%S') from $HOST"
   git push origin "$branch"
 fi
