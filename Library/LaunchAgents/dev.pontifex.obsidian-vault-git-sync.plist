@@ -7,15 +7,12 @@
     <key>ProgramArguments</key>
     <array>
       <string>/bin/bash</string>
-      <string>/Users/ponti/.local/share/obsidian-git-sync/sync.sh</string>
+      <string>-c</string>
+      <string>exec "$HOME/.local/share/obsidian-git-sync/sync.sh"</string>
     </array>
     <key>StartInterval</key>
     <integer>600</integer>
     <key>RunAtLoad</key>
     <true/>
-    <key>StandardOutPath</key>
-    <string>/Users/ponti/.local/state/obsidian-git-sync/stdout.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Users/ponti/.local/state/obsidian-git-sync/stderr.log</string>
   </dict>
 </plist>
