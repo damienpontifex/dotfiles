@@ -31,6 +31,9 @@ require("conform").setup({
 				"$FILENAME",
 			},
 		},
+		xmlformatter = {
+			prepend_args = { "--selfclose" },
+		},
 	},
 	formatters_by_ft = {
 		cs = { "csharpier" },
