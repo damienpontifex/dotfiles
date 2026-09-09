@@ -2,10 +2,8 @@
 
 set -euo pipefail
 
-log_dir="$HOME/.local/state/obsidian-git-sync"
-mkdir -p "$log_dir"
-exec >>"$log_dir/sync.log" 2>&1
-exec >>"$log_dir/sync.log" 2>&1
+# Redirect all stdout (1) and stderr (2) to logger and viewable in console.app
+exec > >(logger -t "dev.pontifex.obsidian-git-sync:INFO") 2> >(logger -t "dev.pontifex.obsidian-git-sync:ERROR")
 
 cd ~/.obsidian-vault
 
