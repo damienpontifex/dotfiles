@@ -14,3 +14,9 @@ Require pam_reattach so it works inside tmux
 auth       optional     /opt/homebrew/lib/pam/pam_reattach.so
 auth       sufficient     pam_tid.so
 ```
+
+## `launchd` jobs
+
+```shell
+find Library/LaunchAgents -name '*.plist' -print0 | xargs -0 -t -I {} launchctl bootstrap gui/$(id -u) ~/{}
+```

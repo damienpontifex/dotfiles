@@ -6,7 +6,7 @@
     <string>dev.pontifex.obsidian-vault-git-sync</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/bin/bash</string>
+      <string>/bin/zsh</string>
       <string>-c</string>
       <string>exec "$HOME/.local/share/obsidian-git-sync/sync.sh"</string>
     </array>
@@ -14,5 +14,9 @@
     <integer>600</integer>
     <key>RunAtLoad</key>
     <true/>
+    <key>StandardErrorPath</key>
+    <string>/tmp/dev.pontifex.obsidian-git-sync.err.log</string>
+    <key>StandardOutPath</key>
+    <string>/tmp/dev.pontifex.obsidian-git-sync.log</string>
   </dict>
 </plist>

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Redirect all stdout (1) and stderr (2) to logger and viewable in console.app
-exec > >(logger -t "dev.pontifex.obsidian-git-sync:INFO") 2> >(logger -t "dev.pontifex.obsidian-git-sync:ERROR")
+# exec > >(logger -t "dev.pontifex.obsidian-git-sync:INFO") 2> >(logger -t "dev.pontifex.obsidian-git-sync:ERROR")
 
 cd ~/.obsidian-vault
 
@@ -15,5 +15,6 @@ if [[ -n $(git status --porcelain) ]]; then
   git add .gitattributes
   git add .
   git commit -m "Automated vault sync: $(date +'%Y-%m-%d %H:%M:%S') from $(hostname -s)"
-  git push origin "$branch"
 fi
+
+git push origin "$branch"
