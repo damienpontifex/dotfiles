@@ -208,7 +208,7 @@ function no-history {
 
 function update-packages {
   brew update
-  brew bundle install --upgrade --global --jobs auto # --verbose
+  brew bundle install --upgrade --global # --verbose
   npm update --global
   [[ -x $(command -v dotnet) ]] && dotnet tool update --global --all
   rustup update
