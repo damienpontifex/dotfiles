@@ -54,7 +54,7 @@ cask "wireshark-app"
 go "honnef.co/go/tools/cmd/staticcheck"
 go "golang.org/x/tools/gopls"
 brew "yq"
-brew "rustup"
+# brew "rustup" # Install via https://rust-lang.org/learn/get-started/
 brew "trivy"
 brew "uv"
 brew "watch"
