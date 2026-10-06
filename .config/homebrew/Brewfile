@@ -1,10 +1,6 @@
-tap "codecrafters-io/tap"
-tap "sst/tap"
-
 brew "age"
 brew "bat"
 brew "cmatrix"
-brew "container", restart_service: true
 brew "coreutils"
 brew "eza"
 brew "fd"
@@ -20,15 +16,13 @@ brew "just"
 brew "jsonnet"
 brew "jsonnet-bundler"
 brew "lazydocker"
-brew "llm"
 brew "mlx-lm"
 brew "neofetch"
 brew "pinentry-mac"
 brew "podman"
 brew "poetry"
-brew "postgresql@16"
+brew "postgresql@17"
 brew "pre-commit"
-brew "probe-rs/probe-rs/probe-rs", trusted: true
 brew "pyenv"
 brew "ripgrep"
 brew "shellcheck"
@@ -55,21 +49,13 @@ go "honnef.co/go/tools/cmd/staticcheck"
 go "golang.org/x/tools/gopls"
 brew "yq"
 # brew "rustup" # Install via https://rust-lang.org/learn/get-started/
-brew "trivy"
 brew "uv"
 brew "watch"
 brew "watchexec"
 brew "neovim"
-brew "opencode"
 brew "go"
 cask "ghostty"
 cask "go-task/tap/go-task", trusted: true
-
-# Azure
-brew "azcopy"
-brew "azure-cli"
-brew "azure/functions/azure-functions-core-tools@4", trusted: true
-brew "azure/bicep/bicep", trusted: true
 
 # git
 brew "gh"
@@ -80,18 +66,15 @@ brew "git-lfs"
 brew "jesseduffield/lazygit/lazygit", trusted: true
 
 # Kubernetes
-brew "Azure/kubelogin/kubelogin", trusted: true
 brew "argocd"
 brew "derailed/k9s/k9s", trusted: true
 brew "helm"
 brew "k3d"
 brew "krew"
 brew "kubecolor"
-brew "kubeconform"
 brew "kubectl"
 brew "kustomize"
 brew "kwok"
-brew "talosctl"
 brew "crane"
 go "sigs.k8s.io/kubectl-validate"
 
@@ -103,8 +86,6 @@ krew "who-can"
 brew "cargo-msrv"
 brew "cargo-outdated"
 brew "cargo-udeps"
-cargo "esp-generate"
-brew "espflash"
 brew "cargo-run-bin"
 cargo "cargo-autoinherit"
 
@@ -112,15 +93,25 @@ go "honnef.co/go/tools/cmd/staticcheck"
 go "golang.org/x/tools/gopls"
 go "github.com/go-delve/delve/cmd/dlv"
 
-krew "edit-status"
-krew "revisions"
-krew "tree"
-krew "who-can"
-
-cask "font-cascadia-mono-nf"
-cask "font-hack-nerd-font"
-cask "font-jetbrains-mono-nerd-font"
 cask "rectangle"
+
+# Set `export PERSONAL_MACHINE=true` in ~/.zshrc.local
+if ENV['PERSONAL_MACHINE'] == 'true'
+  brew "container", restart_service: true
+  brew "talosctl"
+
+  # Azure
+  brew "Azure/kubelogin/kubelogin", trusted: true
+  brew "azcopy"
+  brew "azure-cli"
+  brew "azure/functions/azure-functions-core-tools@4", trusted: true
+  brew "azure/bicep/bicep", trusted: true
+
+  # Rust embedded
+  cargo "esp-generate"
+  brew "espflash"
+  brew "probe-rs/probe-rs/probe-rs", trusted: true
+end
 
 # Include a local Brewfile if present (supports both global and project contexts)
 brewfile_dir = File.expand_path(File.dirname(__FILE__))
