@@ -1,4 +1,5 @@
 .bootstrap
+.task
 Taskfile.yaml
 .DS_Store
 README.md

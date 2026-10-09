@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-
-# Redirect all stdout (1) and stderr (2) to logger and viewable in console.app
-# exec > >(logger -t "dev.pontifex.obsidian-git-sync:INFO") 2> >(logger -t "dev.pontifex.obsidian-git-sync:ERROR")
+set -x
 
 cd ~/.obsidian-vault
 

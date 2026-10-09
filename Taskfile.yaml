@@ -8,3 +8,55 @@ tasks:
       - watchexec stow .
     silent: true
 
+  watch-launchd:
+    desc: Watch launch agents and reload on changes
+    cmds:
+      - watchexec --watch Library/LaunchAgents --exts plist -- task reload-all
+    silent: true
+
+  check:
+    sources:
+      - 'Library/LaunchAgents/*.plist'
+    cmds:
+      - for: sources
+        cmd: plutil -lint '{{.ITEM}}'
+
+  load-all:
+    desc: bootstrap all launchd services
+    sources:
+      - 'Library/LaunchAgents/*.plist'
+    cmds:
+      - for: sources
+        cmd: |
+          label=$(basename "{{.ITEM}}" .plist)
+          launchctl print "gui/$(id -u)/$label" >/dev/null 2>&1 || launchctl bootstrap "gui/$(id -u)" "$HOME/{{.ITEM}}"
+
+  run:
+    desc: Select and run a launch agent now
+    interactive: true
+    cmds:
+      - |
+        set -e
+        command -v fzf >/dev/null || { echo 'fzf is required' >&2; exit 1; }
+        label=$(for plist in Library/LaunchAgents/*.plist; do basename "$plist" .plist; done | fzf --prompt='LaunchAgent> ') || exit 0
+        [ -n "$label" ] || exit 0
+        domain="gui/$(id -u)"
+        if ! launchctl print "$domain/$label" >/dev/null 2>&1; then
+          launchctl bootstrap "$domain" "$PWD/Library/LaunchAgents/$label.plist"
+        fi
+        launchctl kickstart "$domain/$label"
+
+  reload-all:
+    desc: Validate, stow, and reload launch agents
+    deps: [check]
+    cmds:
+      - stow .
+      - |
+        set -e
+        for plist in Library/LaunchAgents/*.plist; do
+          label=$(basename "$plist" .plist)
+          if launchctl print "gui/$(id -u)/$label" >/dev/null 2>&1; then
+            launchctl bootout "gui/$(id -u)/$label"
+          fi
+          launchctl bootstrap "gui/$(id -u)" "$HOME/$plist"
+        done
